@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 10450,
-  "expoServerNgrokUrl": "https://va-iia.idodoroz.trainer-app.exp.direct",
-  "packagerNgrokUrl": "https://packager.q3-8sk.idodoroz.trainer-app.exp.direct",
-  "ngrokPid": 10550
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }

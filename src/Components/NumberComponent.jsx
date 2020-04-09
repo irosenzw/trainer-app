@@ -1,16 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import UpDownArrows from './ClockTimer/UpDownArrows';
-import ClockViewer from './ClockTimer/Clock';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { COLOR_SCHEME } from '../utils/Constants';
 
-const ClockComponent = ({
-  title,
-  seconds,
-  onMinutesDown,
-  onMinutesUp,
-  onSecondsDown,
-  onSecondsUp,
-}) => {
+const NumberComponent = ({ title, number, onDown, onUp }) => {
   return (
     <View style={styles.mainView}>
       <View style={styles.titleView}>
@@ -20,13 +18,17 @@ const ClockComponent = ({
       </View>
       <View style={styles.componentView}>
         <View style={styles.buttonView}>
-          <UpDownArrows onUp={onMinutesUp} onDown={onMinutesDown} />
+          <TouchableOpacity onPress={onDown}>
+            <Icon name="minus-circle" size={40} color="#AAA" />
+          </TouchableOpacity>
         </View>
         <View style={styles.subjectView}>
-          <ClockViewer seconds={seconds} />
+          <Text style={styles.NumberText}>{number}</Text>
         </View>
         <View style={styles.buttonView}>
-          <UpDownArrows onUp={onSecondsUp} onDown={onSecondsDown} />
+          <TouchableOpacity onPress={onUp}>
+            <Icon name="plus-circle" size={40} color="#AAA" />
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -63,17 +65,20 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   buttonView: {
-    // height: '90%',
     flex: 1,
     flexGrow: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   subjectView: {
-    flex: 1,
+    flex: 4,
     flexGrow: 3,
-    // paddingBottom: 25,
     alignItems: 'center',
+  },
+  NumberText: {
+    fontSize: 50,
+    color: COLOR_SCHEME.white,
   },
 });
 
-export default ClockComponent;
+export default NumberComponent;
