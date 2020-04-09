@@ -12,15 +12,15 @@ const navigator = createStackNavigator(
   {
     Home: HomeScreen,
     IntervalWorkout: IntervalWorkout,
-    CounterWorkout: CounterWorkout
+    CounterWorkout: CounterWorkout,
   },
   {
     initialRouteName: 'Home',
-    headerMode: 'none'
-  }
+    headerMode: 'none',
+  },
 );
 
-const Navigation = createAppContainer(navigator)
+const Navigation = createAppContainer(navigator);
 
 export default class App extends React.Component {
   render() {

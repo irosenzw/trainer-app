@@ -1,25 +1,34 @@
 import React from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
+import NumberComponent from '../../Components/NumberComponent';
 import {
   onMinutesDown,
   onMinutesUp,
   onSecondsUp,
   onSecondsDown,
+  onNumberUp,
+  onNumberDown,
 } from './utils';
+import StartButton from '../../Components/Buttons/StartButton';
+
+const intervalMinSec = 1;
+const intervalMinRounds = 1;
+const intervalMaxRounds = 1000;
 
 const IntervalWorkout = ({ navigation }) => {
-  const [intervalSecs, setIntervalSecs] = React.useState(0);
+  const [intervalSecs, setIntervalSecs] = React.useState(1);
   const [restSecs, setRestSecs] = React.useState(0);
-  const [rounds, setRounds] = React.useState(1);
+  const [rounds, setRounds] = React.useState(intervalMinRounds);
 
   const intervalOnMinuteUp = React.useCallback(
     () => onMinutesUp(setIntervalSecs, intervalSecs),
     [intervalSecs],
   );
   const intervalOnMinuteDown = React.useCallback(
-    () => onMinutesDown(setIntervalSecs, intervalSecs),
+    () =>
+      onMinutesDown(setIntervalSecs, intervalSecs, intervalMinSec),
     [intervalSecs],
   );
   const intervalOnSecondsUp = React.useCallback(
@@ -27,7 +36,8 @@ const IntervalWorkout = ({ navigation }) => {
     [intervalSecs],
   );
   const intervalOnSecondsDown = React.useCallback(
-    () => onSecondsDown(setIntervalSecs, intervalSecs),
+    () =>
+      onSecondsDown(setIntervalSecs, intervalSecs, intervalMinSec),
     [intervalSecs],
   );
 
@@ -46,6 +56,16 @@ const IntervalWorkout = ({ navigation }) => {
   const restOnSecondsDown = React.useCallback(
     () => onSecondsDown(setRestSecs, restSecs),
     [restSecs],
+  );
+
+  const onRoundsDown = React.useCallback(
+    () => onNumberDown(setRounds, rounds, intervalMinRounds),
+    [rounds],
+  );
+
+  const onRoundsUp = React.useCallback(
+    () => onNumberUp(setRounds, rounds, intervalMaxRounds),
+    [rounds],
   );
 
   return (
@@ -69,6 +89,13 @@ const IntervalWorkout = ({ navigation }) => {
         onSecondsDown={restOnSecondsDown}
         onSecondsUp={restOnSecondsUp}
       />
+      <NumberComponent
+        title="Rounds"
+        number={rounds}
+        onUp={onRoundsUp}
+        onDown={onRoundsDown}
+      />
+      <StartButton />
     </Wrapper>
   );
 };

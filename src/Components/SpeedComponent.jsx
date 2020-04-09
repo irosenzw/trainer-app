@@ -1,16 +1,18 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import UpDownArrows from './ClockTimer/UpDownArrows';
-import ClockViewer from './ClockTimer/Clock';
+import { ButtonGroup } from 'react-native-elements';
+import { COLOR_SCHEME } from '../utils/Constants';
 
-const ClockComponent = ({
-  title,
-  seconds,
-  onMinutesDown,
-  onMinutesUp,
-  onSecondsDown,
-  onSecondsUp,
-}) => {
+const speedTypes = {
+  slow: 5 * 1000, // 5 seconds
+  normal: 1 * 1000, // 1 second
+  fast: 0.5 * 1000, // 0.5 seconds
+};
+
+const speedArr = ['Slow', 'Normal', 'Fast'];
+
+const SpeedComponent = ({ title }) => {
+  const [selectedIndex, setSelectedIndex] = React.useState(1);
   return (
     <View style={styles.mainView}>
       <View style={styles.titleView}>
@@ -18,21 +20,16 @@ const ClockComponent = ({
           {title ? `${title}:` : 'TITLE:'}
         </Text>
       </View>
-      <View style={styles.componentView}>
-        <View style={styles.buttonView}>
-          <UpDownArrows onUp={onMinutesUp} onDown={onMinutesDown} />
-        </View>
-        <View style={styles.subjectView}>
-          <ClockViewer seconds={seconds} />
-        </View>
-        <View style={styles.buttonView}>
-          <UpDownArrows onUp={onSecondsUp} onDown={onSecondsDown} />
-        </View>
-      </View>
+      <ButtonGroup
+        onPress={(idx) => setSelectedIndex(idx)}
+        selectedIndex={selectedIndex}
+        buttons={speedArr}
+        disabledStyle
+        containerStyle={styles.componentView}
+      />
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   mainView: {
     display: 'flex',
@@ -63,17 +60,20 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   buttonView: {
-    // height: '90%',
     flex: 1,
     flexGrow: 1,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   subjectView: {
-    flex: 1,
+    flex: 4,
     flexGrow: 3,
-    // paddingBottom: 25,
     alignItems: 'center',
+  },
+  NumberText: {
+    fontSize: 50,
+    color: COLOR_SCHEME.white,
   },
 });
 
-export default ClockComponent;
+export default SpeedComponent;
