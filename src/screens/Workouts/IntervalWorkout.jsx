@@ -18,8 +18,8 @@ const intervalMinRounds = 1;
 const intervalMaxRounds = 1000;
 
 const IntervalWorkout = ({ navigation }) => {
-  const [intervalSecs, setIntervalSecs] = React.useState(1);
-  const [restSecs, setRestSecs] = React.useState(0);
+  const [intervalSecs, setIntervalSecs] = React.useState(20);
+  const [restSecs, setRestSecs] = React.useState(10);
   const [rounds, setRounds] = React.useState(intervalMinRounds);
 
   const intervalOnMinuteUp = React.useCallback(

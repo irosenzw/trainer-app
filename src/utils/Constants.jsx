@@ -4,4 +4,5 @@ export const COLOR_SCHEME = {
   blue: '#2EC4B6',
   red: '#E71D36',
   orange: '#FF9F1C',
+  darkOrange: '#664313',
 };

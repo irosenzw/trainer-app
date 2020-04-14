@@ -21,13 +21,14 @@ const StartButton = () => {
 
 const styles = StyleSheet.create({
   view: {
-    padding: 40,
+    marginTop: 20,
+    padding: 20,
     backgroundColor: COLOR_SCHEME.blue,
     borderRadius: 20,
     // flexShrink: 1,
   },
   text: {
-    fontSize: 40,
+    fontSize: 30,
     color: COLOR_SCHEME.white,
   },
 });
