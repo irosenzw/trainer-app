@@ -11,6 +11,7 @@ import {
   onNumberUp,
   onNumberDown,
 } from './utils';
+import StartButton from '../../Components/Buttons/StartButton';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -19,8 +20,8 @@ const maxcountTo = 100;
 
 const CounterWorkout = ({ navigation }) => {
   const [countTo, setCountTo] = React.useState(10);
-  const [speed, setSpeed] = React.useState('high');
-  const [restSecs, setRestSecs] = React.useState(0);
+  const [speed, setSpeed] = React.useState(1000); // milliseconds
+  const [restSecs, setRestSecs] = React.useState(10);
   const [rounds, setRounds] = React.useState(minRounds);
 
   // CountTo
@@ -33,8 +34,6 @@ const CounterWorkout = ({ navigation }) => {
     () => onNumberUp(setCountTo, countTo, maxcountTo),
     [countTo],
   );
-
-  // Speed
 
   // Rest
   const restOnMinuteUp = React.useCallback(
@@ -65,6 +64,10 @@ const CounterWorkout = ({ navigation }) => {
     [rounds],
   );
 
+  const onUpdateSpeed = React.useCallback((spd) => setSpeed(spd), [
+    speed,
+  ]);
+
   return (
     <Wrapper
       title="Counter Workout"
@@ -76,13 +79,13 @@ const CounterWorkout = ({ navigation }) => {
         onUp={onCountToUp}
         onDown={onCountToDown}
       />
-      <SpeedComponent title="Speed" />
       <NumberComponent
         title="Rounds"
         number={rounds}
         onUp={onRoundsUp}
         onDown={onRoundsDown}
       />
+      <SpeedComponent title="Speed" updateSpeed={onUpdateSpeed} />
       <ClockComponent
         title="Rest Time"
         seconds={restSecs}
@@ -91,6 +94,7 @@ const CounterWorkout = ({ navigation }) => {
         onSecondsDown={restOnSecondsDown}
         onSecondsUp={restOnSecondsUp}
       />
+      <StartButton />
     </Wrapper>
   );
 };

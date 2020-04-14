@@ -9,10 +9,16 @@ const speedTypes = {
   fast: 0.5 * 1000, // 0.5 seconds
 };
 
-const speedArr = ['Slow', 'Normal', 'Fast'];
+const speedArr = ['slow', 'normal', 'fast'];
 
-const SpeedComponent = ({ title }) => {
+const SpeedComponent = ({ title, updateSpeed }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+  const onPress = (idx) => {
+    setSelectedIndex(idx);
+    updateSpeed(speedTypes[speedArr[idx]]);
+  };
+
   return (
     <View style={styles.mainView}>
       <View style={styles.titleView}>
@@ -21,11 +27,14 @@ const SpeedComponent = ({ title }) => {
         </Text>
       </View>
       <ButtonGroup
-        onPress={(idx) => setSelectedIndex(idx)}
+        onPress={(idx) => onPress(idx)}
         selectedIndex={selectedIndex}
         buttons={speedArr}
-        disabledStyle
         containerStyle={styles.componentView}
+        buttonStyle={styles.ButtonStyle}
+        textStyle={styles.ButtonText}
+        selectedButtonStyle={styles.SelectedButtonStyle}
+        innerBorderStyle={{ width: 0, color: COLOR_SCHEME.white }}
       />
     </View>
   );
@@ -35,10 +44,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     width: '95%',
     height: '20%',
-    marginVertical: 10,
+    marginVertical: 3,
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'column',
+    flex: 1,
   },
   titleView: {
     width: '100%',
@@ -53,11 +63,14 @@ const styles = StyleSheet.create({
   },
   componentView: {
     width: '85%',
-    height: '80%',
+    height: '45%',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     display: 'flex',
+    borderWidth: 0,
+    borderRadius: 8,
+    backgroundColor: COLOR_SCHEME.black,
   },
   buttonView: {
     flex: 1,
@@ -73,6 +86,17 @@ const styles = StyleSheet.create({
   NumberText: {
     fontSize: 50,
     color: COLOR_SCHEME.white,
+  },
+  ButtonStyle: {
+    backgroundColor: COLOR_SCHEME.orange,
+    borderRadius: 8,
+  },
+  ButtonText: {
+    color: COLOR_SCHEME.black,
+    fontSize: 20,
+  },
+  SelectedButtonStyle: {
+    backgroundColor: COLOR_SCHEME.darkOrange,
   },
 });
 

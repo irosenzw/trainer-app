@@ -39,11 +39,12 @@ const styles = StyleSheet.create({
   mainView: {
     display: 'flex',
     width: '95%',
-    height: '20%',
-    marginVertical: 10,
+    // height: '20%',
+    marginVertical: 3,
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'column',
+    flex: 1,
   },
   titleView: {
     width: '100%',

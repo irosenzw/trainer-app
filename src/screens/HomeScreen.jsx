@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import HomeScreenBtn from '../Components/Btn';
+import HomeScreenBtn from '../Components/Buttons/HomeScreenBtn';
 import Wrapper from '../Components/Wrapper';
 
 class HomeScreen extends React.Component {
