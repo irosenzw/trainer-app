@@ -6,13 +6,15 @@ import { createStore } from 'redux';
 import HomeScreen from './src/screens/HomeScreen';
 import IntervalWorkout from './src/screens/Workouts/IntervalWorkout';
 import CounterWorkout from './src/screens/Workouts/CounterWorkout';
+import ActionScreen from './src/screens/ActionScreen';
 import Reducers from './src/Reducers';
 
 const navigator = createStackNavigator(
   {
     Home: HomeScreen,
-    IntervalWorkout: IntervalWorkout,
-    CounterWorkout: CounterWorkout,
+    IntervalWorkout,
+    CounterWorkout,
+    ActionScreen,
   },
   {
     initialRouteName: 'Home',
@@ -22,7 +24,7 @@ const navigator = createStackNavigator(
 
 const Navigation = createAppContainer(navigator);
 
-export default class App extends React.Component {
+export default class App extends React.PureComponent {
   render() {
     return (
       <Provider store={createStore(Reducers)}>
