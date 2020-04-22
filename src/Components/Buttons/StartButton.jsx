@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 import { COLOR_SCHEME } from '../../utils/Constants';
 
-const StartButton = () => {
+const StartButton = ({ onClick }) => {
   return (
     <View style={{ flex: 1 }}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onClick}>
         <View style={styles.view}>
           <Text style={styles.text}>Start</Text>
         </View>

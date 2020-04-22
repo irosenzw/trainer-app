@@ -12,6 +12,7 @@ import {
   onNumberDown,
 } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
+import { COUNTER } from '../../utils/Constants';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -70,7 +71,7 @@ const CounterWorkout = ({ navigation }) => {
 
   return (
     <Wrapper
-      title="Counter Workout"
+      title="Counter"
       backNav={() => navigation.navigate('Home')}
     >
       <NumberComponent
@@ -94,7 +95,17 @@ const CounterWorkout = ({ navigation }) => {
         onSecondsDown={restOnSecondsDown}
         onSecondsUp={restOnSecondsUp}
       />
-      <StartButton />
+      <StartButton
+        onClick={() => {
+          navigation.navigate('ActionScreen', {
+            restTime: restSecs,
+            workoutTime: countTo,
+            workoutType: COUNTER,
+            speed,
+            rounds,
+          });
+        }}
+      />
     </Wrapper>
   );
 };
