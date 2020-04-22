@@ -23,7 +23,6 @@ export const useInterval = (callback, delay) => {
       if (delay === 1) {
         clearInterval(id);
       }
-      console.log('id:', id);
       return () => clearInterval(id);
     }
   }, [delay]);

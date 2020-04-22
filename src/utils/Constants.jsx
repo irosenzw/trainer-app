@@ -8,7 +8,12 @@ export const COLOR_SCHEME = {
   darkOrange: '#664313',
   yellow: '#f2e416',
   darkYellow: '#7a730b',
+  lightDarkYellow: '#d1cf1d',
+  green: '#24c92a',
 };
 
 export const WORKOUT = 'WORKOUT';
 export const REST = 'REST';
+export const FINISH = 'FINISH';
+export const INTERVAL = 'INTERVAL';
+export const COUNTER = 'COUNTER';

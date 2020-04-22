@@ -12,6 +12,7 @@ import {
   onNumberDown,
 } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
+import { INTERVAL } from '../../utils/Constants';
 
 const intervalMinSec = 1;
 const intervalMinRounds = 1;
@@ -70,7 +71,7 @@ const IntervalWorkout = ({ navigation }) => {
 
   return (
     <Wrapper
-      title="Interval Workout"
+      title="Interval"
       backNav={() => navigation.navigate('Home')}
     >
       <ClockComponent
@@ -95,7 +96,16 @@ const IntervalWorkout = ({ navigation }) => {
         onUp={onRoundsUp}
         onDown={onRoundsDown}
       />
-      <StartButton />
+      <StartButton
+        onClick={() => {
+          navigation.navigate('ActionScreen', {
+            restTime: restSecs,
+            workoutTime: intervalSecs,
+            workoutType: INTERVAL,
+            rounds,
+          });
+        }}
+      />
     </Wrapper>
   );
 };

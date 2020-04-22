@@ -17,10 +17,7 @@ const HomeScreen = ({ navigation }) => {
           action={() => navigation.navigate('CounterWorkout')}
         />
       </View>
-      <HomeScreenBtn
-        text="Custom"
-        action={() => navigation.navigate('ActionScreen')}
-      />
+      <HomeScreenBtn text="Custom" />
       <Icon name="rocket" size={30} color="#AAA" />
     </Wrapper>
   );
