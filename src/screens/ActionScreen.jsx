@@ -7,12 +7,18 @@ import {
   WORKOUT,
   REST,
   INTERVAL,
-  COUNTER,
   FINISH,
+  COUNTER,
 } from '../utils/Constants';
 import { useInterval } from '../Hooks/UseInterval';
 import WorkoutButtonFooter from '../Components/WorkoutButtonFooter';
-import ActionInnterView from '../Components/ActionInnerView';
+import ActionInnerView from '../Components/ActionInnerView';
+import {
+  playBell,
+  playCount,
+  playSuccess,
+  playWarning,
+} from '../Audio/SoundMaker';
 
 const calcFill = (currValue, maxValue) =>
   Math.round((currValue / maxValue) * 100);
@@ -25,7 +31,6 @@ const getIsRunning = (isRunning) => {
 };
 
 const ActionScreen = ({ navigation }) => {
-  console.log('navigation', navigation);
   const {
     restTime,
     workoutTime,
@@ -43,6 +48,10 @@ const ActionScreen = ({ navigation }) => {
     tintColor: COLOR_SCHEME.blue,
     bg: COLOR_SCHEME.darkBlue,
   });
+
+  const isFinish = () => workoutState === FINISH;
+
+  const getSpeed = () => (workoutState === REST ? 1000 : speed);
 
   const debug = () => {
     console.log('workoutState', workoutState);
@@ -75,13 +84,16 @@ const ActionScreen = ({ navigation }) => {
   };
 
   const onStart = () => {
-    setRound(1);
-    setTimerDelay(speed);
-    setWorkoutState(WORKOUT);
-    setOuterCircleStyle({
-      tintColor: COLOR_SCHEME.blue,
-      bg: COLOR_SCHEME.darkBlue,
-    });
+    if (isFinish()) {
+      setRound(1);
+      playBell();
+      setWorkoutState(WORKOUT);
+      setOuterCircleStyle({
+        tintColor: COLOR_SCHEME.blue,
+        bg: COLOR_SCHEME.darkBlue,
+      });
+    }
+    setTimerDelay(getSpeed());
   };
 
   const onFinish = () => {
@@ -90,34 +102,53 @@ const ActionScreen = ({ navigation }) => {
       tintColor: COLOR_SCHEME.green,
       bg: COLOR_SCHEME.green,
     });
+    playSuccess();
   };
 
-  if (round > rounds) {
-    onFinish();
-  }
+  React.useEffect(() => {
+    if (
+      workoutSecs <= 3 &&
+      workoutSecs > 0 &&
+      workoutState === WORKOUT &&
+      workoutType !== COUNTER
+    ) {
+      playWarning();
+    }
 
-  if (workoutSecs === -1) {
-    setWorkoutSecs(workoutTime);
-    setWorkoutState(REST);
-    setOuterCircleStyle({
-      tintColor: COLOR_SCHEME.yellow,
-      bg: COLOR_SCHEME.darkYellow,
-    });
+    if (workoutSecs === -1) {
+      setWorkoutSecs(workoutTime);
+      setWorkoutState(REST);
+      setOuterCircleStyle({
+        tintColor: COLOR_SCHEME.yellow,
+        bg: COLOR_SCHEME.darkYellow,
+      });
 
-    setTimerDelay(1000);
-  }
+      setTimerDelay(1000);
+    }
+  }, [workoutSecs]);
 
-  if (restSecs === -1) {
-    setRound(round + 1);
-    setRestSecs(restTime);
-    setWorkoutState(WORKOUT);
-    setOuterCircleStyle({
-      tintColor: COLOR_SCHEME.blue,
-      bg: COLOR_SCHEME.darkBlue,
-    });
+  React.useEffect(() => {
+    if (restSecs <= 3 && restSecs > 0 && workoutState === REST) {
+      playWarning();
+    }
+    if (restSecs === -1) {
+      setRound(round + 1);
+      setRestSecs(restTime);
+      setWorkoutState(WORKOUT);
+      setOuterCircleStyle({
+        tintColor: COLOR_SCHEME.blue,
+        bg: COLOR_SCHEME.darkBlue,
+      });
 
-    setTimerDelay(speed);
-  }
+      setTimerDelay(speed);
+    }
+  }, [restSecs]);
+
+  React.useEffect(() => {
+    if (round > rounds) {
+      onFinish();
+    }
+  }, [round]);
 
   const fillOuterCircle = () => {
     return workoutState === WORKOUT
@@ -125,13 +156,19 @@ const ActionScreen = ({ navigation }) => {
       : calcFill(restTime - restSecs, restTime);
   };
 
-  useInterval(
-    () =>
-      workoutState === WORKOUT
-        ? setWorkoutSecs(workoutSecs - 1)
-        : setRestSecs(restSecs - 1),
-    timerDelay,
-  );
+  useInterval(() => {
+    if (
+      workoutType === COUNTER &&
+      workoutState === WORKOUT &&
+      workoutSecs > 0
+    ) {
+      debug();
+      playCount(workoutTime - workoutSecs + 1);
+    }
+    return workoutState === WORKOUT
+      ? setWorkoutSecs(workoutSecs - 1)
+      : setRestSecs(restSecs - 1);
+  }, timerDelay);
 
   return (
     <Wrapper title="Action" backNav={() => navigation.goBack()}>
@@ -155,11 +192,13 @@ const ActionScreen = ({ navigation }) => {
               backgroundColor={COLOR_SCHEME.darkOrange}
             >
               {() => (
-                <ActionInnterView
+                <ActionInnerView
                   value={calcInnerCircleValue()}
                   isInterval={workoutType === INTERVAL}
                   isWorkout={workoutState === WORKOUT}
-                  isFinish={workoutState === FINISH}
+                  isFinish={isFinish()}
+                  currRound={round}
+                  totalRounds={rounds}
                 />
               )}
             </AnimatedCircularProgress>
@@ -170,6 +209,7 @@ const ActionScreen = ({ navigation }) => {
           onPause={() => setTimerDelay(null)}
           onStop={() => onStop()}
           isRunning={getIsRunning(timerDelay)}
+          isFinish={isFinish()}
         />
       </View>
     </Wrapper>
