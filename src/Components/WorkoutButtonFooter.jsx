@@ -5,6 +5,7 @@ import { COLOR_SCHEME } from '../utils/Constants';
 
 const WorkoutButtonFooter = ({
   isRunning = true,
+  isFinish = false,
   onContinue,
   onPause,
   onStop,
@@ -26,11 +27,13 @@ const WorkoutButtonFooter = ({
           style={styles.pauseStyle}
         />
       )}
-      <WorkoutButton
-        onClick={onStop}
-        iconName="stop"
-        style={styles.stopStyle}
-      />
+      {!isFinish && (
+        <WorkoutButton
+          onClick={onStop}
+          iconName="stop"
+          style={styles.stopStyle}
+        />
+      )}
     </View>
   );
 };
