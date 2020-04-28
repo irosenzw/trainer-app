@@ -9,6 +9,7 @@ import {
   INTERVAL,
   FINISH,
   COUNTER,
+  PREPARATION,
 } from '../utils/Constants';
 import { useInterval } from '../Hooks/UseInterval';
 import WorkoutButtonFooter from '../Components/WorkoutButtonFooter';
@@ -37,21 +38,25 @@ const ActionScreen = ({ navigation }) => {
     workoutType,
     rounds,
   } = navigation.state.params;
+  const prepTime = 5;
   const speed = navigation.state.params.speed || 1000;
-  const [workoutState, setWorkoutState] = React.useState(WORKOUT); // WORKOUT or REST or PREPARATION or FINISH or PAUSE //later SKIP
-  const [workoutSecs, setWorkoutSecs] = React.useState(workoutTime);
+  const [workoutState, setWorkoutState] = React.useState(PREPARATION); // WORKOUT or REST or PREPARATION or FINISH or PAUSE //later SKIP
+  const [workoutSecs, setWorkoutSecs] = React.useState(prepTime);
   const [restSecs, setRestSecs] = React.useState(restTime);
-  const [round, setRound] = React.useState(1);
-  const [timerDelay, setTimerDelay] = React.useState(speed);
+  const [round, setRound] = React.useState(0);
+  const [timerDelay, setTimerDelay] = React.useState(1000);
 
   const [outerCircleStyle, setOuterCircleStyle] = React.useState({
-    tintColor: COLOR_SCHEME.blue,
+    tintColor: COLOR_SCHEME.red,
     bg: COLOR_SCHEME.darkBlue,
   });
 
   const isFinish = () => workoutState === FINISH;
+  const isWorkout = () => workoutState === WORKOUT;
+  const isRest = () => workoutState === REST;
+  const isPrep = () => workoutState === PREPARATION;
 
-  const getSpeed = () => (workoutState === REST ? 1000 : speed);
+  const getSpeed = () => (isRest() || isPrep() ? 1000 : speed);
 
   const debug = () => {
     console.log('workoutState', workoutState);
@@ -63,12 +68,41 @@ const ActionScreen = ({ navigation }) => {
   };
 
   const calcInnerCircleValue = () => {
-    // eslint-disable-next-line no-nested-ternary
-    return workoutState === WORKOUT
-      ? workoutType === INTERVAL
-        ? workoutSecs
-        : workoutTime - workoutSecs
-      : restSecs;
+    const value =
+      // eslint-disable-next-line no-nested-ternary
+      isWorkout() || isPrep()
+        ? workoutType === INTERVAL
+          ? workoutSecs
+          : workoutTime - workoutSecs
+        : restSecs;
+
+    return value < 0 ? 0 : value;
+  };
+
+  const fillOuterCircle = () => {
+    switch (workoutState) {
+      case PREPARATION:
+        return calcFill(prepTime - workoutSecs, prepTime);
+      case REST:
+        return calcFill(restTime - restSecs, restTime);
+      default:
+        // WORKOUT
+        return calcFill(workoutTime - workoutSecs, workoutTime);
+    }
+  };
+
+  const nextRound = () => {
+    setRound(round + 1);
+    setWorkoutSecs(workoutTime);
+    setRestSecs(restTime);
+    setWorkoutState(WORKOUT);
+    setOuterCircleStyle({
+      tintColor: COLOR_SCHEME.blue,
+      bg: COLOR_SCHEME.darkBlue,
+    });
+
+    setTimerDelay(speed);
+    playBell();
   };
 
   const onStop = () => {
@@ -85,15 +119,16 @@ const ActionScreen = ({ navigation }) => {
 
   const onStart = () => {
     if (isFinish()) {
-      setRound(1);
-      playBell();
-      setWorkoutState(WORKOUT);
+      setRound(0);
+      setWorkoutState(PREPARATION);
+      setTimerDelay(1000);
       setOuterCircleStyle({
-        tintColor: COLOR_SCHEME.blue,
+        tintColor: COLOR_SCHEME.red,
         bg: COLOR_SCHEME.darkBlue,
       });
+    } else {
+      setTimerDelay(getSpeed());
     }
-    setTimerDelay(getSpeed());
   };
 
   const onFinish = () => {
@@ -107,65 +142,47 @@ const ActionScreen = ({ navigation }) => {
 
   React.useEffect(() => {
     if (
-      workoutSecs <= 3 &&
-      workoutSecs > 0 &&
-      workoutState === WORKOUT &&
+      isWorkout() &&
+      workoutSecs === 3 &&
+      workoutTime !== 3 &&
       workoutType !== COUNTER
     ) {
       playWarning();
     }
 
     if (workoutSecs === -1) {
-      setWorkoutSecs(workoutTime);
-      setWorkoutState(REST);
-      setOuterCircleStyle({
-        tintColor: COLOR_SCHEME.yellow,
-        bg: COLOR_SCHEME.darkYellow,
-      });
+      if (round === rounds) {
+        onFinish();
+      } else {
+        setWorkoutSecs(workoutTime);
+        setWorkoutState(REST);
+        setOuterCircleStyle({
+          tintColor: COLOR_SCHEME.yellow,
+          bg: COLOR_SCHEME.darkYellow,
+        });
 
-      setTimerDelay(1000);
+        setTimerDelay(1000);
+      }
+    }
+    if (isPrep() && workoutSecs === -1) {
+      nextRound();
     }
   }, [workoutSecs]);
 
   React.useEffect(() => {
-    if (restSecs <= 3 && restSecs > 0 && workoutState === REST) {
+    if (restSecs === 3 && restTime !== 3 && isRest()) {
       playWarning();
     }
     if (restSecs === -1) {
-      setRound(round + 1);
-      setRestSecs(restTime);
-      setWorkoutState(WORKOUT);
-      setOuterCircleStyle({
-        tintColor: COLOR_SCHEME.blue,
-        bg: COLOR_SCHEME.darkBlue,
-      });
-
-      setTimerDelay(speed);
+      nextRound();
     }
   }, [restSecs]);
 
-  React.useEffect(() => {
-    if (round > rounds) {
-      onFinish();
-    }
-  }, [round]);
-
-  const fillOuterCircle = () => {
-    return workoutState === WORKOUT
-      ? calcFill(workoutTime - workoutSecs, workoutTime)
-      : calcFill(restTime - restSecs, restTime);
-  };
-
   useInterval(() => {
-    if (
-      workoutType === COUNTER &&
-      workoutState === WORKOUT &&
-      workoutSecs > 0
-    ) {
-      debug();
+    if (workoutType === COUNTER && isWorkout() && workoutSecs > 0) {
       playCount(workoutTime - workoutSecs + 1);
     }
-    return workoutState === WORKOUT
+    return isWorkout() || isPrep()
       ? setWorkoutSecs(workoutSecs - 1)
       : setRestSecs(restSecs - 1);
   }, timerDelay);

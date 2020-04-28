@@ -12,13 +12,14 @@ import eight from '../assets/Sounds/fastCountings/8.mp3';
 import nine from '../assets/Sounds/fastCountings/9.mp3';
 import ten from '../assets/Sounds/fastCountings/10.mp3';
 import success from '../assets/Sounds/success.mp3';
-import warning from '../assets/Sounds/boxingBell.mp3';
+import boxingBell from '../assets/Sounds/boxingBell.mp3';
 import kyai from '../assets/Sounds/kyai.mp3';
 
-const playSound = async (audioFile) => {
+const playSound = async (audioFile, volume = 1.0) => {
   const soundObject = new Audio.Sound();
   try {
     await soundObject.loadAsync(audioFile);
+    await soundObject.setVolumeAsync(volume);
     await soundObject.playAsync();
   } catch (error) {
     console.log('no play:', error);
@@ -26,11 +27,10 @@ const playSound = async (audioFile) => {
   }
 };
 
-export const playBell = () => playSound(bellRing);
-
+export const playBell = () => playSound(boxingBell, 0.5);
 export const playSuccess = () => playSound(success);
-
-export const playWarning = () => playSound(warning);
+export const playWarning = () => playSound(bellRing);
+export const playKyai = () => playSound(kyai);
 
 export const playCount = (currCount) => {
   if (currCount === 0) {
