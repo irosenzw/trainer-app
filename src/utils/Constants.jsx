@@ -17,3 +17,4 @@ export const REST = 'REST';
 export const FINISH = 'FINISH';
 export const INTERVAL = 'INTERVAL';
 export const COUNTER = 'COUNTER';
+export const PREPARATION = 'PREPARATION';
