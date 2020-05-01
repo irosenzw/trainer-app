@@ -14,6 +14,7 @@ import ten from '../assets/Sounds/fastCountings/10.mp3';
 import success from '../assets/Sounds/success.mp3';
 import boxingBell from '../assets/Sounds/boxingBell.mp3';
 import kyai from '../assets/Sounds/kyai.mp3';
+import longBeep from '../assets/Sounds/longBeep.mp3';
 
 const playSound = async (audioFile, volume = 1.0) => {
   const soundObject = new Audio.Sound();
@@ -27,10 +28,11 @@ const playSound = async (audioFile, volume = 1.0) => {
   }
 };
 
-export const playBell = () => playSound(boxingBell, 0.5);
+export const playBell = () => playSound(bellRing);
 export const playSuccess = () => playSound(success);
-export const playWarning = () => playSound(bellRing);
+export const playWarning = () => playSound(boxingBell, 0.5);
 export const playKyai = () => playSound(kyai);
+export const playLongBeep = () => playSound(longBeep);
 
 export const playCount = (currCount) => {
   if (currCount === 0) {

@@ -19,6 +19,7 @@ import {
   playCount,
   playSuccess,
   playWarning,
+  playLongBeep,
 } from '../Audio/SoundMaker';
 
 const calcFill = (currValue, maxValue) =>
@@ -39,6 +40,7 @@ const ActionScreen = ({ navigation }) => {
     rounds,
   } = navigation.state.params;
   const prepTime = 5;
+  const playWarningSoundTime = 3;
   const speed = navigation.state.params.speed || 1000;
   const [workoutState, setWorkoutState] = React.useState(PREPARATION); // WORKOUT or REST or PREPARATION or FINISH or PAUSE //later SKIP
   const [workoutSecs, setWorkoutSecs] = React.useState(prepTime);
@@ -143,8 +145,8 @@ const ActionScreen = ({ navigation }) => {
   React.useEffect(() => {
     if (
       isWorkout() &&
-      workoutSecs === 3 &&
-      workoutTime !== 3 &&
+      workoutSecs === playWarningSoundTime &&
+      workoutTime !== playWarningSoundTime &&
       workoutType !== COUNTER
     ) {
       playWarning();
@@ -161,6 +163,7 @@ const ActionScreen = ({ navigation }) => {
           bg: COLOR_SCHEME.darkYellow,
         });
 
+        // playLongBeep();
         setTimerDelay(1000);
       }
     }
@@ -170,7 +173,11 @@ const ActionScreen = ({ navigation }) => {
   }, [workoutSecs]);
 
   React.useEffect(() => {
-    if (restSecs === 3 && restTime !== 3 && isRest()) {
+    if (
+      restSecs === playWarningSoundTime &&
+      restTime !== playWarningSoundTime &&
+      isRest()
+    ) {
       playWarning();
     }
     if (restSecs === -1) {
