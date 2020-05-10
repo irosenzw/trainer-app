@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "/home/irosenzw/privateProjects/trainer-app-test/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-watch-v20/values-watch-v20.xml",
+            "map": [
+                {
+                    "source": "/home/irosenzw/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0.aar/2e1c7b23c925f74be32087b56dda0295/res/values-watch-v20/values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,5,8",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,214,385",
+                        "endLines": "4,7,10",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "209,380,553"
+                    }
+                }
+            ]
+        }
+    ]
+}
