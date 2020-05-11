@@ -1,22 +1,22 @@
 /* eslint-disable import/prefer-default-export */
-// import { Audio } from 'expo-av';
-/*import bellRing from '../assets/Sounds/bell-ring.mp3';
-import one from '../assets/Sounds/fastCountings/1.mp3';
-import two from '../assets/Sounds/fastCountings/2.mp3';
-import three from '../assets/Sounds/fastCountings/3.mp3';
-import four from '../assets/Sounds/fastCountings/4.mp3';
-import five from '../assets/Sounds/fastCountings/5.mp3';
-import six from '../assets/Sounds/fastCountings/6.mp3';
-import seven from '../assets/Sounds/fastCountings/7.mp3';
-import eight from '../assets/Sounds/fastCountings/8.mp3';
-import nine from '../assets/Sounds/fastCountings/9.mp3';
-import ten from '../assets/Sounds/fastCountings/10.mp3';
-import success from '../assets/Sounds/success.mp3';
-import boxingBell from '../assets/Sounds/boxingBell.mp3';
-import kyai from '../assets/Sounds/kyai.mp3';
-import longBeep from '../assets/Sounds/longBeep.mp3';
+import { Audio } from 'expo-av';
+const bellRing = require('../assets/Sounds/bell-ring.mp3');
+const one = require('../assets/Sounds/fastCountings/1.mp3');
+const two = require('../assets/Sounds/fastCountings/2.mp3');
+const three = require('../assets/Sounds/fastCountings/3.mp3');
+const four = require('../assets/Sounds/fastCountings/4.mp3');
+const five = require('../assets/Sounds/fastCountings/5.mp3');
+const six = require('../assets/Sounds/fastCountings/6.mp3');
+const seven = require('../assets/Sounds/fastCountings/7.mp3');
+const eight = require('../assets/Sounds/fastCountings/8.mp3');
+const nine = require('../assets/Sounds/fastCountings/9.mp3');
+const ten = require('../assets/Sounds/fastCountings/10.mp3');
+const success = require('../assets/Sounds/success.mp3');
+const boxingBell = require('../assets/Sounds/boxingBell.mp3');
+const kyai = require('../assets/Sounds/boxingBell.mp3');
+const longBeep = require('../assets/Sounds/boxingBell.mp3');
 
-const playSound = async (audioFile, volume = 1.0) => {
+const playSound = async (audioFile: any, volume = 1.0) => {
   const soundObject = new Audio.Sound();
   try {
     await soundObject.loadAsync(audioFile);
@@ -34,7 +34,7 @@ export const playWarning = () => playSound(boxingBell, 0.5);
 export const playKyai = () => playSound(kyai);
 export const playLongBeep = () => playSound(longBeep);
 
-export const playCount = (currCount) => {
+export const playCount = (currCount: number) => {
   if (currCount === 0) {
     return;
   }
@@ -71,4 +71,3 @@ export const playCount = (currCount) => {
       playSound(ten);
   }
 };
-*/

@@ -4,6 +4,7 @@ ADDED from /home/irosenzw/privateProjects/trainer-app-test/android/app/src/main/
 INJECTED from /home/irosenzw/privateProjects/trainer-app-test/android/app/src/main/AndroidManifest.xml:1:1-48:12
 INJECTED from /home/irosenzw/privateProjects/trainer-app-test/android/app/src/main/AndroidManifest.xml:1:1-48:12
 INJECTED from /home/irosenzw/privateProjects/trainer-app-test/android/app/src/main/AndroidManifest.xml:1:1-48:12
+MERGED from [:react-native-vector-icons] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-permissions] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-permissions/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-screens] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-screens/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-wheel-picker-android] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-wheel-picker-android/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
@@ -13,12 +14,12 @@ MERGED from [:react-native-gesture-handler] /home/irosenzw/privateProjects/train
 MERGED from [:react-native-reanimated] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-reanimated/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-safe-area-context] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-safe-area-context/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-svg] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-svg/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-9:12
-MERGED from [:react-native-vector-icons] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:rn-range-slider] /home/irosenzw/privateProjects/trainer-app-test/node_modules/rn-range-slider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [com.facebook.react:react-native:0.61.5] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-react-native-0.61.5.aar/e27211feabaae6887cd2d4c4b1746608/AndroidManifest.xml:2:1-13:12
 MERGED from [com.google.android.material:material:1.1.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/material-1.1.0.aar/b953876c1acbf6326f66199c029731cb/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.appcompat:appcompat:1.1.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0.aar/2e1c7b23c925f74be32087b56dda0295/AndroidManifest.xml:17:1-24:12
 MERGED from [:expo-app-loader-provider] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
+MERGED from [:expo-av] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-av/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-constants] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:expo-file-system] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-30:12
 MERGED from [:unimodules-barcode-scanner-interface] /home/irosenzw/privateProjects/trainer-app-test/node_modules/unimodules-barcode-scanner-interface/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
@@ -33,8 +34,15 @@ MERGED from [:unimodules-core] /home/irosenzw/privateProjects/trainer-app-test/n
 MERGED from [:unimodules-image-loader-interface] /home/irosenzw/privateProjects/trainer-app-test/node_modules/unimodules-image-loader-interface/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [:unimodules-sensors-interface] /home/irosenzw/privateProjects/trainer-app-test/node_modules/unimodules-sensors-interface/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:2:1-11:12
 MERGED from [org.webkit:android-jsc:r245459] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/android-jsc-r245459.aar/e4085892807f17673aea15db144410ab/AndroidManifest.xml:2:1-11:12
+MERGED from [com.google.android.exoplayer:extension-okhttp:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-extension-okhttp-2.9.2.aar/a62150eee0b296eb4d33c361c900eef8/AndroidManifest.xml:17:1-24:12
 MERGED from [com.github.bumptech.glide:glide:4.9.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-glide-4.9.0.aar/193f1254d1cc5694bc813125c43bce60/AndroidManifest.xml:2:1-12:12
 MERGED from [com.github.bumptech.glide:gifdecoder:4.9.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-gifdecoder-4.9.0.aar/6d8bc4950e35ec1eff349addd04b5e22/AndroidManifest.xml:2:1-11:12
+MERGED from [com.google.android.exoplayer:exoplayer:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/exoplayer-2.9.2.aar/e371fd5d6a2c7d55189dedda941dd224/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-dash:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-dash-2.9.2.aar/ad46a5ebd53b2fa8f8253f8d8427a0ec/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-hls:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-hls-2.9.2.aar/f34408b7137a82fc273c9a4f6cee9007/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-smoothstreaming-2.9.2.aar/1044a8e6a8dfa0eec0fa55a37da0e582/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-ui:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-ui-2.9.2.aar/6b5bff015b3202037cca82cbb747799a/AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.android.exoplayer:exoplayer-core:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-core-2.9.2.aar/c73c060c1e85abfc709ada87dff56c4c/AndroidManifest.xml:17:1-26:12
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/legacy-support-v4-1.0.0.aar/e483d924791842baa66429cbd71fda95/AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/viewpager2-1.0.0.aar/cc55953a5fa97533305026c43d6e5c99/AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.fragment:fragment:1.2.1] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/fragment-1.2.1.aar/1e60e93fa29df359ff32240aa6e251f4/AndroidManifest.xml:17:1-24:12
@@ -78,6 +86,7 @@ MERGED from [com.facebook.fresco:imagepipeline:2.0.0] /home/irosenzw/.gradle/cac
 MERGED from [com.facebook.fresco:nativeimagetranscoder:2.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/nativeimagetranscoder-2.0.0.aar/bee2858850466e8d8c20e2c9f5281f38/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:imagepipeline-base:2.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/imagepipeline-base-2.0.0.aar/905bedf22c74dbd08d1b2a4e8413fb96/AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.soloader:soloader:0.6.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/soloader-0.6.0.aar/6a33893b2c959952e5b4f9eb48b8c563/AndroidManifest.xml:2:1-13:12
+MERGED from [com.yqritc:android-scalablevideoview:1.0.1] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-android-scalablevideoview-1.0.1.aar/423c0f70406e1d4f48ca8f47c5f5ecde/AndroidManifest.xml:2:1-12:12
 MERGED from [com.facebook.fresco:fbcore:2.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-fbcore-2.0.0.aar/bbdff36285543f9cb4120c7872d7dc9f/AndroidManifest.xml:2:1-9:12
 INJECTED from /home/irosenzw/privateProjects/trainer-app-test/android/app/src/main/AndroidManifest.xml:1:1-48:12
 INJECTED from /home/irosenzw/privateProjects/trainer-app-test/android/app/src/main/AndroidManifest.xml:1:1-48:12
@@ -234,6 +243,8 @@ uses-sdk
 INJECTED from /home/irosenzw/privateProjects/trainer-app-test/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/irosenzw/privateProjects/trainer-app-test/android/app/src/main/AndroidManifest.xml
 INJECTED from /home/irosenzw/privateProjects/trainer-app-test/android/app/src/main/AndroidManifest.xml
+MERGED from [:react-native-vector-icons] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:react-native-vector-icons] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-permissions] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-permissions/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-permissions] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-permissions/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:react-native-screens] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-screens/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
@@ -252,8 +263,6 @@ MERGED from [:react-native-safe-area-context] /home/irosenzw/privateProjects/tra
 MERGED from [:react-native-safe-area-context] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-safe-area-context/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-svg] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-svg/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-svg] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-svg/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:5:5-7:41
-MERGED from [:react-native-vector-icons] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
-MERGED from [:react-native-vector-icons] /home/irosenzw/privateProjects/trainer-app-test/node_modules/react-native-vector-icons/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:rn-range-slider] /home/irosenzw/privateProjects/trainer-app-test/node_modules/rn-range-slider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:rn-range-slider] /home/irosenzw/privateProjects/trainer-app-test/node_modules/rn-range-slider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.react:react-native:0.61.5] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-react-native-0.61.5.aar/e27211feabaae6887cd2d4c4b1746608/AndroidManifest.xml:7:5-9:41
@@ -264,6 +273,8 @@ MERGED from [androidx.appcompat:appcompat:1.1.0] /home/irosenzw/.gradle/caches/t
 MERGED from [androidx.appcompat:appcompat:1.1.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/appcompat-1.1.0.aar/2e1c7b23c925f74be32087b56dda0295/AndroidManifest.xml:20:5-22:41
 MERGED from [:expo-app-loader-provider] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-app-loader-provider] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-app-loader-provider/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:expo-av] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-av/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
+MERGED from [:expo-av] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-av/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-constants] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-constants] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-constants/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [:expo-file-system] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:8:5-10:41
@@ -292,10 +303,24 @@ MERGED from [:unimodules-sensors-interface] /home/irosenzw/privateProjects/train
 MERGED from [:unimodules-sensors-interface] /home/irosenzw/privateProjects/trainer-app-test/node_modules/unimodules-sensors-interface/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:7:5-9:41
 MERGED from [org.webkit:android-jsc:r245459] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/android-jsc-r245459.aar/e4085892807f17673aea15db144410ab/AndroidManifest.xml:7:5-9:41
 MERGED from [org.webkit:android-jsc:r245459] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/android-jsc-r245459.aar/e4085892807f17673aea15db144410ab/AndroidManifest.xml:7:5-9:41
+MERGED from [com.google.android.exoplayer:extension-okhttp:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-extension-okhttp-2.9.2.aar/a62150eee0b296eb4d33c361c900eef8/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:extension-okhttp:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-extension-okhttp-2.9.2.aar/a62150eee0b296eb4d33c361c900eef8/AndroidManifest.xml:20:5-22:41
 MERGED from [com.github.bumptech.glide:glide:4.9.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-glide-4.9.0.aar/193f1254d1cc5694bc813125c43bce60/AndroidManifest.xml:6:5-8:41
 MERGED from [com.github.bumptech.glide:glide:4.9.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-glide-4.9.0.aar/193f1254d1cc5694bc813125c43bce60/AndroidManifest.xml:6:5-8:41
 MERGED from [com.github.bumptech.glide:gifdecoder:4.9.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-gifdecoder-4.9.0.aar/6d8bc4950e35ec1eff349addd04b5e22/AndroidManifest.xml:5:5-7:41
 MERGED from [com.github.bumptech.glide:gifdecoder:4.9.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-gifdecoder-4.9.0.aar/6d8bc4950e35ec1eff349addd04b5e22/AndroidManifest.xml:5:5-7:41
+MERGED from [com.google.android.exoplayer:exoplayer:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/exoplayer-2.9.2.aar/e371fd5d6a2c7d55189dedda941dd224/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/exoplayer-2.9.2.aar/e371fd5d6a2c7d55189dedda941dd224/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-dash:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-dash-2.9.2.aar/ad46a5ebd53b2fa8f8253f8d8427a0ec/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-dash:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-dash-2.9.2.aar/ad46a5ebd53b2fa8f8253f8d8427a0ec/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-hls:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-hls-2.9.2.aar/f34408b7137a82fc273c9a4f6cee9007/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-hls:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-hls-2.9.2.aar/f34408b7137a82fc273c9a4f6cee9007/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-smoothstreaming-2.9.2.aar/1044a8e6a8dfa0eec0fa55a37da0e582/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-smoothstreaming:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-smoothstreaming-2.9.2.aar/1044a8e6a8dfa0eec0fa55a37da0e582/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-ui:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-ui-2.9.2.aar/6b5bff015b3202037cca82cbb747799a/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-ui:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-ui-2.9.2.aar/6b5bff015b3202037cca82cbb747799a/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-core:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-core-2.9.2.aar/c73c060c1e85abfc709ada87dff56c4c/AndroidManifest.xml:20:5-22:41
+MERGED from [com.google.android.exoplayer:exoplayer-core:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-core-2.9.2.aar/c73c060c1e85abfc709ada87dff56c4c/AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/legacy-support-v4-1.0.0.aar/e483d924791842baa66429cbd71fda95/AndroidManifest.xml:20:5-44
 MERGED from [androidx.legacy:legacy-support-v4:1.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/legacy-support-v4-1.0.0.aar/e483d924791842baa66429cbd71fda95/AndroidManifest.xml:20:5-44
 MERGED from [androidx.viewpager2:viewpager2:1.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/viewpager2-1.0.0.aar/cc55953a5fa97533305026c43d6e5c99/AndroidManifest.xml:20:5-22:41
@@ -382,6 +407,8 @@ MERGED from [com.facebook.fresco:imagepipeline-base:2.0.0] /home/irosenzw/.gradl
 MERGED from [com.facebook.fresco:imagepipeline-base:2.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/imagepipeline-base-2.0.0.aar/905bedf22c74dbd08d1b2a4e8413fb96/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.soloader:soloader:0.6.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/soloader-0.6.0.aar/6a33893b2c959952e5b4f9eb48b8c563/AndroidManifest.xml:7:5-9:41
 MERGED from [com.facebook.soloader:soloader:0.6.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/soloader-0.6.0.aar/6a33893b2c959952e5b4f9eb48b8c563/AndroidManifest.xml:7:5-9:41
+MERGED from [com.yqritc:android-scalablevideoview:1.0.1] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-android-scalablevideoview-1.0.1.aar/423c0f70406e1d4f48ca8f47c5f5ecde/AndroidManifest.xml:8:5-10:41
+MERGED from [com.yqritc:android-scalablevideoview:1.0.1] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-android-scalablevideoview-1.0.1.aar/423c0f70406e1d4f48ca8f47c5f5ecde/AndroidManifest.xml:8:5-10:41
 MERGED from [com.facebook.fresco:fbcore:2.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-fbcore-2.0.0.aar/bbdff36285543f9cb4120c7872d7dc9f/AndroidManifest.xml:5:5-7:41
 MERGED from [com.facebook.fresco:fbcore:2.0.0] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-fbcore-2.0.0.aar/bbdff36285543f9cb4120c7872d7dc9f/AndroidManifest.xml:5:5-7:41
 INJECTED from /home/irosenzw/privateProjects/trainer-app-test/android/app/src/main/AndroidManifest.xml
@@ -416,3 +443,7 @@ ADDED from [:expo-file-system] /home/irosenzw/privateProjects/trainer-app-test/n
 		ADDED from [:expo-file-system] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:26:17-67
 	android:name
 		ADDED from [:expo-file-system] /home/irosenzw/privateProjects/trainer-app-test/node_modules/expo-file-system/android/build/intermediates/library_manifest/debug/AndroidManifest.xml:25:17-67
+uses-permission#android.permission.ACCESS_NETWORK_STATE
+ADDED from [com.google.android.exoplayer:exoplayer-core:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-core-2.9.2.aar/c73c060c1e85abfc709ada87dff56c4c/AndroidManifest.xml:24:5-79
+	android:name
+		ADDED from [com.google.android.exoplayer:exoplayer-core:2.9.2] /home/irosenzw/.gradle/caches/transforms-1/files-1.1/jetified-exoplayer-core-2.9.2.aar/c73c060c1e85abfc709ada87dff56c4c/AndroidManifest.xml:24:22-76

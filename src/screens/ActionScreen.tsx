@@ -14,13 +14,13 @@ import {
 import { useInterval } from '../Hooks/UseInterval';
 import WorkoutButtonFooter from '../Components/WorkoutButtonFooter';
 import ActionInnerView from '../Components/ActionInnerView';
-/*import {
+import {
   playBell,
   playCount,
   playSuccess,
   playWarning,
   playLongBeep,
-} from '../Audio/SoundMaker';*/
+} from '../Audio/SoundMaker';
 const calcFill = (currValue: number, maxValue: number): number =>
   Math.round((currValue / maxValue) * 100);
 
@@ -61,6 +61,11 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   const isPrep = () => workoutState === PREPARATION;
 
   const getSpeed = () => (isRest() || isPrep() ? 1000 : speed);
+
+  // idea: make the the counter time double and make the sound every second count
+  if (workoutType === COUNTER && isWorkout() && workoutSecs > 0) {
+    playCount(workoutTime - workoutSecs + 1);
+  }
 
   const debug = () => {
     console.log('workoutState', workoutState);
@@ -110,7 +115,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       bg: COLOR_SCHEME.darkYellow,
     });
 
-    // playLongBeep();
+    playLongBeep();
     setTimerDelay(1000);
   };
 
@@ -126,7 +131,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
     setTimerDelay(speed);
     if (workoutType === INTERVAL) {
-      // playBell();
+      playBell();
     }
   };
 
@@ -163,7 +168,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       tintColor: COLOR_SCHEME.green,
       bg: COLOR_SCHEME.green,
     });
-    // playSuccess();
+    playSuccess();
   };
 
   React.useEffect(() => {
@@ -179,7 +184,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       workoutTime !== playWarningSoundTime &&
       workoutType !== COUNTER
     ) {
-      // playWarning();
+      playWarning();
     }
 
     if (workoutSecs === -1) {
@@ -199,7 +204,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       restTime !== playWarningSoundTime &&
       isRest()
     ) {
-      // playWarning();
+      playWarning();
     }
     if (restSecs === -1) {
       nextRound();
@@ -207,9 +212,6 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   }, [restSecs]);
 
   useInterval(() => {
-    if (workoutType === COUNTER && isWorkout() && workoutSecs > 0) {
-      // playCount(workoutTime - workoutSecs + 1);
-    }
     switch (workoutState) {
       case PREPARATION:
         setPrepSecs(prepSecs - 1);
