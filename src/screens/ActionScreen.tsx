@@ -36,7 +36,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   navigation,
 }) => {
   const { restTime, workoutTime, workoutType, rounds } = route.params;
-  const prepTime: number = 5;
+  const prepTime: number = 2;
   const playWarningSoundTime: number = 3;
   const speed: number = route?.params?.speed || 1000;
   const [workoutState, setWorkoutState] = React.useState<string>(
@@ -63,7 +63,12 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   const getSpeed = () => (isRest() || isPrep() ? 1000 : speed);
 
   // idea: make the the counter time double and make the sound every second count
-  if (workoutType === COUNTER && isWorkout() && workoutSecs > 0) {
+  if (
+    workoutType === COUNTER &&
+    isWorkout() &&
+    workoutSecs > 0 &&
+    timerDelay
+  ) {
     playCount(workoutTime - workoutSecs + 1);
   }
 
@@ -78,22 +83,28 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
   const calcInnerCircleValue = () => {
     let value;
+    let max;
     switch (workoutState) {
       case PREPARATION:
         value = prepSecs;
+        max = prepTime;
         break;
       case REST:
         value = restSecs;
+        max = restTime;
         break;
       default:
         // WORKOUT
+        max = workoutTime;
         value =
           workoutType === INTERVAL
             ? workoutSecs // for INTERVAL
             : workoutTime - workoutSecs; // for COUNTER
     }
 
-    return value < 0 ? 0 : value;
+    value = value < 0 ? 0 : value;
+    value = value > max ? max : value;
+    return value;
   };
 
   const fillOuterCircle = () => {
@@ -192,8 +203,12 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
         // Finish workout
         onFinish();
       } else {
-        // move to Rest phase
-        startRestPhase();
+        if (restTime === 0) {
+          nextRound();
+        } else {
+          // move to Rest phase
+          startRestPhase();
+        }
       }
     }
   }, [workoutSecs]);
