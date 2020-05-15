@@ -241,7 +241,11 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   }, timerDelay);
 
   return (
-    <Wrapper title="Action" backNav={() => navigation.goBack()}>
+    <Wrapper
+      title="Action"
+      backNav={() => navigation.goBack()}
+      scrollEnabled={false}
+    >
       <View style={styles.mainView}>
         <AnimatedCircularProgress
           size={350}
@@ -289,9 +293,9 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 const styles = StyleSheet.create({
   mainView: {
     display: 'flex',
-    width: '95%',
+    width: '100%',
     marginVertical: 3,
-    paddingTop: 40,
+    paddingTop: 50,
     alignItems: 'center',
     flexDirection: 'column',
     flex: 1,

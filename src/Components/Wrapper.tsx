@@ -1,27 +1,51 @@
-import React, { ReactNode } from 'react';
-import Container from './Container';
+import React, { ReactNode, Children } from 'react';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import Header from './Header/Header';
-
-const Wrapper: React.FC<WrapperProps> = (props) => {
-  return (
-    <Container>
-      <Header title={props.title} backNav={props.backNav} />
-      <Container
-        style={{
-          flex: 10,
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-        }}
-      >
-        {props.children}
-      </Container>
-    </Container>
-  );
-};
+import { COLOR_SCHEME } from '../utils/Constants';
 
 type WrapperProps = {
   title: string;
   backNav?: any;
+  scrollEnabled?: boolean;
 };
 
-export default Wrapper;
+const { width } = Dimensions.get('screen');
+
+const pageLayout: React.FC<WrapperProps> = ({
+  title,
+  backNav,
+  scrollEnabled = true,
+  children,
+}) => {
+  return (
+    <View style={styles.mainLayout}>
+      <Header title={title} backNav={backNav} />
+      <ScrollView
+        contentContainerStyle={{
+          flexGrow: 1,
+        }}
+        scrollEnabled={scrollEnabled}
+      >
+        {children}
+      </ScrollView>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  mainLayout: {
+    flex: 1,
+    flexDirection: 'column',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: COLOR_SCHEME.black,
+  },
+});
+
+export default pageLayout;
