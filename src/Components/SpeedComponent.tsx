@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
 import { COLOR_SCHEME } from '../utils/Constants';
+import Card from '../Components/Layout/Card';
 
 const speedTypes: { [key: string]: number } = {
   slow: 5 * 1000, // 5 seconds
@@ -23,12 +24,7 @@ const SpeedComponent: React.FC<SpeedComponentProps> = ({
   };
 
   return (
-    <View style={styles.mainView}>
-      <View style={styles.titleView}>
-        <Text style={styles.titleText}>
-          {title ? `${title}:` : 'TITLE:'}
-        </Text>
-      </View>
+    <Card title={title}>
       <ButtonGroup
         onPress={(idx) => onPress(idx)}
         selectedIndex={selectedIndex}
@@ -39,34 +35,13 @@ const SpeedComponent: React.FC<SpeedComponentProps> = ({
         selectedButtonStyle={styles.SelectedButtonStyle}
         innerBorderStyle={{ width: 0, color: COLOR_SCHEME.white }}
       />
-    </View>
+    </Card>
   );
 };
 const styles = StyleSheet.create({
-  mainView: {
-    display: 'flex',
-    width: '95%',
-    height: '20%',
-    marginVertical: 3,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    flexDirection: 'column',
-    flex: 1,
-  },
-  titleView: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    marginBottom: 10,
-  },
-  titleText: {
-    color: 'white',
-    fontSize: 20,
-  },
   componentView: {
-    width: '85%',
-    height: '45%',
+    width: '90%',
+    height: '70%',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -74,21 +49,6 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 8,
     backgroundColor: COLOR_SCHEME.black,
-  },
-  buttonView: {
-    flex: 1,
-    flexGrow: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  subjectView: {
-    flex: 4,
-    flexGrow: 3,
-    alignItems: 'center',
-  },
-  NumberText: {
-    fontSize: 50,
-    color: COLOR_SCHEME.white,
   },
   ButtonStyle: {
     backgroundColor: COLOR_SCHEME.orange,
@@ -104,7 +64,7 @@ const styles = StyleSheet.create({
 });
 
 type SpeedComponentProps = {
-  title: String;
+  title: string;
   updateSpeed: (speed: number) => void;
 };
 

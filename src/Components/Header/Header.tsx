@@ -16,7 +16,6 @@ const Header: React.FC<HeaderProps> = ({ backNav, title }) => {
 
 const styles = StyleSheet.create({
   view: {
-    display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 30,

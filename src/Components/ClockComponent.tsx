@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import UpDownArrows from './ClockTimer/UpDownArrows';
 import ClockViewer from './ClockTimer/Clock';
+import Card from './Layout/Card';
 
 const ClockComponent: React.FC<ClockComponentProps> = ({
   title,
@@ -12,12 +13,7 @@ const ClockComponent: React.FC<ClockComponentProps> = ({
   onSecondsUp,
 }) => {
   return (
-    <View style={styles.mainView}>
-      <View style={styles.titleView}>
-        <Text style={styles.titleText}>
-          {title ? `${title}:` : 'TITLE:'}
-        </Text>
-      </View>
+    <Card title={title}>
       <View style={styles.componentView}>
         <View style={styles.buttonView}>
           <UpDownArrows onUp={onMinutesUp} onDown={onMinutesDown} />
@@ -29,31 +25,11 @@ const ClockComponent: React.FC<ClockComponentProps> = ({
           <UpDownArrows onUp={onSecondsUp} onDown={onSecondsDown} />
         </View>
       </View>
-    </View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  mainView: {
-    display: 'flex',
-    width: '95%',
-    height: '20%',
-    marginVertical: 10,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  titleView: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    marginBottom: 10,
-  },
-  titleText: {
-    color: 'white',
-    fontSize: 20,
-  },
   componentView: {
     width: '85%',
     height: '80%',
@@ -63,7 +39,6 @@ const styles = StyleSheet.create({
     display: 'flex',
   },
   buttonView: {
-    // height: '90%',
     flex: 1,
     flexGrow: 1,
     alignItems: 'center',
@@ -71,7 +46,6 @@ const styles = StyleSheet.create({
   subjectView: {
     flex: 1,
     flexGrow: 3,
-    // paddingBottom: 25,
     alignItems: 'center',
   },
 });

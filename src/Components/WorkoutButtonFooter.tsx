@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     margin: 10,
-    flex: 1,
   },
   continueStyle: {
     backgroundColor: COLOR_SCHEME.green,
@@ -70,11 +69,11 @@ const styles = StyleSheet.create({
 });
 
 type WorkoutButtonFooterProps = {
-  isRunning: Boolean,
-  isFinish: Boolean,
-  onContinue: () => void,
-  onPause: () => void,
-  onStop: () => void,
+  isRunning: Boolean;
+  isFinish: Boolean;
+  onContinue: () => void;
+  onPause: () => void;
+  onStop: () => void;
 };
 
 export default WorkoutButtonFooter;

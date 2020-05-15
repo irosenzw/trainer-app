@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLOR_SCHEME } from '../utils/Constants';
+import Card from '../Components/Layout/Card';
 
 const NumberComponent: React.FC<NumberComponentProps> = ({
   title,
@@ -15,12 +16,7 @@ const NumberComponent: React.FC<NumberComponentProps> = ({
   onUp,
 }) => {
   return (
-    <View style={styles.mainView}>
-      <View style={styles.titleView}>
-        <Text style={styles.titleText}>
-          {title ? `${title}:` : 'TITLE:'}
-        </Text>
-      </View>
+    <Card title={title}>
       <View style={styles.componentView}>
         <View style={styles.buttonView}>
           <TouchableOpacity onPress={onDown}>
@@ -36,39 +32,17 @@ const NumberComponent: React.FC<NumberComponentProps> = ({
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  mainView: {
-    display: 'flex',
-    width: '95%',
-    // height: '20%',
-    marginVertical: 3,
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    flexDirection: 'column',
-    flex: 1,
-  },
-  titleView: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    justifyContent: 'flex-start',
-    marginBottom: 10,
-  },
-  titleText: {
-    color: 'white',
-    fontSize: 20,
-  },
   componentView: {
     width: '85%',
     height: '80%',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
-    display: 'flex',
   },
   buttonView: {
     flex: 1,
