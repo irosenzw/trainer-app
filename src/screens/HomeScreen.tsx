@@ -17,10 +17,17 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           action={() => navigation.navigate('Counter')}
         />
       </View>
-      <HomeScreenBtn
-        text="Custom"
-        action={() => navigation.navigate('Custom')}
-      />
+      <View style={{ flexDirection: 'row' }}>
+        <HomeScreenBtn
+          text="Custom"
+          action={() => navigation.navigate('Custom')}
+        />
+        <HomeScreenBtn
+          text="Reaction"
+          action={() => navigation.navigate('Reaction')}
+        />
+      </View>
+
       <Icon name="rocket" size={30} color="#AAA" />
     </Wrapper>
   );

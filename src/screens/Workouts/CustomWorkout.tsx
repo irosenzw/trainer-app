@@ -14,9 +14,9 @@ const CustomWorkout: React.FC<CustomWorkoutProps> = ({
       title="Custom"
       backNav={() => navigation.navigate('Home')}
     >
-      <Card bg="red" />
-      <Card />
-      <Card bg="pink" />
+      <Card title="" />
+      <Card title="" />
+      <Card title="" />
     </Wrapper>
   );
 };
