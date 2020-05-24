@@ -2,7 +2,7 @@ import React from 'react';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
-import SpeedComponent from '../../Components/SpeedComponent';
+import SpeedComponent from '../../Components/ButtonGroupComponent';
 import {
   onMinutesDown,
   onMinutesUp,
@@ -10,11 +10,12 @@ import {
   onSecondsDown,
   onNumberUp,
   onNumberDown,
+  onValueChange,
 } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
 import { REACTION } from '../../utils/Constants';
-import TimeRangeSlider from '../../Components/TimeRangeSlider';
-import RangeSliderComponent from '../../Components/RangeSliderComponent';
+import TimeRangeSlider from '../../Components/WorkoutRangeSlider';
+import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -29,6 +30,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
   const [rounds, setRounds] = React.useState(minRounds);
   const [currFastSpeed, setCurrFastSpeed] = React.useState(1000);
   const [currSlowSpeed, setCurrSlowSpeed] = React.useState(5000);
+  const [currActionDur, setCurrActionDur] = React.useState(1000);
 
   // Actions
   const onActionDown = React.useCallback(
@@ -70,14 +72,32 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
     [rounds],
   );
 
-  // Speed
+  // Action Duration
+  const onActionDurtionChange = React.useCallback(
+    (newValue) => onValueChange(setCurrActionDur, newValue),
+    [currActionDur],
+  );
+
+  // Time Between Actions
   const onFastSpeedChange = React.useCallback(
-    () => onNumberUp(setCurrFastSpeed, currFastSpeed, fastestValue),
+    (newValue) =>
+      onValueChange(
+        setCurrFastSpeed,
+        newValue,
+        fastestValue,
+        currSlowSpeed - 50,
+      ),
     [currFastSpeed],
   );
 
   const onSlowSpeedChange = React.useCallback(
-    () => onNumberUp(setCurrSlowSpeed, currSlowSpeed, slowestValue),
+    (newValue) =>
+      onValueChange(
+        setCurrSlowSpeed,
+        newValue,
+        currFastSpeed + 50,
+        slowestValue,
+      ),
     [currSlowSpeed],
   );
 
@@ -99,8 +119,17 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
         onDown={onRoundsDown}
       />
 
-      <RangeSliderComponent
-        title="Speed Range"
+      <RangeSpeedComponent
+        title="Action Duration"
+        minValue={0}
+        maxValue={slowestValue}
+        currFastSpeed={currActionDur}
+        onFastSpeedChange={onActionDurtionChange}
+        rangeEnabled={false}
+      />
+
+      <RangeSpeedComponent
+        title="Time Between Actions"
         minValue={fastestValue}
         maxValue={slowestValue}
         currFastSpeed={currFastSpeed}
@@ -108,6 +137,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
         onFastSpeedChange={onFastSpeedChange}
         onSlowSpeedChange={onSlowSpeedChange}
       />
+
       <ClockComponent
         title="Rest Time"
         seconds={restSecs}
@@ -116,17 +146,18 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
         onSecondsDown={restOnSecondsDown}
         onSecondsUp={restOnSecondsUp}
       />
-      {/*<StartButton
+      <StartButton
         onClick={() => {
           navigation.navigate('Action', {
             restTime: restSecs,
             workoutTime: actions,
             workoutType: REACTION,
-            speed,
+            slowSpeed: currActionDur + currSlowSpeed,
+            fastSpeed: currActionDur + currFastSpeed,
             rounds,
           });
         }}
-    />*/}
+      />
     </Wrapper>
   );
 };

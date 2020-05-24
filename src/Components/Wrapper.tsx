@@ -1,4 +1,4 @@
-import React, { ReactNode, Children } from 'react';
+import React, { ReactNode, Children, createContext } from 'react';
 import {
   View,
   ScrollView,
@@ -11,17 +11,18 @@ import { COLOR_SCHEME } from '../utils/Constants';
 type WrapperProps = {
   title: string;
   backNav?: any;
-  scrollEnabled?: boolean;
 };
 
 const { width } = Dimensions.get('screen');
 
+export const ScrollContext = createContext<any>(null);
+
 const pageLayout: React.FC<WrapperProps> = ({
   title,
   backNav,
-  scrollEnabled = true,
   children,
 }) => {
+  const [enableScroll, setEnableScroll] = React.useState(true);
   return (
     <View style={styles.mainLayout}>
       <Header title={title} backNav={backNav} />
@@ -29,9 +30,11 @@ const pageLayout: React.FC<WrapperProps> = ({
         contentContainerStyle={{
           flexGrow: 1,
         }}
-        scrollEnabled={scrollEnabled}
+        scrollEnabled={enableScroll}
       >
-        {children}
+        <ScrollContext.Provider value={setEnableScroll}>
+          {children}
+        </ScrollContext.Provider>
       </ScrollView>
     </View>
   );

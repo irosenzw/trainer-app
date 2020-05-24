@@ -14,6 +14,8 @@ import {
 import { useInterval } from '../Hooks/UseInterval';
 import WorkoutButtonFooter from '../Components/WorkoutButtonFooter';
 import ActionInnerView from '../Components/ActionInnerView';
+import { REACTION } from '../utils/Constants';
+import { playKyai } from '../Audio/SoundMaker';
 import {
   playBell,
   playCount,
@@ -39,6 +41,8 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   const prepTime: number = 2;
   const playWarningSoundTime: number = 3;
   const speed: number = route?.params?.speed || 1000;
+  const fastSpeed: number = route?.params?.fastSpeed || 1000;
+  const slowSpeed: number = route?.params?.slowSpeed || 1000;
   const [workoutState, setWorkoutState] = React.useState<string>(
     PREPARATION,
   ); // WORKOUT or REST or PREPARATION or FINISH or PAUSE //later SKIP
@@ -62,7 +66,6 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
   const getSpeed = () => (isRest() || isPrep() ? 1000 : speed);
 
-  // idea: make the the counter time double and make the sound every second count
   if (
     workoutType === COUNTER &&
     isWorkout() &&
@@ -80,6 +83,9 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     console.log('timerDelay', timerDelay);
     console.log('*************************');
   };
+
+  const calcReactionSpeeds = (): number =>
+    Math.round((slowSpeed - fastSpeed) * Math.random());
 
   const calcInnerCircleValue = () => {
     let value;
@@ -139,6 +145,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       tintColor: COLOR_SCHEME.blue,
       bg: COLOR_SCHEME.darkBlue,
     });
+    workoutType === REACTION && setTimerDelay(calcReactionSpeeds());
 
     setTimerDelay(speed);
     if (workoutType === INTERVAL) {
@@ -237,15 +244,13 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       default:
         // WORKOUT
         setWorkoutSecs(workoutSecs - 1);
+        workoutType === REACTION &&
+          setTimerDelay(calcReactionSpeeds());
     }
   }, timerDelay);
 
   return (
-    <Wrapper
-      title="Action"
-      backNav={() => navigation.goBack()}
-      scrollEnabled={false}
-    >
+    <Wrapper title="Action" backNav={() => navigation.goBack()}>
       <View style={styles.mainView}>
         <AnimatedCircularProgress
           size={350}

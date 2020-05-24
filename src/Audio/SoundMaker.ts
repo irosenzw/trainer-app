@@ -13,8 +13,8 @@ const nine = require('../assets/Sounds/fastCountings/9.mp3');
 const ten = require('../assets/Sounds/fastCountings/10.mp3');
 const success = require('../assets/Sounds/success.mp3');
 const boxingBell = require('../assets/Sounds/boxingBell.mp3');
-const kyai = require('../assets/Sounds/boxingBell.mp3');
-const longBeep = require('../assets/Sounds/boxingBell.mp3');
+const kyai = require('../assets/Sounds/kyai.mp3');
+const longBeep = require('../assets/Sounds/longBeep.mp3');
 
 const playSound = async (audioFile: any, volume = 1.0) => {
   const soundObject = new Audio.Sound();
