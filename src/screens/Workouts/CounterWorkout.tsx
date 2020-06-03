@@ -2,7 +2,7 @@ import React from 'react';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
-import SpeedComponent from '../../Components/SpeedComponent';
+import ButtonGroupComponent from '../../Components/ButtonGroupComponent';
 import {
   onMinutesDown,
   onMinutesUp,
@@ -13,12 +13,15 @@ import {
 } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
 import { COUNTER } from '../../utils/Constants';
-import TimeRangeSlider from '../../Components/TimeRangeSlider';
+import TimeRangeSlider from '../../Components/WorkoutRangeSlider';
+import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
 
 const minRounds = 1;
 const maxRounds = 1000;
 const minCountTo = 1;
 const maxcountTo = 100;
+const fastestSpeed = 200;
+const slowestSpeed = 10000;
 
 const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
   const [countTo, setCountTo] = React.useState(10);
@@ -88,7 +91,15 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
         onDown={onRoundsDown}
       />
 
-      <SpeedComponent title="Speed" updateSpeed={onUpdateSpeed} />
+      <RangeSpeedComponent
+        title="Speed (miliseconds)"
+        minValue={fastestSpeed}
+        maxValue={slowestSpeed}
+        currFastSpeed={speed}
+        onFastSpeedChange={onUpdateSpeed}
+        rangeEnabled={false}
+      />
+
       <ClockComponent
         title="Rest Time"
         seconds={restSecs}

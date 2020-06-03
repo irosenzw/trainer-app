@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
 import { COLOR_SCHEME } from '../utils/Constants';
-import Card from '../Components/Layout/Card';
+import Card from './Layout/Card';
 
 const speedTypes: { [key: string]: number } = {
   slow: 5 * 1000, // 5 seconds
@@ -12,9 +12,10 @@ const speedTypes: { [key: string]: number } = {
 
 const speedArr: string[] = ['slow', 'normal', 'fast'];
 
-const SpeedComponent: React.FC<SpeedComponentProps> = ({
+const ButtonGroupComponent: React.FC<ButtonGroupComponentProps> = ({
   title,
   updateSpeed,
+  labelArr = [],
 }) => {
   const [selectedIndex, setSelectedIndex] = React.useState(1);
 
@@ -28,7 +29,7 @@ const SpeedComponent: React.FC<SpeedComponentProps> = ({
       <ButtonGroup
         onPress={(idx) => onPress(idx)}
         selectedIndex={selectedIndex}
-        buttons={speedArr}
+        buttons={labelArr}
         containerStyle={styles.componentView}
         buttonStyle={styles.ButtonStyle}
         textStyle={styles.ButtonText}
@@ -63,9 +64,10 @@ const styles = StyleSheet.create({
   },
 });
 
-type SpeedComponentProps = {
+type ButtonGroupComponentProps = {
   title: string;
   updateSpeed: (speed: number) => void;
+  labelArr: string[];
 };
 
-export default SpeedComponent;
+export default ButtonGroupComponent;
