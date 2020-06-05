@@ -1,29 +1,34 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import UpDownArrows from './ClockTimer/UpDownArrows';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import ClockViewer from './ClockTimer/Clock';
 import Card from './Layout/Card';
+import ChangeTimeModal from './Modals/ChangeTimeModal';
 
 const ClockComponent: React.FC<ClockComponentProps> = ({
   title,
   seconds,
-  onMinutesDown,
-  onMinutesUp,
-  onSecondsDown,
-  onSecondsUp,
+  onSecondsChange,
 }) => {
+  const [showModal, setShowModal] = React.useState(false);
   return (
     <Card title={title}>
+      <ChangeTimeModal
+        seconds={seconds}
+        onClose={() => setShowModal(false)}
+        onSave={(newSeconds) => {
+          onSecondsChange(newSeconds);
+          setShowModal(false);
+        }}
+        isVisible={showModal}
+        title="Pick Time"
+      />
       <View style={styles.componentView}>
-        <View style={styles.buttonView}>
-          <UpDownArrows onUp={onMinutesUp} onDown={onMinutesDown} />
-        </View>
-        <View style={styles.subjectView}>
+        <TouchableOpacity
+          style={styles.subjectView}
+          onPress={() => setShowModal(true)}
+        >
           <ClockViewer seconds={seconds} />
-        </View>
-        <View style={styles.buttonView}>
-          <UpDownArrows onUp={onSecondsUp} onDown={onSecondsDown} />
-        </View>
+        </TouchableOpacity>
       </View>
     </Card>
   );
@@ -53,10 +58,7 @@ const styles = StyleSheet.create({
 type ClockComponentProps = {
   title: string;
   seconds: number;
-  onMinutesDown: () => void;
-  onMinutesUp: () => void;
-  onSecondsDown: () => void;
-  onSecondsUp: () => void;
+  onSecondsChange: (n: number) => void;
 };
 
 export default ClockComponent;
