@@ -2,7 +2,6 @@ import React from 'react';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
-import SpeedComponent from '../../Components/ButtonGroupComponent';
 import {
   onMinutesDown,
   onMinutesUp,
@@ -14,7 +13,6 @@ import {
 } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
 import { REACTION } from '../../utils/Constants';
-import TimeRangeSlider from '../../Components/WorkoutRangeSlider';
 import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
 
 const minRounds = 1;
@@ -41,24 +39,6 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
   const onActionUp = React.useCallback(
     () => onNumberUp(setActions, actions, maxcountTo),
     [actions],
-  );
-
-  // Rest
-  const restOnMinuteUp = React.useCallback(
-    () => onMinutesUp(setRestSecs, restSecs),
-    [restSecs],
-  );
-  const restOnMinuteDown = React.useCallback(
-    () => onMinutesDown(setRestSecs, restSecs),
-    [restSecs],
-  );
-  const restOnSecondsUp = React.useCallback(
-    () => onSecondsUp(setRestSecs, restSecs),
-    [restSecs],
-  );
-  const restOnSecondsDown = React.useCallback(
-    () => onSecondsDown(setRestSecs, restSecs),
-    [restSecs],
   );
 
   // Rounds
@@ -141,10 +121,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
       <ClockComponent
         title="Rest Time"
         seconds={restSecs}
-        onMinutesDown={restOnMinuteDown}
-        onMinutesUp={restOnMinuteUp}
-        onSecondsDown={restOnSecondsDown}
-        onSecondsUp={restOnSecondsUp}
+        onSecondsChange={setRestSecs}
       />
       <StartButton
         onClick={() => {
