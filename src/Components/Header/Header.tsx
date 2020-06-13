@@ -9,7 +9,7 @@ const Header: React.FC<HeaderProps> = ({ backNav, title }) => {
     <View style={styles.view}>
       <HeaderBtn text="back" action={backNav} />
       <HeaderTitle title={title} />
-      <HeaderBtn text="btn2" action={() => console.log()} />
+      <HeaderBtn text="" action={() => console.log()} />
     </View>
   );
 };
@@ -18,15 +18,8 @@ const styles = StyleSheet.create({
   view: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginTop: 30,
     borderColor: COLOR_SCHEME.orange,
-    borderWidth: 3,
-  },
-  text: {
-    color: 'white',
-    padding: 10,
-    borderColor: 'yellow',
-    borderWidth: 3,
+    borderBottomWidth: 0.2,
   },
 });
 
