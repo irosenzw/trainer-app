@@ -43,6 +43,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   const speed: number = route?.params?.speed || 1000;
   const fastSpeed: number = route?.params?.fastSpeed || 1000;
   const slowSpeed: number = route?.params?.slowSpeed || 1000;
+
   const [workoutState, setWorkoutState] = React.useState<string>(
     PREPARATION,
   ); // WORKOUT or REST or PREPARATION or FINISH or PAUSE //later SKIP
@@ -66,15 +67,6 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
   const getSpeed = () => (isRest() || isPrep() ? 1000 : speed);
 
-  if (
-    workoutType === COUNTER &&
-    isWorkout() &&
-    workoutSecs > 0 &&
-    timerDelay
-  ) {
-    playCount(workoutTime - workoutSecs + 1);
-  }
-
   const debug = () => {
     console.log('workoutState', workoutState);
     console.log('workoutSecs', workoutSecs);
@@ -85,7 +77,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   };
 
   const calcReactionSpeeds = (): number =>
-    Math.round((slowSpeed - fastSpeed) * Math.random());
+    Math.round(fastSpeed + (slowSpeed - fastSpeed) * Math.random());
 
   const calcInnerCircleValue = () => {
     let value;
@@ -200,7 +192,8 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       isWorkout() &&
       workoutSecs === playWarningSoundTime &&
       workoutTime !== playWarningSoundTime &&
-      workoutType !== COUNTER
+      workoutType !== COUNTER &&
+      workoutType !== REACTION
     ) {
       playWarning();
     }
@@ -244,8 +237,10 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       default:
         // WORKOUT
         setWorkoutSecs(workoutSecs - 1);
-        workoutType === REACTION &&
+        workoutType === REACTION && // Set new delay every tick
           setTimerDelay(calcReactionSpeeds());
+        workoutType === COUNTER && // play Count on every tick
+          playCount(workoutTime - workoutSecs + 1);
     }
   }, timerDelay);
 
