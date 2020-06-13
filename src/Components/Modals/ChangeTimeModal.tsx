@@ -34,6 +34,7 @@ const ChangeTimeModal: React.FC<ChangeTimeModalProps> = (props) => {
       isVisible={modalVisible}
       animationOut="fadeOutDown"
       animationIn="fadeInUp"
+      backdropTransitionOutTiming={0}
     >
       <View style={styles.content}>
         <Text style={styles.contentTitle}>{title}</Text>
