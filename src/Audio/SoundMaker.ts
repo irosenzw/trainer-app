@@ -1,38 +1,32 @@
 /* eslint-disable import/prefer-default-export */
-import { Audio } from 'expo-av';
-const bellRing = require('../assets/Sounds/bell-ring.mp3');
-const one = require('../assets/Sounds/fastCountings/1.mp3');
-const two = require('../assets/Sounds/fastCountings/2.mp3');
-const three = require('../assets/Sounds/fastCountings/3.mp3');
-const four = require('../assets/Sounds/fastCountings/4.mp3');
-const five = require('../assets/Sounds/fastCountings/5.mp3');
-const six = require('../assets/Sounds/fastCountings/6.mp3');
-const seven = require('../assets/Sounds/fastCountings/7.mp3');
-const eight = require('../assets/Sounds/fastCountings/8.mp3');
-const nine = require('../assets/Sounds/fastCountings/9.mp3');
-const ten = require('../assets/Sounds/fastCountings/10.mp3');
-const success = require('../assets/Sounds/success.mp3');
-const boxingBell = require('../assets/Sounds/boxingBell.mp3');
-const kyai = require('../assets/Sounds/kyai.mp3');
-const longBeep = require('../assets/Sounds/longBeep.mp3');
+import Sound from 'react-native-sound';
+import { listFileNames } from '../utils/fsUtils';
 
-const playSound = async (audioFile: any, volume = 1.0) => {
-  const soundObject = new Audio.Sound();
-  try {
-    await soundObject.loadAsync(audioFile);
-    await soundObject.setVolumeAsync(volume);
-    await soundObject.playAsync();
-  } catch (error) {
-    console.log('no play:', error);
-    // An error occurred!
-  }
+Sound.setCategory('Playback');
+
+const sd: { [name: string]: Sound } = {};
+
+const getAllSounds = async () => {
+  const soundFiles = await listFileNames(
+    '/storage/emulated/0/TrainMe/Sounds/App/',
+  );
+  soundFiles.forEach(
+    (sound) =>
+      (sd[sound] = new Sound(
+        `/storage/emulated/0/TrainMe/Sounds/App/${sound}`,
+        '',
+        (e) => e && console.log(`Error:`, e),
+      )),
+  );
+  sd['boxingBell.mp3'].setVolume(0.5);
 };
+getAllSounds();
 
-export const playBell = () => playSound(bellRing);
-export const playSuccess = () => playSound(success);
-export const playWarning = () => playSound(boxingBell, 0.5);
-export const playKyai = () => playSound(kyai);
-export const playLongBeep = () => playSound(longBeep);
+export const playBell = () => sd['bell-ring.mp3'].play();
+export const playSuccess = () => sd['success.mp3'].play();
+export const playWarning = () => sd['boxingBell.mp3'].play();
+export const playKyai = () => sd['kyai.mp3'].play();
+export const playLongBeep = () => sd['longBeep.mp3'].play();
 
 export const playCount = (currCount: number) => {
   if (currCount === 0) {
@@ -41,33 +35,33 @@ export const playCount = (currCount: number) => {
 
   switch (currCount % 10) {
     case 1:
-      playSound(one);
+      sd['1.mp3'].play();
       break;
     case 2:
-      playSound(two);
+      sd['2.mp3'].play();
       break;
     case 3:
-      playSound(three);
+      sd['3.mp3'].play();
       break;
     case 4:
-      playSound(four);
+      sd['4.mp3'].play();
       break;
     case 5:
-      playSound(five);
+      sd['5.mp3'].play();
       break;
     case 6:
-      playSound(six);
+      sd['6.mp3'].play();
       break;
     case 7:
-      playSound(seven);
+      sd['7.mp3'].play();
       break;
     case 8:
-      playSound(eight);
+      sd['8.mp3'].play();
       break;
     case 9:
-      playSound(nine);
+      sd['9.mp3'].play();
       break;
     default:
-      playSound(ten);
+      sd['10.mp3'].play();
   }
 };

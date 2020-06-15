@@ -6,7 +6,7 @@ import Wrapper from '../Components/Wrapper';
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   return (
-    <Wrapper title="Welcome">
+    <Wrapper title="Train Me">
       <View style={{ flexDirection: 'row' }}>
         <HomeScreenBtn
           text="Interval"

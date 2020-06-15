@@ -130,7 +130,12 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
   const nextRound = () => {
     setRound(round + 1);
-    setWorkoutSecs(workoutTime);
+    if (round > 0 && restTime === 0 && workoutType === COUNTER) {
+      setWorkoutSecs(workoutTime - 1);
+      playCount(1);
+    } else {
+      setWorkoutSecs(workoutTime);
+    }
     setRestSecs(restTime);
     setWorkoutState(WORKOUT);
     setOuterCircleStyle({
@@ -239,7 +244,10 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
         setWorkoutSecs(workoutSecs - 1);
         workoutType === REACTION && // Set new delay every tick
           setTimerDelay(calcReactionSpeeds());
-        workoutType === COUNTER && // play Count on every tick
+
+        // play Count on every tick
+        workoutType === COUNTER &&
+          workoutSecs > 0 &&
           playCount(workoutTime - workoutSecs + 1);
     }
   }, timerDelay);
