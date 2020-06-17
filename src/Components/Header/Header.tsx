@@ -9,7 +9,7 @@ const Header: React.FC<HeaderProps> = ({ backNav, title }) => {
     <View style={styles.view}>
       <HeaderBtn text="back" action={backNav} />
       <HeaderTitle title={title} />
-      <HeaderBtn text="" action={() => console.log()} />
+      <HeaderBtn text="" action={() => null} />
     </View>
   );
 };
