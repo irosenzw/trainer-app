@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import KeepAwake from 'react-native-keep-awake';
 import Wrapper from '../Components/Wrapper';
 import {
   COLOR_SCHEME,
@@ -15,7 +16,6 @@ import { useInterval } from '../Hooks/UseInterval';
 import WorkoutButtonFooter from '../Components/WorkoutButtonFooter';
 import ActionInnerView from '../Components/ActionInnerView';
 import { REACTION } from '../utils/Constants';
-import { playKyai } from '../Audio/SoundMaker';
 import {
   playBell,
   playCount,
@@ -37,7 +37,13 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   route,
   navigation,
 }) => {
-  const { restTime, workoutTime, workoutType, rounds } = route.params;
+  const {
+    restTime,
+    workoutTime,
+    workoutType,
+    rounds,
+    mode,
+  } = route.params;
   const prepTime: number = 2;
   const playWarningSoundTime: number = 3;
   const speed: number = route?.params?.speed || 1000;
@@ -65,6 +71,10 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   const isRest = () => workoutState === REST;
   const isPrep = () => workoutState === PREPARATION;
 
+  const isPlayCounterSound = () =>
+    workoutType === COUNTER ||
+    (workoutType === REACTION && mode === 'Counter');
+
   const getSpeed = () => (isRest() || isPrep() ? 1000 : speed);
 
   const debug = () => {
@@ -73,6 +83,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     console.log('restSecs', restSecs);
     console.log('round', round);
     console.log('timerDelay', timerDelay);
+    console.log('isPlayCounterSound', isPlayCounterSound());
     console.log('*************************');
   };
 
@@ -130,7 +141,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
   const nextRound = () => {
     setRound(round + 1);
-    if (round > 0 && restTime === 0 && workoutType === COUNTER) {
+    if (round > 0 && restTime === 0 && isPlayCounterSound()) {
       setWorkoutSecs(workoutTime - 1);
       playCount(1);
     } else {
@@ -246,7 +257,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
           setTimerDelay(calcReactionSpeeds());
 
         // play Count on every tick
-        workoutType === COUNTER &&
+        isPlayCounterSound() &&
           workoutSecs > 0 &&
           playCount(workoutTime - workoutSecs + 1);
     }
@@ -255,6 +266,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   return (
     <Wrapper title="Action" backNav={() => navigation.goBack()}>
       <View style={styles.mainView}>
+        <KeepAwake />
         <AnimatedCircularProgress
           size={350}
           width={30}

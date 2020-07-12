@@ -19,3 +19,5 @@ export const INTERVAL = 'INTERVAL';
 export const COUNTER = 'COUNTER';
 export const REACTION = 'REACTION';
 export const PREPARATION = 'PREPARATION';
+
+export const SOUNDS_PATH = '/storage/emulated/0/TrainMe/Sounds/App/';

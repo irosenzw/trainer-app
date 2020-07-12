@@ -14,6 +14,7 @@ import {
 import StartButton from '../../Components/Buttons/StartButton';
 import { REACTION } from '../../utils/Constants';
 import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
+import ButtonGroupComponent from '../../Components/ButtonGroupComponent';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -21,14 +22,18 @@ const minCountTo = 1;
 const maxcountTo = 100;
 const fastestValue = 200; // miliseconds - 0.2 seconds
 const slowestValue = 10000; // miliseconds - 10 seconds
+const reactionModes = ['Timer', 'Counter', 'Actions'];
 
 const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
+  const [countTo, setCountTo] = React.useState(10);
   const [actions, setActions] = React.useState(10);
-  const [restSecs, setRestSecs] = React.useState(10);
+  const [timerSecs, setTimerSecs] = React.useState(30);
+  const [restSecs, setRestSecs] = React.useState(0);
   const [rounds, setRounds] = React.useState(minRounds);
   const [currFastSpeed, setCurrFastSpeed] = React.useState(1000);
   const [currSlowSpeed, setCurrSlowSpeed] = React.useState(5000);
   const [currActionDur, setCurrActionDur] = React.useState(1000);
+  const [mode, setMode] = React.useState(reactionModes[0]);
 
   // Actions
   const onActionDown = React.useCallback(
@@ -39,6 +44,17 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
   const onActionUp = React.useCallback(
     () => onNumberUp(setActions, actions, maxcountTo),
     [actions],
+  );
+
+  // CountTo
+  const onCountToDown = React.useCallback(
+    () => onNumberDown(setCountTo, countTo, minCountTo),
+    [countTo],
+  );
+
+  const onCountToUp = React.useCallback(
+    () => onNumberUp(setCountTo, countTo, maxcountTo),
+    [countTo],
   );
 
   // Rounds
@@ -81,17 +97,54 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
     [currSlowSpeed],
   );
 
+  const getWorkoutTime = () => {
+    switch (mode) {
+      case 'Counter':
+        return countTo;
+      case 'Timer':
+        return timerSecs;
+      case 'Actions':
+        return actions;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Wrapper
       title="Reaction"
       backNav={() => navigation.navigate('Home')}
     >
-      <NumberComponent
-        title="Actions"
-        number={actions}
-        onUp={onActionUp}
-        onDown={onActionDown}
+      <ButtonGroupComponent
+        title="Mode"
+        onChange={setMode}
+        labelArr={reactionModes}
       />
+
+      {mode === 'Counter' && (
+        <NumberComponent
+          title="Count To"
+          number={countTo}
+          onUp={onCountToUp}
+          onDown={onCountToDown}
+        />
+      )}
+
+      {mode === 'Actions' && (
+        <NumberComponent
+          title="Actions"
+          number={actions}
+          onUp={onActionUp}
+          onDown={onActionDown}
+        />
+      )}
+      {mode === 'Timer' && (
+        <ClockComponent
+          title="Timer"
+          seconds={timerSecs}
+          onSecondsChange={setTimerSecs}
+        />
+      )}
       <NumberComponent
         title="Rounds"
         number={rounds}
@@ -127,11 +180,12 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
         onClick={() => {
           navigation.navigate('Action', {
             restTime: restSecs,
-            workoutTime: actions,
+            workoutTime: getWorkoutTime(), // actions,
             workoutType: REACTION,
             slowSpeed: currActionDur + currSlowSpeed,
             fastSpeed: currActionDur + currFastSpeed,
             rounds,
+            mode,
           });
         }}
       />
