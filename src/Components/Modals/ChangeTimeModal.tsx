@@ -17,7 +17,7 @@ const ChangeTimeModal: React.FC<ChangeTimeModalProps> = (props) => {
   const { title, seconds, onSave, onClose, isVisible } = props;
   const [newSeconds, setNewSeconds] = React.useState(seconds % 60);
   const [newMinutes, setNewMinutes] = React.useState(
-    Math.round(seconds / 60),
+    Math.floor(seconds / 60),
   );
   const [modalVisible, setModalVisible] = React.useState(isVisible);
 
@@ -25,7 +25,7 @@ const ChangeTimeModal: React.FC<ChangeTimeModalProps> = (props) => {
     setModalVisible(isVisible);
     if (!isVisible) {
       setNewSeconds(seconds % 60);
-      setNewMinutes(Math.round(seconds / 60));
+      setNewMinutes(Math.floor(seconds / 60));
     }
   }, [isVisible]);
 
