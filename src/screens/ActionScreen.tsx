@@ -16,6 +16,7 @@ import { useInterval } from '../Hooks/UseInterval';
 import WorkoutButtonFooter from '../Components/WorkoutButtonFooter';
 import ActionInnerView from '../Components/ActionInnerView';
 import { REACTION } from '../utils/Constants';
+import { playSound } from '../Audio/SoundMaker';
 import {
   playBell,
   playCount,
@@ -47,6 +48,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   const prepTime: number = 2;
   const playWarningSoundTime: number = 3;
   const speed: number = route?.params?.speed || 1000;
+  const sounds: string[] = route?.params?.sounds;
   const fastSpeed: number = route?.params?.fastSpeed || 1000;
   const slowSpeed: number = route?.params?.slowSpeed || 1000;
 
@@ -71,9 +73,24 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   const isRest = () => workoutState === REST;
   const isPrep = () => workoutState === PREPARATION;
 
+  const isPlayReactionSounds = () =>
+    workoutType === REACTION &&
+    !!['Timer', 'Actions'].find((x) => x === mode);
+
   const isPlayCounterSound = () =>
     workoutType === COUNTER ||
     (workoutType === REACTION && mode === 'Counter');
+
+  const playReactionSound = () => {
+    const randomIdx = Math.floor(Math.random() * sounds.length);
+    const sound = sounds[randomIdx];
+    if (mode === 'Actions') {
+      playSound(sound);
+    }
+    if (mode === 'Timer' && Math.random() > 0.5) {
+      playSound(sound);
+    }
+  };
 
   const getSpeed = () => (isRest() || isPrep() ? 1000 : speed);
 
@@ -253,13 +270,19 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       default:
         // WORKOUT
         setWorkoutSecs(workoutSecs - 1);
-        workoutType === REACTION && // Set new delay every tick
+        workoutType === REACTION &&
+        mode !== 'Timer' && // Set new delay every tick
           setTimerDelay(calcReactionSpeeds());
 
         // play Count on every tick
         isPlayCounterSound() &&
           workoutSecs > 0 &&
           playCount(workoutTime - workoutSecs + 1);
+
+        // play on of the
+        isPlayReactionSounds() &&
+          workoutSecs > 0 &&
+          playReactionSound();
     }
   }, timerDelay);
 

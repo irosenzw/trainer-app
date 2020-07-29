@@ -27,12 +27,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           action={() => navigation.navigate('Reaction')}
         />
       </View>
-      <View style={{ flexDirection: 'row' }}>
-        <HomeScreenBtn
-          text="Sounds"
-          action={() => navigation.navigate('SoundsPicker')}
-        />
-      </View>
 
       <Icon name="rocket" size={30} color="#AAA" />
     </Wrapper>
