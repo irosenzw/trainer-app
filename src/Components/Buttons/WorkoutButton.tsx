@@ -4,7 +4,13 @@ import { Icon } from 'react-native-elements';
 import { COLOR_SCHEME } from '../../utils/Constants';
 
 const WorkoutButton: React.FC<WorkoutButtonProps> = (props) => {
-  const { text, iconName, style, onClick } = props;
+  const {
+    text,
+    iconName,
+    style = null,
+    textStyle = null,
+    onClick,
+  } = props;
   if (!text && !iconName) {
     return <></>;
   }
@@ -13,7 +19,7 @@ const WorkoutButton: React.FC<WorkoutButtonProps> = (props) => {
       {iconName ? (
         <Icon name={iconName} size={50} color={COLOR_SCHEME.white} />
       ) : (
-        <Text style={styles.text}>{text}</Text>
+        <Text style={textStyle || styles.text}>{text}</Text>
       )}
     </TouchableOpacity>
   );
@@ -24,18 +30,15 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: COLOR_SCHEME.white,
   },
-  btn: {
-    padding: 20,
-    backgroundColor: COLOR_SCHEME.blue,
-    borderRadius: 20,
-  },
+  btn: {},
 });
 
 type WorkoutButtonProps = {
   onClick: () => void;
   iconName?: string;
   text?: string;
-  style: object;
+  style?: object;
+  textStyle?: object;
 };
 
 export default WorkoutButton;

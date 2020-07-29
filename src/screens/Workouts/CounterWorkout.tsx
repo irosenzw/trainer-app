@@ -57,6 +57,13 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
         onUp={onCountToUp}
         onDown={onCountToDown}
       />
+
+      <ClockComponent
+        title="Rest Time"
+        seconds={restSecs}
+        onSecondsChange={setRestSecs}
+      />
+
       <NumberComponent
         title="Rounds"
         number={rounds}
@@ -73,11 +80,6 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
         rangeEnabled={false}
       />
 
-      <ClockComponent
-        title="Rest Time"
-        seconds={restSecs}
-        onSecondsChange={setRestSecs}
-      />
       <StartButton
         onClick={() => {
           navigation.navigate('Action', {

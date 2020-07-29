@@ -6,7 +6,7 @@ const { width } = Dimensions.get('screen');
 const defaultHeight = 150;
 
 type CardProps = {
-  title: string;
+  title?: string;
   customHeight?: number;
 };
 
@@ -17,9 +17,7 @@ const Card: React.FC<CardProps> = ({
 }) => {
   return (
     <View style={[styles.mainView, { height: customHeight }]}>
-      <Text style={styles.titleText}>
-        {title ? `${title}:` : 'TITLE:'}
-      </Text>
+      <Text style={styles.titleText}>{title ? `${title}:` : ''}</Text>
       <View style={styles.componentView}>{children}</View>
     </View>
   );

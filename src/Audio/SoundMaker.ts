@@ -108,6 +108,8 @@ const getAllSounds = async () => {
 
 getAllSounds();
 
+export const playSound = (fileName: string) => sd[fileName].play();
+
 export const playBell = () => sd['bell-ring.mp3'].play();
 export const playSuccess = () => sd['success.mp3'].play();
 export const playWarning = () => sd['boxingBell.mp3'].play();

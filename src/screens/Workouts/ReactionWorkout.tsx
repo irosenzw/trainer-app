@@ -15,6 +15,8 @@ import StartButton from '../../Components/Buttons/StartButton';
 import { REACTION } from '../../utils/Constants';
 import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
 import ButtonGroupComponent from '../../Components/ButtonGroupComponent';
+import SelectSoundsComponent from '../../Components/SelectSounds';
+import { ReactionModes } from './types';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -22,9 +24,11 @@ const minCountTo = 1;
 const maxcountTo = 100;
 const fastestValue = 200; // miliseconds - 0.2 seconds
 const slowestValue = 10000; // miliseconds - 10 seconds
-const reactionModes = ['Timer', 'Counter', 'Actions'];
 
-const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
+const ReactionWorkout: React.FC<CounterProps> = ({
+  navigation,
+  route,
+}) => {
   const [countTo, setCountTo] = React.useState(10);
   const [actions, setActions] = React.useState(10);
   const [timerSecs, setTimerSecs] = React.useState(30);
@@ -33,7 +37,9 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
   const [currFastSpeed, setCurrFastSpeed] = React.useState(1000);
   const [currSlowSpeed, setCurrSlowSpeed] = React.useState(5000);
   const [currActionDur, setCurrActionDur] = React.useState(1000);
-  const [mode, setMode] = React.useState(reactionModes[0]);
+  const [mode, setMode] = React.useState(ReactionModes.actions);
+
+  const sounds = route.params?.sounds || ['kyai.mp3'];
 
   // Actions
   const onActionDown = React.useCallback(
@@ -99,11 +105,11 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
 
   const getWorkoutTime = () => {
     switch (mode) {
-      case 'Counter':
+      case ReactionModes.counter:
         return countTo;
-      case 'Timer':
+      case ReactionModes.timer:
         return timerSecs;
-      case 'Actions':
+      case ReactionModes.actions:
         return actions;
       default:
         return null;
@@ -118,10 +124,14 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
       <ButtonGroupComponent
         title="Mode"
         onChange={setMode}
-        labelArr={reactionModes}
+        labelArr={[
+          ReactionModes.actions,
+          ReactionModes.counter,
+          ReactionModes.timer,
+        ]}
       />
 
-      {mode === 'Counter' && (
+      {mode === ReactionModes.counter && (
         <NumberComponent
           title="Count To"
           number={countTo}
@@ -130,7 +140,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
         />
       )}
 
-      {mode === 'Actions' && (
+      {mode === ReactionModes.actions && (
         <NumberComponent
           title="Actions"
           number={actions}
@@ -138,13 +148,20 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
           onDown={onActionDown}
         />
       )}
-      {mode === 'Timer' && (
+      {mode === ReactionModes.timer && (
         <ClockComponent
           title="Timer"
           seconds={timerSecs}
           onSecondsChange={setTimerSecs}
         />
       )}
+
+      <ClockComponent
+        title="Rest Time"
+        seconds={restSecs}
+        onSecondsChange={setRestSecs}
+      />
+
       <NumberComponent
         title="Rounds"
         number={rounds}
@@ -171,11 +188,16 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
         onSlowSpeedChange={onSlowSpeedChange}
       />
 
-      <ClockComponent
-        title="Rest Time"
-        seconds={restSecs}
-        onSecondsChange={setRestSecs}
-      />
+      {mode !== 'Counter' && (
+        <SelectSoundsComponent
+          title="Action Sounds"
+          sounds={sounds || []}
+          navigateToSoundPicker={() =>
+            navigation.navigate('SoundsPicker', { sounds })
+          }
+        />
+      )}
+
       <StartButton
         onClick={() => {
           navigation.navigate('Action', {
@@ -186,6 +208,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({ navigation }) => {
             fastSpeed: currActionDur + currFastSpeed,
             rounds,
             mode,
+            sounds,
           });
         }}
       />
@@ -203,6 +226,7 @@ type NavigationParams = {
 
 type CounterProps = {
   navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
+  route: any;
 };
 
 export default ReactionWorkout;
