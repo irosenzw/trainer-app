@@ -4,7 +4,7 @@ import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
 import { onNumberUp, onNumberDown } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
-import { INTERVAL } from '../../utils/Constants';
+import { WorkoutType } from '../../utils/types';
 
 const intervalMinSec = 1;
 const intervalMinRounds = 1;
@@ -50,7 +50,7 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
           navigation.navigate('Action', {
             restTime: restSecs,
             workoutTime: intervalSecs,
-            workoutType: INTERVAL,
+            workoutType: WorkoutType.Interval,
             rounds,
           });
         }}

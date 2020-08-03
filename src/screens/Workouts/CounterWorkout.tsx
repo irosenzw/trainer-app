@@ -4,8 +4,8 @@ import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
 import { onNumberUp, onNumberDown } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
-import { COUNTER } from '../../utils/Constants';
 import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
+import { WorkoutType } from '../../utils/types';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -85,7 +85,7 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
           navigation.navigate('Action', {
             restTime: restSecs,
             workoutTime: countTo,
-            workoutType: COUNTER,
+            workoutType: WorkoutType.Counter,
             speed,
             rounds,
           });

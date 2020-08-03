@@ -50,7 +50,6 @@ const SoundPicker: React.FC<SoundPickerProps> = ({
     );
   }, [loadedSounds]);
 
-  console.log('pickedSounds2:', pickedSounds);
   return (
     <Wrapper title="Sounds" backNav={() => navigation.goBack()}>
       <View style={styles.mainView}>

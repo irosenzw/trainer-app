@@ -2,21 +2,12 @@ import React from 'react';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
-import {
-  onMinutesDown,
-  onMinutesUp,
-  onSecondsUp,
-  onSecondsDown,
-  onNumberUp,
-  onNumberDown,
-  onValueChange,
-} from './utils';
+import { onNumberUp, onNumberDown, onValueChange } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
-import { REACTION } from '../../utils/Constants';
 import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
 import ButtonGroupComponent from '../../Components/ButtonGroupComponent';
 import SelectSoundsComponent from '../../Components/SelectSounds';
-import { ReactionModes } from './types';
+import { ReactionModes, WorkoutType } from '../../utils/types';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -37,7 +28,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({
   const [currFastSpeed, setCurrFastSpeed] = React.useState(1000);
   const [currSlowSpeed, setCurrSlowSpeed] = React.useState(5000);
   const [currActionDur, setCurrActionDur] = React.useState(1000);
-  const [mode, setMode] = React.useState(ReactionModes.actions);
+  const [mode, setMode] = React.useState(ReactionModes.Actions);
 
   const sounds = route.params?.sounds || ['kyai.mp3'];
 
@@ -105,11 +96,11 @@ const ReactionWorkout: React.FC<CounterProps> = ({
 
   const getWorkoutTime = () => {
     switch (mode) {
-      case ReactionModes.counter:
+      case ReactionModes.Counter:
         return countTo;
-      case ReactionModes.timer:
+      case ReactionModes.Timer:
         return timerSecs;
-      case ReactionModes.actions:
+      case ReactionModes.Actions:
         return actions;
       default:
         return null;
@@ -125,13 +116,13 @@ const ReactionWorkout: React.FC<CounterProps> = ({
         title="Mode"
         onChange={setMode}
         labelArr={[
-          ReactionModes.actions,
-          ReactionModes.counter,
-          ReactionModes.timer,
+          ReactionModes.Actions,
+          ReactionModes.Counter,
+          ReactionModes.Timer,
         ]}
       />
 
-      {mode === ReactionModes.counter && (
+      {mode === ReactionModes.Counter && (
         <NumberComponent
           title="Count To"
           number={countTo}
@@ -140,7 +131,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({
         />
       )}
 
-      {mode === ReactionModes.actions && (
+      {mode === ReactionModes.Actions && (
         <NumberComponent
           title="Actions"
           number={actions}
@@ -148,7 +139,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({
           onDown={onActionDown}
         />
       )}
-      {mode === ReactionModes.timer && (
+      {mode === ReactionModes.Timer && (
         <ClockComponent
           title="Timer"
           seconds={timerSecs}
@@ -190,8 +181,6 @@ const ReactionWorkout: React.FC<CounterProps> = ({
 
       {mode !== 'Counter' && (
         <SelectSoundsComponent
-          title="Action Sounds"
-          sounds={sounds || []}
           navigateToSoundPicker={() =>
             navigation.navigate('SoundsPicker', { sounds })
           }
@@ -203,7 +192,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({
           navigation.navigate('Action', {
             restTime: restSecs,
             workoutTime: getWorkoutTime(), // actions,
-            workoutType: REACTION,
+            workoutType: WorkoutType.Reaction,
             slowSpeed: currActionDur + currSlowSpeed,
             fastSpeed: currActionDur + currFastSpeed,
             rounds,

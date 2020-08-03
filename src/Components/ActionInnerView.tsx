@@ -6,7 +6,7 @@ import { COLOR_SCHEME } from '../utils/Constants';
 const ActionInnerView: React.FC<ActionInnerViewProps> = ({
   value,
   isWorkout,
-  isInterval,
+  clockView,
   isFinish,
   currRound,
   totalRounds,
@@ -17,8 +17,8 @@ const ActionInnerView: React.FC<ActionInnerViewProps> = ({
   return (
     <View style={styles.View}>
       {!isWorkout && <Clock seconds={value} />}
-      {isInterval && isWorkout && <Clock seconds={value} />}
-      {isWorkout && !isInterval && (
+      {clockView && isWorkout && <Clock seconds={value} />}
+      {isWorkout && !clockView && (
         <Text style={styles.NumberText}>{value}</Text>
       )}
       {!isFinish && (
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 type ActionInnerViewProps = {
   value: number;
   isWorkout: boolean;
-  isInterval: boolean;
+  clockView: boolean;
   isFinish: boolean;
   currRound: number;
   totalRounds: number;
