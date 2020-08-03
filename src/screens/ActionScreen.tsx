@@ -3,19 +3,10 @@ import { View, StyleSheet, Text } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 import KeepAwake from 'react-native-keep-awake';
 import Wrapper from '../Components/Wrapper';
-import {
-  COLOR_SCHEME,
-  WORKOUT,
-  REST,
-  INTERVAL,
-  FINISH,
-  COUNTER,
-  PREPARATION,
-} from '../utils/Constants';
+import { COLOR_SCHEME } from '../utils/Constants';
 import { useInterval } from '../Hooks/UseInterval';
 import WorkoutButtonFooter from '../Components/WorkoutButtonFooter';
 import ActionInnerView from '../Components/ActionInnerView';
-import { REACTION } from '../utils/Constants';
 import { playSound } from '../Audio/SoundMaker';
 import {
   playBell,
@@ -24,6 +15,11 @@ import {
   playWarning,
   playLongBeep,
 } from '../Audio/SoundMaker';
+import {
+  WorkoutPhase,
+  WorkoutType,
+  ReactionModes,
+} from '../utils/types';
 const calcFill = (currValue: number, maxValue: number): number =>
   Math.round((currValue / maxValue) * 100);
 
@@ -45,15 +41,15 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     rounds,
     mode,
   } = route.params;
-  const prepTime: number = 2;
-  const playWarningSoundTime: number = 3;
+  const prepTime: number = 5;
+  const playWarningSoundTime: number = -10; // no warning
   const speed: number = route?.params?.speed || 1000;
   const sounds: string[] = route?.params?.sounds;
   const fastSpeed: number = route?.params?.fastSpeed || 1000;
   const slowSpeed: number = route?.params?.slowSpeed || 1000;
 
   const [workoutState, setWorkoutState] = React.useState<string>(
-    PREPARATION,
+    WorkoutPhase.Preparation,
   ); // WORKOUT or REST or PREPARATION or FINISH or PAUSE //later SKIP
   const [workoutSecs, setWorkoutSecs] = React.useState<number>(
     prepTime,
@@ -62,24 +58,34 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   const [prepSecs, setPrepSecs] = React.useState<number>(prepTime);
   const [round, setRound] = React.useState<number>(0);
   const [timerDelay, setTimerDelay] = React.useState<any>(1000);
+  const [rtLastSoundTime, setRTLastSoundTime] = React.useState<any>(
+    workoutTime,
+  );
 
   const [outerCircleStyle, setOuterCircleStyle] = React.useState({
     tintColor: COLOR_SCHEME.red,
     bg: COLOR_SCHEME.darkBlue,
   });
 
-  const isFinish = () => workoutState === FINISH;
-  const isWorkout = () => workoutState === WORKOUT;
-  const isRest = () => workoutState === REST;
-  const isPrep = () => workoutState === PREPARATION;
+  const isFinish = () => workoutState === WorkoutPhase.Finish;
+  const isWorkout = () => workoutState === WorkoutPhase.Workout;
+  const isRest = () => workoutState === WorkoutPhase.Rest;
+  const isPrep = () => workoutState === WorkoutPhase.Preparation;
+
+  const isClockView = () =>
+    workoutType === WorkoutType.Interval ||
+    (workoutType === WorkoutType.Reaction &&
+      mode === ReactionModes.Timer);
 
   const isPlayReactionSounds = () =>
-    workoutType === REACTION &&
-    !!['Timer', 'Actions'].find((x) => x === mode);
+    workoutType === WorkoutType.Reaction &&
+    !![ReactionModes.Timer, ReactionModes.Actions].find(
+      (x) => x === mode,
+    );
 
   const isPlayCounterSound = () =>
-    workoutType === COUNTER ||
-    (workoutType === REACTION && mode === 'Counter');
+    workoutType === WorkoutType.Counter ||
+    (workoutType === WorkoutType.Reaction && mode === 'Counter');
 
   const playReactionSound = () => {
     const randomIdx = Math.floor(Math.random() * sounds.length);
@@ -87,8 +93,17 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     if (mode === 'Actions') {
       playSound(sound);
     }
-    if (mode === 'Timer' && Math.random() > 0.5) {
-      playSound(sound);
+    if (mode === 'Timer') {
+      const timePassed = (rtLastSoundTime - workoutSecs) * 1000;
+      if (timePassed >= slowSpeed) {
+        playSound(sound);
+        setRTLastSoundTime(workoutSecs);
+        return;
+      }
+      if (timePassed >= fastSpeed && Math.random() > 0.5) {
+        playSound(sound);
+        setRTLastSoundTime(workoutSecs);
+      }
     }
   };
 
@@ -111,21 +126,20 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     let value;
     let max;
     switch (workoutState) {
-      case PREPARATION:
+      case WorkoutPhase.Preparation:
         value = prepSecs;
         max = prepTime;
         break;
-      case REST:
+      case WorkoutPhase.Rest:
         value = restSecs;
         max = restTime;
         break;
       default:
         // WORKOUT
         max = workoutTime;
-        value =
-          workoutType === INTERVAL
-            ? workoutSecs // for INTERVAL
-            : workoutTime - workoutSecs; // for COUNTER
+        value = isClockView()
+          ? workoutSecs // for INTERVAL
+          : workoutTime - workoutSecs; // for COUNTER
     }
 
     value = value < 0 ? 0 : value;
@@ -135,9 +149,9 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
   const fillOuterCircle = () => {
     switch (workoutState) {
-      case PREPARATION:
+      case WorkoutPhase.Preparation:
         return calcFill(prepTime - prepSecs, prepTime);
-      case REST:
+      case WorkoutPhase.Rest:
         return calcFill(restTime - restSecs, restTime);
       default:
         // WORKOUT
@@ -146,7 +160,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   };
 
   const startRestPhase = () => {
-    setWorkoutState(REST);
+    setWorkoutState(WorkoutPhase.Rest);
     setOuterCircleStyle({
       tintColor: COLOR_SCHEME.yellow,
       bg: COLOR_SCHEME.darkYellow,
@@ -165,22 +179,30 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       setWorkoutSecs(workoutTime);
     }
     setRestSecs(restTime);
-    setWorkoutState(WORKOUT);
+    setWorkoutState(WorkoutPhase.Workout);
     setOuterCircleStyle({
       tintColor: COLOR_SCHEME.blue,
       bg: COLOR_SCHEME.darkBlue,
     });
-    workoutType === REACTION && setTimerDelay(calcReactionSpeeds());
 
+    // Reaction:
+    if (workoutType === WorkoutType.Reaction) {
+      if (mode === ReactionModes.Timer) {
+        setRTLastSoundTime(workoutTime);
+      }
+      setTimerDelay(calcReactionSpeeds());
+    }
+
+    // Interval:
     setTimerDelay(speed);
-    if (workoutType === INTERVAL) {
+    if (workoutType === WorkoutType.Interval) {
       playBell();
     }
   };
 
   const onStop = () => {
     setTimerDelay(1);
-    setWorkoutState(FINISH);
+    setWorkoutState(WorkoutPhase.Finish);
     setOuterCircleStyle({
       tintColor: COLOR_SCHEME.blue,
       bg: COLOR_SCHEME.darkBlue,
@@ -194,7 +216,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   const onStart = () => {
     if (isFinish()) {
       setRound(0);
-      setWorkoutState(PREPARATION);
+      setWorkoutState(WorkoutPhase.Preparation);
       setTimerDelay(1000);
       setOuterCircleStyle({
         tintColor: COLOR_SCHEME.red,
@@ -221,21 +243,13 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   }, [prepSecs]);
 
   React.useEffect(() => {
-    if (
-      isWorkout() &&
-      workoutSecs === playWarningSoundTime &&
-      workoutTime !== playWarningSoundTime &&
-      workoutType !== COUNTER &&
-      workoutType !== REACTION
-    ) {
-      playWarning();
-    }
-
+    // if workout ended
     if (workoutSecs === -1) {
+      // Finish workout
       if (round === rounds) {
-        // Finish workout
         onFinish();
       } else {
+        // Next round
         if (restTime === 0) {
           nextRound();
         } else {
@@ -248,12 +262,14 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
   React.useEffect(() => {
     if (
+      playWarningSoundTime > 0 &&
       restSecs === playWarningSoundTime &&
       restTime !== playWarningSoundTime &&
       isRest()
     ) {
       playWarning();
     }
+
     if (restSecs === -1) {
       nextRound();
     }
@@ -261,28 +277,42 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
   useInterval(() => {
     switch (workoutState) {
-      case PREPARATION:
+      case WorkoutPhase.Preparation:
         setPrepSecs(prepSecs - 1);
         break;
-      case REST:
+      case WorkoutPhase.Rest:
         setRestSecs(restSecs - 1);
         break;
       default:
         // WORKOUT
         setWorkoutSecs(workoutSecs - 1);
-        workoutType === REACTION &&
-        mode !== 'Timer' && // Set new delay every tick
+
+        if (
+          playWarningSoundTime > 0 &&
+          workoutSecs === playWarningSoundTime + 1 &&
+          workoutTime !== playWarningSoundTime &&
+          workoutType === WorkoutType.Interval
+        ) {
+          playWarning();
+        }
+
+        // Reaction: Set new delay every tick
+        if (
+          workoutType === WorkoutType.Reaction &&
+          mode !== 'Timer'
+        ) {
           setTimerDelay(calcReactionSpeeds());
+        }
 
-        // play Count on every tick
-        isPlayCounterSound() &&
-          workoutSecs > 0 &&
+        // Counter (or Reaction counter mode): play Count on every tick
+        if (isPlayCounterSound() && workoutSecs > 0) {
           playCount(workoutTime - workoutSecs + 1);
+        }
 
-        // play on of the
-        isPlayReactionSounds() &&
-          workoutSecs > 0 &&
+        // Reaction: play reaction sound
+        if (isPlayReactionSounds() && workoutSecs > 0) {
           playReactionSound();
+        }
     }
   }, timerDelay);
 
@@ -311,8 +341,8 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
               {() => (
                 <ActionInnerView
                   value={calcInnerCircleValue()}
-                  isInterval={workoutType === INTERVAL}
-                  isWorkout={workoutState === WORKOUT}
+                  clockView={isClockView()}
+                  isWorkout={workoutState === WorkoutPhase.Workout}
                   isFinish={isFinish()}
                   currRound={round}
                   totalRounds={rounds}
