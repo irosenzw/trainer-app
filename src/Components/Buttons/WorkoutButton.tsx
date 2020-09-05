@@ -10,16 +10,28 @@ const WorkoutButton: React.FC<WorkoutButtonProps> = (props) => {
     style = null,
     textStyle = null,
     onClick,
+    disabled = false,
   } = props;
   if (!text && !iconName) {
     return <></>;
   }
+
   return (
-    <TouchableOpacity onPress={onClick} style={style || styles.btn}>
+    <TouchableOpacity
+      onPress={onClick}
+      style={style || styles.btn}
+      disabled={disabled}
+    >
       {iconName ? (
         <Icon name={iconName} size={50} color={COLOR_SCHEME.white} />
       ) : (
-        <Text style={textStyle || styles.text}>{text}</Text>
+        <Text
+          style={
+            disabled ? styles.disabledText : textStyle || styles.text
+          }
+        >
+          {text}
+        </Text>
       )}
     </TouchableOpacity>
   );
@@ -31,6 +43,10 @@ const styles = StyleSheet.create({
     color: COLOR_SCHEME.white,
   },
   btn: {},
+  disabledText: {
+    fontSize: 30,
+    color: COLOR_SCHEME.grey,
+  },
 });
 
 type WorkoutButtonProps = {
@@ -39,6 +55,7 @@ type WorkoutButtonProps = {
   text?: string;
   style?: object;
   textStyle?: object;
+  disabled?: boolean;
 };
 
 export default WorkoutButton;

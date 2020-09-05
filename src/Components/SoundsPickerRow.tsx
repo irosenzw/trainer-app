@@ -1,11 +1,10 @@
 import React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLOR_SCHEME } from '../utils/Constants';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
-const { width } = Dimensions.get('window');
+import { ListRowComponent } from './List/ListComponent';
 
 const SoundsPickerRow: React.FC<SoundsPickerRowProps> = ({
   soundFileName,
@@ -13,9 +12,8 @@ const SoundsPickerRow: React.FC<SoundsPickerRowProps> = ({
   onChange,
   onPlay,
 }) => {
-  const [val, setVal] = React.useState(isChosen);
   return (
-    <View style={styles.mainView} key={soundFileName}>
+    <ListRowComponent keyProp={soundFileName}>
       <View style={styles.chkboxView}>
         <CheckBox
           center
@@ -24,11 +22,8 @@ const SoundsPickerRow: React.FC<SoundsPickerRowProps> = ({
           containerStyle={styles.chkBoxContainer}
           checkedIcon="dot-circle-o"
           uncheckedIcon="circle-o"
-          checked={val}
-          onPress={() => {
-            setVal(!val);
-            onChange();
-          }}
+          checked={isChosen}
+          onPress={onChange}
         />
       </View>
       <View style={styles.playView}>
@@ -36,21 +31,11 @@ const SoundsPickerRow: React.FC<SoundsPickerRowProps> = ({
           <Icon name="play" size={35} color={COLOR_SCHEME.orange} />
         </TouchableOpacity>
       </View>
-    </View>
+    </ListRowComponent>
   );
 };
 
 const styles = StyleSheet.create({
-  mainView: {
-    width: width,
-    height: 60,
-    borderColor: COLOR_SCHEME.white,
-    borderBottomWidth: 0.2,
-    borderTopWidth: 0.2,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-  },
   text: {
     color: COLOR_SCHEME.white,
     fontSize: 20,

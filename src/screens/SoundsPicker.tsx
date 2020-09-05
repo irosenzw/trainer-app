@@ -1,15 +1,24 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
 import Wrapper from '../Components/Wrapper';
 import SoundsPickerRow from '../Components/SoundsPickerRow';
 import { SoundMaker } from '../Audio/SoundMaker';
 import Sound from 'react-native-sound';
 import WorkoutButton from '../Components/Buttons/WorkoutButton';
+import { ListComponent } from '../Components/List/ListComponent';
 
 const SoundPicker: React.FC<SoundPickerProps> = ({
   route,
   navigation,
 }) => {
+  const mySounds: string[] = route.params?.sounds || [];
+  const backTo: string = route.params?.backTo || 'Reaction';
+  const singleValue: boolean = route.params?.singleValue || false;
+  const settingsPath = route.params?.settingsPath || null;
+
+  const [chosenSound, setChosenSound] = React.useState(
+    singleValue ? mySounds[0] : null, // change to default
+  );
+
   const [pickedSounds, setPickedSounds] = React.useState<{
     [filename: string]: boolean;
   }>({});
@@ -18,15 +27,11 @@ const SoundPicker: React.FC<SoundPickerProps> = ({
     [name: string]: Sound;
   }>({});
 
-  const mySounds: string[] = route.params?.sounds || [];
-  const soundFileList = Object.keys(pickedSounds);
-
   React.useEffect(() => {
     const getSoundObjects = async () => {
       const sm = new SoundMaker();
       await sm.loadSounds();
       setLoadedSounds(sm.getSounds());
-      console.log('LOADED!');
     };
 
     if (Object.keys(loadedSounds).length === 0) {
@@ -50,47 +55,58 @@ const SoundPicker: React.FC<SoundPickerProps> = ({
     );
   }, [loadedSounds]);
 
+  const onPickSound = (newFileName: string) => {
+    if (!singleValue) {
+      pickedSounds[newFileName] = !pickedSounds[newFileName];
+      setPickedSounds(Object.assign({}, pickedSounds));
+      return;
+    }
+
+    if (chosenSound) {
+      if (chosenSound === newFileName) {
+        return;
+      }
+      pickedSounds[chosenSound] = false;
+      pickedSounds[newFileName] = true;
+      setPickedSounds(pickedSounds);
+      setChosenSound(newFileName);
+    }
+  };
+
+  const soundFileList = Object.keys(pickedSounds);
+  const isSaveDisabled = !soundFileList.find(
+    (fname) => pickedSounds[fname],
+  );
+
   return (
     <Wrapper title="Sounds" backNav={() => navigation.goBack()}>
-      <View style={styles.mainView}>
+      <ListComponent>
         {soundFileList.map((fileName) => (
           <SoundsPickerRow
             key={`${fileName}`}
             isChosen={pickedSounds[fileName]}
             soundFileName={`${fileName}`}
-            onChange={() => {
-              pickedSounds[fileName] = !pickedSounds[fileName];
-            }}
+            onChange={() => onPickSound(fileName)}
             onPlay={() => loadedSounds[fileName].play()}
           />
         ))}
         <WorkoutButton
           style={{}}
           text="Save"
+          disabled={isSaveDisabled}
           onClick={() =>
-            navigation.navigate('Reaction', {
+            navigation.navigate(backTo, {
               sounds: soundFileList.filter(
                 (fileName) => pickedSounds[fileName],
               ),
+              settingsPath,
             })
           }
         />
-      </View>
+      </ListComponent>
     </Wrapper>
   );
 };
-
-const styles = StyleSheet.create({
-  mainView: {
-    display: 'flex',
-    width: '100%',
-    height: '80%',
-    marginVertical: 3,
-    alignItems: 'center',
-    flexDirection: 'column',
-  },
-  view: {},
-});
 
 type SoundPickerProps = {
   route: any;
