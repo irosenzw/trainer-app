@@ -21,3 +21,9 @@ export enum CountDirection {
   Up = 'Up',
   Down = 'Down',
 }
+
+export enum SettingsType {
+  SOUND = 'sound',
+  NUMBER = 'number',
+  SECONDS = 'seconds',
+}

@@ -10,6 +10,7 @@ export const COLOR_SCHEME: { [key: string]: string } = {
   darkYellow: '#7a730b',
   lightDarkYellow: '#d1cf1d',
   green: '#24c92a',
+  grey: '#686868',
 };
 
 export const SOUNDS_PATH = '/storage/emulated/0/TrainMe/Sounds/App/';

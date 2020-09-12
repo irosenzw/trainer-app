@@ -2,7 +2,6 @@ import React from 'react';
 import Card from './Layout/Card';
 import { View, Text, StyleSheet } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import WorkoutButton from './Buttons/WorkoutButton';
 import { COLOR_SCHEME } from '../utils/Constants';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
