@@ -1,11 +1,6 @@
 import React from 'react';
 import { Text, StyleSheet, View, TextInput } from 'react-native';
-import {
-  connect,
-  useSelector,
-  shallowEqual,
-  useDispatch,
-} from 'react-redux';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import Wrapper from '../Components/Wrapper';
 import {
   ListComponent,
@@ -15,6 +10,7 @@ import { COLOR_SCHEME } from '../utils/Constants';
 import { SettingsType } from '../utils/types';
 import WorkoutButton from '../Components/Buttons/WorkoutButton';
 import { storeObject } from '../storage/storage';
+import { settings } from '../utils/default-settings';
 
 type settingsFieldInputProps = {
   navigation: any;
@@ -22,6 +18,31 @@ type settingsFieldInputProps = {
   settingsPath: { topic: string; key: string };
   isNumber: boolean;
   onChange: (topic: string, key: string, v: any) => void;
+};
+
+const updateSettings = (loadedSettings: {
+  [key: string]: { [key: string] };
+}) => {
+  const newSettings: { [key: string]: { [key: string] } } = {};
+
+  // Go over all topics
+  Object.keys(settings).forEach((topic) => {
+    if (settings[topic]) {
+      newSettings[topic] = {};
+      // Go over all keys in topics inside default-settings
+      Object.keys(settings[topic]).forEach((key) => {
+        if (loadedSettings[topic] && loadedSettings[topic][key]) {
+          // first use user's saved settings
+          newSettings[topic][key] = loadedSettings[topic][key];
+        } else if (settings[topic][key]) {
+          // use default-settings as this is a new setting
+          newSettings[topic][key] = settings[topic][key];
+        }
+      });
+    }
+  });
+
+  return newSettings;
 };
 
 const SettingsFieldInput: React.FC<settingsFieldInputProps> = ({
@@ -82,23 +103,32 @@ const SettingsPage: React.FC<SettingPageProps> = ({
   route,
 }) => {
   const dispatch = useDispatch();
-  const getSettings = useSelector(
+  let getSettings = useSelector(
     (state: any) => state.trainerState.Settings,
     shallowEqual,
   );
+
+  React.useEffect(() => {
+    setLocalSettings(updateSettings(getSettings));
+  }, [settings]);
+
   const [localSettings, setLocalSettings] = React.useState(
-    getSettings,
+    updateSettings(getSettings),
   );
 
-  const updateSettings = (
+  const storeModefiledSettings = () => {
+    setLocalSettings(Object.assign({}, localSettings));
+    dispatch({ type: 'SET_SETTINGS', payload: localSettings });
+    storeObject('Settings', localSettings);
+  };
+
+  const modifySettings = (
     topic: string,
     key: string,
     value: string,
   ) => {
     localSettings[topic][key].value = value;
-    setLocalSettings(Object.assign({}, localSettings));
-    dispatch({ type: 'SET_SETTINGS', payload: localSettings });
-    storeObject('Settings', localSettings);
+    storeModefiledSettings();
   };
 
   const sounds = route.params?.sounds;
@@ -110,18 +140,20 @@ const SettingsPage: React.FC<SettingPageProps> = ({
     key = settingsPath.key;
   }
 
-  console.log('localSettings', localSettings);
-
   if (
     sounds &&
     settingsPath &&
     localSettings[topic][key].value !== sounds[0]
   ) {
-    updateSettings(topic, key, sounds[0]);
+    modifySettings(topic, key, sounds[0]);
   }
 
   return (
-    <Wrapper title="Settings" backNav={() => navigation.goBack()}>
+    <Wrapper
+      title="Settings"
+      backNav={() => navigation.goBack()}
+      navigation={navigation}
+    >
       <ListComponent>
         {Object.keys(localSettings).map((topic) => (
           <View key={`${topic}-settings`}>
@@ -147,7 +179,7 @@ const SettingsPage: React.FC<SettingPageProps> = ({
                   <SettingsFieldInput
                     navigation={navigation}
                     initialValue={localSettings[topic][k].value}
-                    onChange={updateSettings}
+                    onChange={modifySettings}
                     settingsPath={{ topic, key: k }}
                     isNumber={
                       localSettings[topic][k].type ===
@@ -161,6 +193,19 @@ const SettingsPage: React.FC<SettingPageProps> = ({
             ))}
           </View>
         ))}
+        <ListRowComponent
+          key={'Restore-to-default'}
+          keyProp={'Restore-to-default'}
+        >
+          <WorkoutButton
+            style={{}}
+            text="Restore to defaults"
+            onClick={() => {
+              setLocalSettings(settings);
+              storeModefiledSettings();
+            }}
+          />
+        </ListRowComponent>
       </ListComponent>
     </Wrapper>
   );

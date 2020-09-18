@@ -7,11 +7,6 @@ export const settings: { [key: string]: any } = {
       preview: 'Prepration time',
       value: 5,
     },
-    warningSound: {
-      type: SettingsType.SOUND,
-      preview: 'Warning sound',
-      value: 'kyai.mp3',
-    },
     startRoundSound: {
       type: SettingsType.SOUND,
       preview: 'Start round sound',
@@ -44,6 +39,11 @@ export const settings: { [key: string]: any } = {
       type: SettingsType.SECONDS,
       preview: 'Warning time',
       value: 3, // 0 for no warning
+    },
+    warningSound: {
+      type: SettingsType.SOUND,
+      preview: 'Warning sound',
+      value: 'kyai.mp3',
     },
   },
   counter: {
@@ -105,6 +105,11 @@ export const settings: { [key: string]: any } = {
       type: SettingsType.SECONDS,
       preview: 'Slow launch time',
       value: 3,
+    },
+    actionDuration: {
+      type: SettingsType.SECONDS,
+      preview: 'Action Duration',
+      value: 1,
     },
     reactionDefaultSound: {
       value: 'kyai.mp3',

@@ -14,7 +14,6 @@ import SettingPage from './src/screens/settings';
 import reducers from './src/redux/reducers';
 
 const Stack = createStackNavigator();
-
 export default class App extends React.PureComponent {
   render() {
     return (

@@ -1,15 +1,32 @@
 /* eslint-disable import/prefer-default-export */
 import React from 'react';
-import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { COLOR_SCHEME } from '../../utils/Constants';
 
 export const HeaderBtn: React.FC<HeaderBtnProps> = ({
   btnStyle,
   action,
   text,
+  iconName,
 }) => {
   return (
     <TouchableOpacity style={[styles.btn, btnStyle]} onPress={action}>
-      <Text style={styles.text}>{text}</Text>
+      <View>
+        {!!text && <Text style={styles.text}>{text}</Text>}
+        {!!iconName && (
+          <Icon
+            name={iconName}
+            size={35}
+            color={COLOR_SCHEME.white}
+          />
+        )}
+      </View>
     </TouchableOpacity>
   );
 };
@@ -30,5 +47,6 @@ const styles = StyleSheet.create({
 type HeaderBtnProps = {
   btnStyle?: object;
   action: () => void;
-  text: string;
+  text?: string;
+  iconName?: string;
 };
