@@ -14,6 +14,7 @@ const CustomWorkout: React.FC<CustomWorkoutProps> = ({
     <Wrapper
       title="Custom"
       backNav={() => navigation.navigate('Home')}
+      navigation={navigation}
     >
       {/*<RecorderComponent />*/}
       <Card title="" />

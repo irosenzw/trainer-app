@@ -8,6 +8,8 @@ import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
 import ButtonGroupComponent from '../../Components/ButtonGroupComponent';
 import SelectSoundsComponent from '../../Components/SelectSounds';
 import { ReactionModes, WorkoutType } from '../../utils/types';
+import { useSelector, shallowEqual } from 'react-redux';
+import { getValue, toMilliseconds } from '../../utils/utils';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -20,17 +22,57 @@ const ReactionWorkout: React.FC<CounterProps> = ({
   navigation,
   route,
 }) => {
-  const [countTo, setCountTo] = React.useState(10);
-  const [actions, setActions] = React.useState(10);
-  const [timerSecs, setTimerSecs] = React.useState(30);
-  const [restSecs, setRestSecs] = React.useState(0);
-  const [rounds, setRounds] = React.useState(minRounds);
-  const [currFastSpeed, setCurrFastSpeed] = React.useState(1000);
-  const [currSlowSpeed, setCurrSlowSpeed] = React.useState(5000);
-  const [currActionDur, setCurrActionDur] = React.useState(1000);
+  const reactionSettings = useSelector(
+    (state: any) => state.trainerState.Settings.reaction,
+    shallowEqual,
+  );
+
+  const {
+    reactionActionsNum,
+    reactionTimer,
+    reactionCounterNum,
+    reactionRestTime,
+    reactionRounds,
+    timeBetweenActionsMin,
+    timeBetweenActionsMax,
+    reactionDefaultSound,
+    actionDuration,
+  } = reactionSettings;
+
+  console.log(
+    'settings: ',
+    JSON.stringify(reactionSettings, null, 2),
+  );
+
+  const [countTo, setCountTo] = React.useState(
+    getValue(reactionCounterNum),
+  );
+  const [actions, setActions] = React.useState(
+    getValue(reactionActionsNum),
+  );
+  const [timerSecs, setTimerSecs] = React.useState(
+    getValue(reactionTimer),
+  );
+  const [restSecs, setRestSecs] = React.useState(
+    getValue(reactionRestTime),
+  );
+  const [rounds, setRounds] = React.useState(
+    getValue(reactionRounds),
+  );
+  const [currFastSpeed, setCurrFastSpeed] = React.useState(
+    toMilliseconds(getValue(timeBetweenActionsMin)),
+  );
+  const [currSlowSpeed, setCurrSlowSpeed] = React.useState(
+    toMilliseconds(getValue(timeBetweenActionsMax)),
+  );
+  const [currActionDur, setCurrActionDur] = React.useState(
+    toMilliseconds(getValue(actionDuration)),
+  );
   const [mode, setMode] = React.useState(ReactionModes.Actions);
 
-  const sounds = route.params?.sounds || ['kyai.mp3'];
+  const sounds = route.params?.sounds || [
+    getValue(reactionDefaultSound),
+  ];
 
   // Actions
   const onActionDown = React.useCallback(
@@ -111,6 +153,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({
     <Wrapper
       title="Reaction"
       backNav={() => navigation.navigate('Home')}
+      navigation={navigation}
     >
       <ButtonGroupComponent
         title="Mode"

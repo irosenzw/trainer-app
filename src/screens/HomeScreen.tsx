@@ -28,13 +28,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     }
   }, [trainerSettings]);
 
-  const select = useSelector((state: any) => state);
-
-  console.log('select: ', select);
-  console.log(trainerSettings);
-
   return (
-    <Wrapper title="Train Me">
+    <Wrapper title="Train Me" navigation={navigation}>
       <View style={{ flexDirection: 'row' }}>
         <HomeScreenBtn
           text="Interval"

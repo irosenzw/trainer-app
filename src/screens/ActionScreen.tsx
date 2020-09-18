@@ -20,6 +20,7 @@ import {
   WorkoutType,
   ReactionModes,
 } from '../utils/types';
+import { useSelector, shallowEqual } from 'react-redux';
 const calcFill = (currValue: number, maxValue: number): number =>
   Math.round((currValue / maxValue) * 100);
 
@@ -41,8 +42,18 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     rounds,
     mode,
   } = route.params;
-  const prepTime: number = 5;
-  const playWarningSoundTime: number = -10; // no warning
+
+  const allSettings = useSelector(
+    (state: any) => state.trainerState.Settings,
+    shallowEqual,
+  );
+
+  const enterWorkoutSound = allSettings.general.startRoundSound;
+  const enterRestSound = allSettings.general.endRoundSound;
+  const warningSound = allSettings.general.warningSound;
+
+  const prepTime: number = allSettings.general.prepTime;
+  const warningTime: number = allSettings.interval.warningTime; // no warning
   const speed: number = route?.params?.speed || 1000;
   const sounds: string[] = route?.params?.sounds;
   const fastSpeed: number = route?.params?.fastSpeed || 1000;
@@ -83,7 +94,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       (x) => x === mode,
     );
 
-  const isPlayCounterSound = () =>
+  const isCounterMode = () =>
     workoutType === WorkoutType.Counter ||
     (workoutType === WorkoutType.Reaction && mode === 'Counter');
 
@@ -115,7 +126,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     console.log('restSecs', restSecs);
     console.log('round', round);
     console.log('timerDelay', timerDelay);
-    console.log('isPlayCounterSound', isPlayCounterSound());
+    console.log('isPlayCounterSound', isCounterMode());
     console.log('*************************');
   };
 
@@ -166,13 +177,13 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       bg: COLOR_SCHEME.darkYellow,
     });
 
-    playLongBeep();
+    playSound(enterRestSound);
     setTimerDelay(1000);
   };
 
   const nextRound = () => {
     setRound(round + 1);
-    if (round > 0 && restTime === 0 && isPlayCounterSound()) {
+    if (round > 0 && restTime === 0 && isCounterMode()) {
       setWorkoutSecs(workoutTime - 1);
       playCount(1);
     } else {
@@ -196,7 +207,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     // Interval:
     setTimerDelay(speed);
     if (workoutType === WorkoutType.Interval) {
-      playBell();
+      playSound(enterWorkoutSound);
     }
   };
 
@@ -262,12 +273,12 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
   React.useEffect(() => {
     if (
-      playWarningSoundTime > 0 &&
-      restSecs === playWarningSoundTime &&
-      restTime !== playWarningSoundTime &&
+      warningTime > 0 &&
+      restSecs === warningTime &&
+      restTime !== warningTime &&
       isRest()
     ) {
-      playWarning();
+      playSound(warningSound);
     }
 
     if (restSecs === -1) {
@@ -288,12 +299,12 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
         setWorkoutSecs(workoutSecs - 1);
 
         if (
-          playWarningSoundTime > 0 &&
-          workoutSecs === playWarningSoundTime + 1 &&
-          workoutTime !== playWarningSoundTime &&
+          warningTime > 0 &&
+          workoutSecs === warningTime + 1 &&
+          workoutTime !== warningTime &&
           workoutType === WorkoutType.Interval
         ) {
-          playWarning();
+          playSound(warningSound);
         }
 
         // Reaction: Set new delay every tick
@@ -305,7 +316,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
         }
 
         // Counter (or Reaction counter mode): play Count on every tick
-        if (isPlayCounterSound() && workoutSecs > 0) {
+        if (isCounterMode() && workoutSecs > 0) {
           playCount(workoutTime - workoutSecs + 1);
         }
 

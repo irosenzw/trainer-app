@@ -6,6 +6,8 @@ import { onNumberUp, onNumberDown } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
 import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
 import { WorkoutType } from '../../utils/types';
+import { useSelector, shallowEqual } from 'react-redux';
+import { getValue } from '../../utils/utils';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -15,10 +17,26 @@ const fastestSpeed = 200;
 const slowestSpeed = 10000;
 
 const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
-  const [countTo, setCountTo] = React.useState(10);
-  const [speed, setSpeed] = React.useState(1000); // milliseconds
-  const [restSecs, setRestSecs] = React.useState(10);
-  const [rounds, setRounds] = React.useState(minRounds);
+  const counterSettings = useSelector(
+    (state: any) => state.trainerState.Settings.counter,
+    shallowEqual,
+  );
+
+  const {
+    counterNum,
+    counterRestTime,
+    counterRounds,
+    counterSpeed,
+  } = counterSettings;
+
+  const [countTo, setCountTo] = React.useState(getValue(counterNum));
+  const [speed, setSpeed] = React.useState(
+    getValue(counterSpeed) * 1000,
+  ); // convert to milliseconds
+  const [restSecs, setRestSecs] = React.useState(
+    getValue(counterRestTime),
+  );
+  const [rounds, setRounds] = React.useState(getValue(counterRounds));
 
   // CountTo
   const onCountToDown = React.useCallback(
@@ -50,6 +68,7 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
     <Wrapper
       title="Counter"
       backNav={() => navigation.navigate('Home')}
+      navigation={navigation}
     >
       <NumberComponent
         title="Count To"

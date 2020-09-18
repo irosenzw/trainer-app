@@ -5,6 +5,8 @@ import NumberComponent from '../../Components/NumberComponent';
 import { onNumberUp, onNumberDown } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
 import { WorkoutType } from '../../utils/types';
+import { useSelector, shallowEqual } from 'react-redux';
+import { getValue } from '../../utils/utils';
 
 const intervalMinSec = 1;
 const intervalMinRounds = 1;
@@ -13,9 +15,26 @@ const intervalMaxRounds = 1000;
 const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
   navigation,
 }) => {
-  const [intervalSecs, setIntervalSecs] = React.useState(5);
-  const [restSecs, setRestSecs] = React.useState(3);
-  const [rounds, setRounds] = React.useState(intervalMinRounds);
+  const intervalSettings = useSelector(
+    (state: any) => state.trainerState.Settings.interval,
+    shallowEqual,
+  );
+
+  const {
+    intervalTime,
+    intervalRestTime,
+    intervalRounds,
+  } = intervalSettings;
+
+  const [intervalSecs, setIntervalSecs] = React.useState(
+    getValue(intervalTime),
+  );
+  const [restSecs, setRestSecs] = React.useState(
+    getValue(intervalRestTime),
+  );
+  const [rounds, setRounds] = React.useState(
+    getValue(intervalRounds),
+  );
 
   const onRoundsDown = React.useCallback(
     () => onNumberDown(setRounds, rounds, intervalMinRounds),
@@ -28,7 +47,11 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
   );
 
   return (
-    <Wrapper title="Interval" backNav={() => navigation.goBack()}>
+    <Wrapper
+      title="Interval"
+      backNav={() => navigation.goBack()}
+      navigation={navigation}
+    >
       <ClockComponent
         title="Interval Time"
         seconds={intervalSecs}
