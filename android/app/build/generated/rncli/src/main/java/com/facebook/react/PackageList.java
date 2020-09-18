@@ -14,16 +14,26 @@ import java.util.ArrayList;
 import com.trainer.BuildConfig;
 import com.trainer.R;
 
+// @react-native-community/async-storage
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 // @react-native-community/masked-view
 import org.reactnative.maskedview.RNCMaskedViewPackage;
+// react-native-audio-recorder-player
+import com.dooboolab.RNAudioRecorderPlayerPackage;
+// react-native-fs
+import com.rnfs.RNFSPackage;
 // react-native-gesture-handler
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+// react-native-keep-awake
+import com.corbt.keepawake.KCKeepAwakePackage;
 // react-native-reanimated
 import com.swmansion.reanimated.ReanimatedPackage;
 // react-native-safe-area-context
 import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 // react-native-screens
 import com.swmansion.rnscreens.RNScreensPackage;
+// react-native-sound
+import com.zmxv.RNSound.RNSoundPackage;
 // react-native-svg
 import com.horcrux.svg.SvgPackage;
 // react-native-vector-icons
@@ -77,11 +87,16 @@ public class PackageList {
   public ArrayList<ReactPackage> getPackages() {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
+      new AsyncStoragePackage(),
       new RNCMaskedViewPackage(),
+      new RNAudioRecorderPlayerPackage(),
+      new RNFSPackage(),
       new RNGestureHandlerPackage(),
+      new KCKeepAwakePackage(),
       new ReanimatedPackage(),
       new SafeAreaContextPackage(),
       new RNScreensPackage(),
+      new RNSoundPackage(),
       new SvgPackage(),
       new VectorIconsPackage(),
       new WheelPickerPackage(),
