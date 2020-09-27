@@ -2,7 +2,7 @@ import React from 'react';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
-import { onNumberUp, onNumberDown } from './utils';
+import { onNumberUp, onNumberDown, onNumberChange } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
 import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
 import { WorkoutType } from '../../utils/types';
@@ -12,7 +12,7 @@ import { getValue } from '../../utils/utils';
 const minRounds = 1;
 const maxRounds = 1000;
 const minCountTo = 1;
-const maxcountTo = 100;
+const maxCountTo = 100;
 const fastestSpeed = 200;
 const slowestSpeed = 10000;
 
@@ -29,14 +29,14 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
     counterSpeed,
   } = counterSettings;
 
-  const [countTo, setCountTo] = React.useState(getValue(counterNum));
+  const [countTo, setCountTo] = React.useState(parseInt(getValue(counterNum)));
   const [speed, setSpeed] = React.useState(
-    getValue(counterSpeed) * 1000,
+    parseInt(getValue(counterSpeed)) * 1000,
   ); // convert to milliseconds
   const [restSecs, setRestSecs] = React.useState(
-    getValue(counterRestTime),
+    parseInt(getValue(counterRestTime)),
   );
-  const [rounds, setRounds] = React.useState(getValue(counterRounds));
+  const [rounds, setRounds] = React.useState(parseInt(getValue(counterRounds)));
 
   // CountTo
   const onCountToDown = React.useCallback(
@@ -45,9 +45,14 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
   );
 
   const onCountToUp = React.useCallback(
-    () => onNumberUp(setCountTo, countTo, maxcountTo),
+    () => onNumberUp(setCountTo, countTo, maxCountTo),
     [countTo],
   );
+
+  const onCountToChange = React.useCallback(
+    (newValue) => onNumberChange(newValue, setCountTo, minCountTo, maxCountTo),
+    [countTo]
+  )
 
   // Rounds
   const onRoundsDown = React.useCallback(
@@ -60,6 +65,12 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
     [rounds],
   );
 
+  const onRoundsChange = React.useCallback(
+    (newValue) => onNumberChange(newValue, setRounds, minRounds, maxRounds),
+    [rounds]
+  )
+
+  // Speed
   const onUpdateSpeed = React.useCallback((spd) => setSpeed(spd), [
     speed,
   ]);
@@ -75,6 +86,7 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
         number={countTo}
         onUp={onCountToUp}
         onDown={onCountToDown}
+        onChange={onCountToChange}
       />
 
       <ClockComponent
@@ -88,6 +100,7 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
         number={rounds}
         onUp={onRoundsUp}
         onDown={onRoundsDown}
+        onChange={onRoundsChange}
       />
 
       <RangeSpeedComponent

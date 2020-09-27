@@ -73,6 +73,17 @@ export const onNumberDown = (
   setter(stateValue - 1);
 };
 
+export const onNumberChange = (
+  newValue: number,
+  setter: (n: number) => void,
+  minValue: number = 0,
+  maxValue: number = 100,
+) => {
+  if (newValue <= maxValue && newValue >= minValue ) {
+    setter(newValue)
+  }
+}
+
 export const onValueChange = (
   setter: (n: number) => void,
   newValue: number,
