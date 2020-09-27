@@ -8,13 +8,31 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLOR_SCHEME } from '../utils/Constants';
 import Card from '../Components/Layout/Card';
+import { TextInput } from 'react-native';
 
 const NumberComponent: React.FC<NumberComponentProps> = ({
   title,
   number,
   onDown,
   onUp,
+  onChange
 }) => {
+
+  const [val, setVal] = React.useState(number);
+
+  React.useEffect(() => {
+    if (val !== number) {
+      setVal(number);
+    }
+  }, [number])
+
+  const submitChange = () => {
+    onChange(val);
+    if (val !== number) {
+      setVal(number);
+    }
+  }
+
   return (
     <Card title={title}>
       <View style={styles.componentView}>
@@ -24,7 +42,13 @@ const NumberComponent: React.FC<NumberComponentProps> = ({
           </TouchableOpacity>
         </View>
         <View style={styles.subjectView}>
-          <Text style={styles.NumberText}>{number}</Text>
+          <TextInput
+            style={styles.NumberText}
+            keyboardType='numeric'
+            onChangeText={(v) => setVal(parseInt(v))}
+            onBlur={submitChange}
+            value={val ? `${val}` : ''}
+          />
         </View>
         <View style={styles.buttonView}>
           <TouchableOpacity onPress={onUp}>
@@ -39,7 +63,7 @@ const NumberComponent: React.FC<NumberComponentProps> = ({
 const styles = StyleSheet.create({
   componentView: {
     width: '85%',
-    height: '80%',
+    height: '90%',
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
@@ -66,6 +90,7 @@ type NumberComponentProps = {
   number: number;
   onDown: () => void;
   onUp: () => void;
+  onChange: (val: number) => void;
 };
 
 export default NumberComponent;

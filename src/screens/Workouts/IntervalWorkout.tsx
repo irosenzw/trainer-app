@@ -2,7 +2,7 @@ import React from 'react';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
-import { onNumberUp, onNumberDown } from './utils';
+import { onNumberUp, onNumberDown, onNumberChange } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
 import { WorkoutType } from '../../utils/types';
 import { useSelector, shallowEqual } from 'react-redux';
@@ -27,13 +27,13 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
   } = intervalSettings;
 
   const [intervalSecs, setIntervalSecs] = React.useState(
-    getValue(intervalTime),
+    parseInt(getValue(intervalTime)),
   );
   const [restSecs, setRestSecs] = React.useState(
-    getValue(intervalRestTime),
+    parseInt(getValue(intervalRestTime)),
   );
   const [rounds, setRounds] = React.useState(
-    getValue(intervalRounds),
+    parseInt(getValue(intervalRounds)),
   );
 
   const onRoundsDown = React.useCallback(
@@ -45,6 +45,11 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
     () => onNumberUp(setRounds, rounds, intervalMaxRounds),
     [rounds],
   );
+
+  const onRoundsChange = React.useCallback(
+    (newValue) => onNumberChange(newValue, setRounds, intervalMinRounds, intervalMaxRounds),
+    [rounds]
+  )
 
   return (
     <Wrapper
@@ -67,6 +72,7 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
         number={rounds}
         onUp={onRoundsUp}
         onDown={onRoundsDown}
+        onChange={onRoundsChange}
       />
       <StartButton
         onClick={() => {
