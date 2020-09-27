@@ -39,11 +39,6 @@ const ReactionWorkout: React.FC<CounterProps> = ({
     actionDuration,
   } = reactionSettings;
 
-  console.log(
-    'settings: ',
-    JSON.stringify(reactionSettings, null, 2),
-  );
-
   const [countTo, setCountTo] = React.useState(
     getValue(reactionCounterNum),
   );

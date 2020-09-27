@@ -14,10 +14,11 @@ export const HeaderBtn: React.FC<HeaderBtnProps> = ({
   action,
   text,
   iconName,
+  hideButton = false,
 }) => {
   return (
-    <TouchableOpacity style={[styles.btn, btnStyle]} onPress={action}>
-      <View>
+    <View style={styles.view}>
+    {!hideButton &&  (<TouchableOpacity style={styles.btn || btnStyle} onPress={action}>
         {!!text && <Text style={styles.text}>{text}</Text>}
         {!!iconName && (
           <Icon
@@ -26,16 +27,23 @@ export const HeaderBtn: React.FC<HeaderBtnProps> = ({
             color={COLOR_SCHEME.white}
           />
         )}
-      </View>
-    </TouchableOpacity>
+    </TouchableOpacity>)}
+    </View>
+
   );
 };
 
 const styles = StyleSheet.create({
-  btn: {
-    width: 50,
-    textAlign: 'center',
+  view: {
+    justifyContent: 'center',
+    alignItems: 'center',
     margin: 20,
+    width: 35,
+  },
+  btn: {
+    textAlign: 'center',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   text: {
     color: 'white',
@@ -49,4 +57,5 @@ type HeaderBtnProps = {
   action: () => void;
   text?: string;
   iconName?: string;
+  hideButton?: boolean;
 };
