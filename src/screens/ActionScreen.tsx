@@ -21,6 +21,7 @@ import {
   ReactionModes,
 } from '../utils/types';
 import { useSelector, shallowEqual } from 'react-redux';
+import { getValue } from '../utils/utils';
 const calcFill = (currValue: number, maxValue: number): number =>
   Math.round((currValue / maxValue) * 100);
 
@@ -48,22 +49,22 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     shallowEqual,
   );
 
-  const enterWorkoutSound = allSettings.general.startRoundSound;
-  const enterRestSound = allSettings.general.endRoundSound;
-  const warningSound = allSettings.general.warningSound;
+  const enterWorkoutSound = getValue(allSettings.general.startRoundSound);
+  const enterRestSound = getValue(allSettings.general.endRoundSound);
+  const warningSound = getValue(allSettings.interval.warningSound);
 
-  const prepTime: number = allSettings.general.prepTime;
-  const warningTime: number = allSettings.interval.warningTime; // no warning
+  const prepTime: number = getValue(allSettings.general.prepTime);
+  const warningTime: number = getValue(allSettings.interval.warningTime);
   const speed: number = route?.params?.speed || 1000;
   const sounds: string[] = route?.params?.sounds;
   const fastSpeed: number = route?.params?.fastSpeed || 1000;
   const slowSpeed: number = route?.params?.slowSpeed || 1000;
 
   const [workoutState, setWorkoutState] = React.useState<string>(
-    WorkoutPhase.Preparation,
+    prepTime > 0 ? WorkoutPhase.Preparation : WorkoutPhase.Workout,
   ); // WORKOUT or REST or PREPARATION or FINISH or PAUSE //later SKIP
   const [workoutSecs, setWorkoutSecs] = React.useState<number>(
-    prepTime,
+    prepTime > 0 ? prepTime : workoutTime,
   );
   const [restSecs, setRestSecs] = React.useState<number>(restTime);
   const [prepSecs, setPrepSecs] = React.useState<number>(prepTime);
@@ -73,8 +74,11 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     workoutTime,
   );
 
-  const [outerCircleStyle, setOuterCircleStyle] = React.useState({
+  const [outerCircleStyle, setOuterCircleStyle] = React.useState(prepTime > 0 ? {
     tintColor: COLOR_SCHEME.red,
+    bg: COLOR_SCHEME.darkBlue,
+  } : {
+    tintColor: COLOR_SCHEME.blue,
     bg: COLOR_SCHEME.darkBlue,
   });
 
@@ -273,10 +277,10 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
   React.useEffect(() => {
     if (
+      isRest() &&
       warningTime > 0 &&
       restSecs === warningTime &&
-      restTime !== warningTime &&
-      isRest()
+      restTime !== warningTime
     ) {
       playSound(warningSound);
     }
@@ -328,7 +332,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   }, timerDelay);
 
   return (
-    <Wrapper title="Action" backNav={() => navigation.goBack()}>
+    <Wrapper title="Action" backNav={() => navigation.goBack()} navigation={null} hideHeader={true}>
       <View style={styles.mainView}>
         <KeepAwake />
         <AnimatedCircularProgress
@@ -379,7 +383,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     width: '100%',
     marginVertical: 3,
-    paddingTop: 50,
+    paddingTop: 80,
     alignItems: 'center',
     flexDirection: 'column',
     flex: 1,

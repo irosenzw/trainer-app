@@ -6,18 +6,13 @@ export const HeaderTitle: React.FC<HeaderTitleProps> = ({
   textStyle,
 }) => {
   return (
-    <View style={styles.view}>
-      <Text style={[styles.text, textStyle]}>{title}</Text>
+    <View>
+        <Text style={[styles.text, textStyle]}>{title}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  view: {
-    flex: 1,
-    width: 50,
-    height: 50,
-  },
   text: {
     color: 'white',
     fontWeight: 'bold',

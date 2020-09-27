@@ -20,10 +20,8 @@ type settingsFieldInputProps = {
   onChange: (topic: string, key: string, v: any) => void;
 };
 
-const updateSettings = (loadedSettings: {
-  [key: string]: { [key: string] };
-}) => {
-  const newSettings: { [key: string]: { [key: string] } } = {};
+const updateSettings = (loadedSettings: { [key: string]: any }) => {
+  const newSettings: { [key: string]: any } = {};
 
   // Go over all topics
   Object.keys(settings).forEach((topic) => {
@@ -71,6 +69,7 @@ const SettingsFieldInput: React.FC<settingsFieldInputProps> = ({
           style={styles.text}
           keyboardType="numeric"
           value={`${val}`}
+          onFocus={() => setVal('')}
           onChangeText={(v: string) => validateInput(v)}
         />
       )}
@@ -108,16 +107,13 @@ const SettingsPage: React.FC<SettingPageProps> = ({
     shallowEqual,
   );
 
-  React.useEffect(() => {
-    setLocalSettings(updateSettings(getSettings));
-  }, [settings]);
-
   const [localSettings, setLocalSettings] = React.useState(
     updateSettings(getSettings),
   );
 
   const storeModefiledSettings = () => {
-    setLocalSettings(Object.assign({}, localSettings));
+    const x = Object.assign({}, localSettings)
+    setLocalSettings(x);
     dispatch({ type: 'SET_SETTINGS', payload: localSettings });
     storeObject('Settings', localSettings);
   };
@@ -153,6 +149,7 @@ const SettingsPage: React.FC<SettingPageProps> = ({
       title="Settings"
       backNav={() => navigation.goBack()}
       navigation={navigation}
+      hideSettingsBtn={true}
     >
       <ListComponent>
         {Object.keys(localSettings).map((topic) => (
@@ -193,19 +190,6 @@ const SettingsPage: React.FC<SettingPageProps> = ({
             ))}
           </View>
         ))}
-        <ListRowComponent
-          key={'Restore-to-default'}
-          keyProp={'Restore-to-default'}
-        >
-          <WorkoutButton
-            style={{}}
-            text="Restore to defaults"
-            onClick={() => {
-              setLocalSettings(settings);
-              storeModefiledSettings();
-            }}
-          />
-        </ListRowComponent>
       </ListComponent>
     </Wrapper>
   );

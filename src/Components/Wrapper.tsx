@@ -11,6 +11,10 @@ import { COLOR_SCHEME } from '../utils/Constants';
 type WrapperProps = {
   title: string;
   backNav?: any;
+  navigation: any;
+  hideBackBtn?: boolean;
+  hideSettingsBtn?: boolean;
+  hideHeader?: boolean;
 };
 
 const { width } = Dimensions.get('screen');
@@ -20,12 +24,24 @@ export const ScrollContext = createContext<any>(null);
 const pageLayout: React.FC<WrapperProps> = ({
   title,
   backNav,
+  navigation,
   children,
+  hideBackBtn,
+  hideSettingsBtn,
+  hideHeader = false,
 }) => {
   const [enableScroll, setEnableScroll] = React.useState(true);
   return (
     <View style={styles.mainLayout}>
-      <Header title={title} backNav={backNav} />
+      {!hideHeader &&
+        <Header
+          title={title}
+          backNav={backNav}
+          navigation={navigation}
+          hideBackBtn={hideBackBtn}
+          hideSettingsBtn={hideSettingsBtn}
+        />
+      }
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,

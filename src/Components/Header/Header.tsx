@@ -8,14 +8,19 @@ const Header: React.FC<HeaderProps> = ({
   navigation,
   backNav,
   title,
+  hideBackBtn = false,
+  hideSettingsBtn = false,
 }) => {
   return (
     <View style={styles.view}>
-      <HeaderBtn iconName="chevron-left" action={backNav} />
-      <HeaderTitle title={title} />
+      <HeaderBtn iconName="chevron-left" action={backNav} hideButton={hideBackBtn}/>
+      <View style={{flex: 1}}>
+        <HeaderTitle title={title} />
+      </View>
       <HeaderBtn
         iconName="cog"
         action={() => navigation.navigate('Settings')}
+        hideButton={hideSettingsBtn}
       />
     </View>
   );
@@ -35,6 +40,8 @@ type HeaderProps = {
   navigation: any;
   backNav: () => void;
   title: string;
+  hideBackBtn?: boolean;
+  hideSettingsBtn?: boolean;
 };
 
 export default Header;

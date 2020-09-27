@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import HomeScreenBtn from '../Components/Buttons/HomeScreenBtn';
 import Wrapper from '../Components/Wrapper';
 import { getKey, storeObject } from '../storage/storage';
@@ -29,8 +29,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   }, [trainerSettings]);
 
   return (
-    <Wrapper title="Train Me" navigation={navigation}>
-      <View style={{ flexDirection: 'row' }}>
+    <Wrapper title="Train Me" navigation={navigation} hideBackBtn={true}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <HomeScreenBtn
           text="Interval"
           action={() => navigation.navigate('Interval')}
@@ -40,11 +40,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           action={() => navigation.navigate('Counter')}
         />
       </View>
-      <View style={{ flexDirection: 'row' }}>
-        <HomeScreenBtn
-          text="Settings"
-          action={() => navigation.navigate('Settings')}
-        />
+      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
         <HomeScreenBtn
           text="Reaction"
           action={() => navigation.navigate('Reaction')}
