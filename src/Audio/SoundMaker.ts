@@ -1,5 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import Sound from 'react-native-sound';
+// @ts-ignore
+import Tts from 'react-native-tts';
 import { listFileNames } from '../utils/fsUtils';
 import { SOUNDS_PATH } from '../utils/Constants';
 
@@ -107,6 +109,17 @@ const getAllSounds = async () => {
 };
 
 getAllSounds();
+
+const TTS_SETTINGS = {
+  androidParams: {
+    KEY_PARAM_PAN: -1,
+    KEY_PARAM_VOLUME: 1,
+    KEY_PARAM_STREAM: 'STREAM_MUSIC',
+  },
+};
+
+export const playText = (text: string) =>
+  Tts.speak(text, TTS_SETTINGS);
 
 export const playSound = (fileName: string) => sd[fileName].play();
 

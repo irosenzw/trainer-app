@@ -47,9 +47,15 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
   );
 
   const onRoundsChange = React.useCallback(
-    (newValue) => onNumberChange(newValue, setRounds, intervalMinRounds, intervalMaxRounds),
-    [rounds]
-  )
+    (newValue) =>
+      onNumberChange(
+        newValue,
+        setRounds,
+        intervalMinRounds,
+        intervalMaxRounds,
+      ),
+    [rounds],
+  );
 
   return (
     <Wrapper
