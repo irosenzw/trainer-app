@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+// @ts-ignore
 import KeepAwake from 'react-native-keep-awake';
 import Wrapper from '../Components/Wrapper';
 import { COLOR_SCHEME } from '../utils/Constants';
 import { useInterval } from '../Hooks/UseInterval';
 import WorkoutButtonFooter from '../Components/WorkoutButtonFooter';
 import ActionInnerView from '../Components/ActionInnerView';
-import { playSound } from '../Audio/SoundMaker';
+import { playSound, playText } from '../Audio/SoundMaker';
 import {
   playBell,
   playCount,
@@ -49,12 +50,16 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     shallowEqual,
   );
 
-  const enterWorkoutSound = getValue(allSettings.general.startRoundSound);
+  const enterWorkoutSound = getValue(
+    allSettings.general.startRoundSound,
+  );
   const enterRestSound = getValue(allSettings.general.endRoundSound);
   const warningSound = getValue(allSettings.interval.warningSound);
 
   const prepTime: number = getValue(allSettings.general.prepTime);
-  const warningTime: number = getValue(allSettings.interval.warningTime);
+  const warningTime: number = getValue(
+    allSettings.interval.warningTime,
+  );
   const speed: number = route?.params?.speed || 1000;
   const sounds: string[] = route?.params?.sounds;
   const fastSpeed: number = route?.params?.fastSpeed || 1000;
@@ -74,13 +79,17 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     workoutTime,
   );
 
-  const [outerCircleStyle, setOuterCircleStyle] = React.useState(prepTime > 0 ? {
-    tintColor: COLOR_SCHEME.red,
-    bg: COLOR_SCHEME.darkBlue,
-  } : {
-    tintColor: COLOR_SCHEME.blue,
-    bg: COLOR_SCHEME.darkBlue,
-  });
+  const [outerCircleStyle, setOuterCircleStyle] = React.useState(
+    prepTime > 0
+      ? {
+          tintColor: COLOR_SCHEME.red,
+          bg: COLOR_SCHEME.darkBlue,
+        }
+      : {
+          tintColor: COLOR_SCHEME.blue,
+          bg: COLOR_SCHEME.darkBlue,
+        },
+  );
 
   const isFinish = () => workoutState === WorkoutPhase.Finish;
   const isWorkout = () => workoutState === WorkoutPhase.Workout;
@@ -282,7 +291,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
       restSecs === warningTime &&
       restTime !== warningTime
     ) {
-      playSound(warningSound);
+      playText('Get ready');
     }
 
     if (restSecs === -1) {
@@ -304,11 +313,12 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
 
         if (
           warningTime > 0 &&
-          workoutSecs === warningTime + 1 &&
+          workoutSecs > 1 &&
+          workoutSecs <= warningTime + 1 &&
           workoutTime !== warningTime &&
           workoutType === WorkoutType.Interval
         ) {
-          playSound(warningSound);
+          playText(`${workoutSecs - 1}`);
         }
 
         // Reaction: Set new delay every tick
@@ -332,7 +342,12 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   }, timerDelay);
 
   return (
-    <Wrapper title="Action" backNav={() => navigation.goBack()} navigation={null} hideHeader={true}>
+    <Wrapper
+      title="Action"
+      backNav={() => navigation.goBack()}
+      navigation={null}
+      hideHeader={true}
+    >
       <View style={styles.mainView}>
         <KeepAwake />
         <AnimatedCircularProgress

@@ -4,12 +4,7 @@ export const askForPremissions = async () => {
   if (Platform.OS === 'android') {
     try {
       const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: 'Permissions for write access',
-          message: 'Give permission to your storage to write a file',
-          buttonPositive: 'ok',
-        },
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('You can use the storage');
@@ -24,12 +19,7 @@ export const askForPremissions = async () => {
 
     try {
       const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-        {
-          title: 'Permissions for write access',
-          message: 'Give permission to your storage to write a file',
-          buttonPositive: 'ok',
-        },
+        PermissionsAndroid.PERMISSIONS.RECORD_AUDIO
       );
       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
         console.log('You can use the camera');

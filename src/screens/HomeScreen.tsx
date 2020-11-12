@@ -6,10 +6,13 @@ import Wrapper from '../Components/Wrapper';
 import { getKey, storeObject } from '../storage/storage';
 import { isEmpty } from '../utils/utils';
 import { settings } from '../utils/default-settings';
+import { askForPremissions } from '../utils/askForPremissions';
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [trainerSettings, setTrainerSettings] = React.useState({});
   const dispatch = useDispatch();
+
+  askForPremissions();
 
   useEffect(() => {
     if (isEmpty(trainerSettings)) {
@@ -50,7 +53,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   );
 };
 
-// / color platte : https://coolors.co/011627-fdfffc-2ec4b6-e71d36-ff9f1c
+// color platte : https://coolors.co/011627-fdfffc-2ec4b6-e71d36-ff9f1c
 
 type HomeScreenProps = {
   navigation: any;
