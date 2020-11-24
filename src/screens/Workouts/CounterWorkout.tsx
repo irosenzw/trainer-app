@@ -29,14 +29,18 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
     counterSpeed,
   } = counterSettings;
 
-  const [countTo, setCountTo] = React.useState(parseInt(getValue(counterNum)));
+  const [countTo, setCountTo] = React.useState(
+    parseInt(getValue(counterNum)),
+  );
   const [speed, setSpeed] = React.useState(
     parseInt(getValue(counterSpeed)) * 1000,
   ); // convert to milliseconds
   const [restSecs, setRestSecs] = React.useState(
     parseInt(getValue(counterRestTime)),
   );
-  const [rounds, setRounds] = React.useState(parseInt(getValue(counterRounds)));
+  const [rounds, setRounds] = React.useState(
+    parseInt(getValue(counterRounds)),
+  );
 
   // CountTo
   const onCountToDown = React.useCallback(
@@ -50,9 +54,10 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
   );
 
   const onCountToChange = React.useCallback(
-    (newValue) => onNumberChange(newValue, setCountTo, minCountTo, maxCountTo),
-    [countTo]
-  )
+    (newValue) =>
+      onNumberChange(newValue, setCountTo, minCountTo, maxCountTo),
+    [countTo],
+  );
 
   // Rounds
   const onRoundsDown = React.useCallback(
@@ -66,9 +71,10 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
   );
 
   const onRoundsChange = React.useCallback(
-    (newValue) => onNumberChange(newValue, setRounds, minRounds, maxRounds),
-    [rounds]
-  )
+    (newValue) =>
+      onNumberChange(newValue, setRounds, minRounds, maxRounds),
+    [rounds],
+  );
 
   // Speed
   const onUpdateSpeed = React.useCallback((spd) => setSpeed(spd), [
@@ -78,7 +84,7 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
   return (
     <Wrapper
       title="Counter"
-      backNav={() => navigation.navigate('Home')}
+      hideLoadSaveBtns={false}
       navigation={navigation}
     >
       <NumberComponent

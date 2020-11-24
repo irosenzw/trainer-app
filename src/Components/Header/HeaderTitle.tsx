@@ -7,7 +7,7 @@ export const HeaderTitle: React.FC<HeaderTitleProps> = ({
 }) => {
   return (
     <View>
-        <Text style={[styles.text, textStyle]}>{title}</Text>
+      <Text style={[styles.text, textStyle]}>{title}</Text>
     </View>
   );
 };
@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
     fontSize: 40,
-    textAlign: 'center',
+    textAlign: 'left',
   },
 });
 

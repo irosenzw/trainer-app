@@ -342,12 +342,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   }, timerDelay);
 
   return (
-    <Wrapper
-      title="Action"
-      backNav={() => navigation.goBack()}
-      navigation={null}
-      hideHeader={true}
-    >
+    <Wrapper title="Action" navigation={null} hideHeader={true}>
       <View style={styles.mainView}>
         <KeepAwake />
         <AnimatedCircularProgress

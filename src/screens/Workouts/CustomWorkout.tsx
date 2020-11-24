@@ -13,7 +13,7 @@ const CustomWorkout: React.FC<CustomWorkoutProps> = ({
   return (
     <Wrapper
       title="Custom"
-      backNav={() => navigation.navigate('Home')}
+      hideLoadSaveBtns={false}
       navigation={navigation}
     >
       {/*<RecorderComponent />*/}

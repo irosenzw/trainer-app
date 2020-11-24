@@ -7,6 +7,7 @@ import StartButton from '../../Components/Buttons/StartButton';
 import { WorkoutType } from '../../utils/types';
 import { useSelector, shallowEqual } from 'react-redux';
 import { getValue } from '../../utils/utils';
+import WorkoutNameInput from '../../Components/workoutNameInput';
 
 const intervalMinSec = 1;
 const intervalMinRounds = 1;
@@ -46,6 +47,11 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
     [rounds],
   );
 
+  const [
+    isNameInputVisiable,
+    setIsNameInputVisiable,
+  ] = React.useState(false);
+
   const onRoundsChange = React.useCallback(
     (newValue) =>
       onNumberChange(
@@ -60,9 +66,13 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
   return (
     <Wrapper
       title="Interval"
-      backNav={() => navigation.goBack()}
+      saveAction={() => setIsNameInputVisiable(true)}
+      hideLoadSaveBtns={false}
       navigation={navigation}
     >
+      {isNameInputVisiable && (
+        <WorkoutNameInput onSubmit={(x: string) => console.log(x)} />
+      )}
       <ClockComponent
         title="Interval Time"
         seconds={intervalSecs}

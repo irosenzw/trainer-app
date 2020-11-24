@@ -27,3 +27,28 @@ export enum SettingsType {
   NUMBER = 'number',
   SECONDS = 'seconds',
 }
+
+type GeneralSettings = {
+  type: WorkoutType;
+  workout: number;
+  rest: number;
+  rounds: number;
+};
+
+export type IntervalSettings = GeneralSettings;
+
+export type CounterSettings = {
+  speed: number;
+} & GeneralSettings;
+
+export type ReactionSettings = {
+  mode: ReactionModes;
+  slowSpeed: number;
+  fastSpeed: number;
+  actionDuration: number;
+} & GeneralSettings;
+
+export type workoutSettings =
+  | IntervalSettings
+  | CounterSettings
+  | ReactionSettings;

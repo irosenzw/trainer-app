@@ -1,13 +1,12 @@
 import React from 'react';
+import { View, TouchableOpacity, Text } from 'react-native';
 import AudioRecorderPlayer, {
   AudioSet,
   AudioEncoderAndroidType,
   AudioSourceAndroidType,
   OutputFormatAndroidType,
 } from 'react-native-audio-recorder-player';
-import { askForPremissions } from '../utils/askForPremissions';
 import Card from './Layout/Card';
-import { View, TouchableOpacity, Text } from 'react-native';
 import { COLOR_SCHEME } from '../utils/Constants';
 import { isPathExists, createDir } from '../utils/fsUtils';
 
@@ -16,10 +15,9 @@ const audioSet: AudioSet = {
   AudioSourceAndroid: AudioSourceAndroidType.MIC,
   OutputFormatAndroid: OutputFormatAndroidType.AMR_WB,
 };
-askForPremissions();
 
 // const x = async () => await readdir('/storage/emulated/0/Download');
-// List files in dir
+// List files in dir s
 const r = async () => {
   if (!(await isPathExists('/storage/emulated/0/TrainMe/Sounds'))) {
     console.log('Create Sounds dir');

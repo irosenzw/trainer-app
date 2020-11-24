@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { COLOR_SCHEME } from '../utils/Constants';
 import Card from './Layout/Card';
 import { ScrollContext } from './Wrapper';
@@ -25,8 +20,8 @@ type RangeSpeedComponentProps = {
 };
 
 enum RangeTypes {
-  SLOW = "SLOW",
-  FAST = "FAST"
+  SLOW = 'SLOW',
+  FAST = 'FAST',
 }
 
 const RangeSpeedComponent: React.FC<RangeSpeedComponentProps> = (
@@ -43,8 +38,12 @@ const RangeSpeedComponent: React.FC<RangeSpeedComponentProps> = (
     rangeEnabled = true,
   } = props;
 
-  const [fastSpeed, setFastSpeed] = React.useState<number>(currFastSpeed);
-  const [slowSpeed, setSlowSpeed] = React.useState<number | undefined>(currSlowSpeed);
+  const [fastSpeed, setFastSpeed] = React.useState<number>(
+    currFastSpeed,
+  );
+  const [slowSpeed, setSlowSpeed] = React.useState<
+    number | undefined
+  >(currSlowSpeed);
 
   const sliderRef = React.useRef(null);
 
@@ -53,7 +52,7 @@ const RangeSpeedComponent: React.FC<RangeSpeedComponentProps> = (
   const NonRangeChange = (fastSpeed: number) => {
     onFastSpeedChange(fastSpeed);
     setFastSpeed(fastSpeed);
-  }
+  };
   const rangeChanged = (low: number, high: number) => {
     if (low !== currFastSpeed) {
       onFastSpeedChange(low);
@@ -105,9 +104,8 @@ const RangeSpeedComponent: React.FC<RangeSpeedComponentProps> = (
 
       setSlowSpeed(slowSpeed);
       sliderRef?.current.setHighValue(slowSpeed);
-
     }
-  }
+  };
 
   return (
     <Card title={title} customHeight={180}>
@@ -118,25 +116,33 @@ const RangeSpeedComponent: React.FC<RangeSpeedComponentProps> = (
             onChangeText={(v) => setFastSpeed(parseInt(v))}
             onBlur={() => validateValue(RangeTypes.FAST)}
             onFocus={() => setFastSpeed(NaN)}
-            value={fastSpeed ? `${fastSpeed}` : fastSpeed === 0 ? '0' : ''}
+            value={
+              fastSpeed ? `${fastSpeed}` : fastSpeed === 0 ? '0' : ''
+            }
             keyboardType="numeric"
           />
         </View>
-        {rangeEnabled &&
+        {rangeEnabled && (
           <View style={styles.delimiterView}>
             <Text style={styles.delimiterText}>-</Text>
           </View>
-          }
+        )}
         {rangeEnabled && (
           <View style={styles.labelRight}>
-          <TextInput
-            style={styles.labelStyle}
-            onChangeText={(v) => setSlowSpeed(parseInt(v))}
-            onBlur={() => validateValue(RangeTypes.SLOW)}
-            onFocus={() => setSlowSpeed(NaN)}
-            value={slowSpeed ? `${slowSpeed}` : slowSpeed === 0 ? '0' : ''}
-            keyboardType="numeric"
-          />
+            <TextInput
+              style={styles.labelStyle}
+              onChangeText={(v) => setSlowSpeed(parseInt(v))}
+              onBlur={() => validateValue(RangeTypes.SLOW)}
+              onFocus={() => setSlowSpeed(NaN)}
+              value={
+                slowSpeed
+                  ? `${slowSpeed}`
+                  : slowSpeed === 0
+                  ? '0'
+                  : ''
+              }
+              keyboardType="numeric"
+            />
           </View>
         )}
       </View>
@@ -169,7 +175,9 @@ const RangeSpeedComponent: React.FC<RangeSpeedComponentProps> = (
             setEnableScroll ? setEnableScroll(true) : null
           }
           onValueChanged={(low: number, high: number) => {
-            rangeEnabled ? rangeChanged(low, high) : NonRangeChange(low);
+            rangeEnabled
+              ? rangeChanged(low, high)
+              : NonRangeChange(low);
           }}
         />
       </View>
@@ -221,7 +229,7 @@ const styles = StyleSheet.create({
   delimiterView: {
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
 });
 
 export default RangeSpeedComponent;
