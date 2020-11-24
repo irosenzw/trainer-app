@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react';
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import HomeScreenBtn from '../Components/Buttons/HomeScreenBtn';
 import Wrapper from '../Components/Wrapper';
 import { getKey, storeObject } from '../storage/storage';
 import { isEmpty } from '../utils/utils';
 import { settings } from '../utils/default-settings';
-import { askForPremissions } from '../utils/askForPremissions';
+import { setup } from '../utils/setup';
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const [trainerSettings, setTrainerSettings] = React.useState({});
   const dispatch = useDispatch();
+  const { navigate } = navigation;
 
-  askForPremissions();
+  setup();
 
   useEffect(() => {
     if (isEmpty(trainerSettings)) {
@@ -32,21 +33,21 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   }, [trainerSettings]);
 
   return (
-    <Wrapper title="Train Me" navigation={navigation} hideBackBtn={true}>
-      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+    <Wrapper title="Train Me" navigation={navigation}>
+      <View style={styles.btnContainer}>
         <HomeScreenBtn
           text="Interval"
-          action={() => navigation.navigate('Interval')}
+          action={() => navigate('Interval')}
         />
         <HomeScreenBtn
           text="Counter"
-          action={() => navigation.navigate('Counter')}
+          action={() => navigate('Counter')}
         />
       </View>
-      <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+      <View style={styles.btnContainer}>
         <HomeScreenBtn
           text="Reaction"
-          action={() => navigation.navigate('Reaction')}
+          action={() => navigate('Reaction')}
         />
       </View>
     </Wrapper>
@@ -54,6 +55,13 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 };
 
 // color platte : https://coolors.co/011627-fdfffc-2ec4b6-e71d36-ff9f1c
+
+const styles = StyleSheet.create({
+  btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+});
 
 type HomeScreenProps = {
   navigation: any;

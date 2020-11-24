@@ -18,18 +18,22 @@ export const HeaderBtn: React.FC<HeaderBtnProps> = ({
 }) => {
   return (
     <View style={styles.view}>
-    {!hideButton &&  (<TouchableOpacity style={styles.btn || btnStyle} onPress={action}>
-        {!!text && <Text style={styles.text}>{text}</Text>}
-        {!!iconName && (
-          <Icon
-            name={iconName}
-            size={35}
-            color={COLOR_SCHEME.white}
-          />
-        )}
-    </TouchableOpacity>)}
+      {!hideButton && (
+        <TouchableOpacity
+          style={styles.btn || btnStyle}
+          onPress={action}
+        >
+          {!!text && <Text style={styles.text}>{text}</Text>}
+          {!!iconName && (
+            <Icon
+              name={iconName}
+              size={25}
+              color={COLOR_SCHEME.white}
+            />
+          )}
+        </TouchableOpacity>
+      )}
     </View>
-
   );
 };
 
@@ -37,8 +41,9 @@ const styles = StyleSheet.create({
   view: {
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 20,
-    width: 35,
+    marginVertical: 20,
+    marginHorizontal: 10,
+    width: 25,
   },
   btn: {
     textAlign: 'center',

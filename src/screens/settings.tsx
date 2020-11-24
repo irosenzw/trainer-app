@@ -112,7 +112,7 @@ const SettingsPage: React.FC<SettingPageProps> = ({
   );
 
   const storeModefiledSettings = () => {
-    const x = Object.assign({}, localSettings)
+    const x = Object.assign({}, localSettings);
     setLocalSettings(x);
     dispatch({ type: 'SET_SETTINGS', payload: localSettings });
     storeObject('Settings', localSettings);
@@ -147,7 +147,6 @@ const SettingsPage: React.FC<SettingPageProps> = ({
   return (
     <Wrapper
       title="Settings"
-      backNav={() => navigation.goBack()}
       navigation={navigation}
       hideSettingsBtn={true}
     >

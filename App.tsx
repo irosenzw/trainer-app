@@ -19,7 +19,11 @@ export default class App extends React.PureComponent {
     return (
       <Provider store={createStore(reducers)}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home" headerMode="none">
+          <Stack.Navigator
+            initialRouteName="Home"
+            headerMode="none"
+            screenOptions={{ animationEnabled: false }}
+          >
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen
               name="Interval"

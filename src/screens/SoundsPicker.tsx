@@ -79,11 +79,7 @@ const SoundPicker: React.FC<SoundPickerProps> = ({
   );
 
   return (
-    <Wrapper
-      title="Sounds"
-      backNav={() => navigation.goBack()}
-      navigation={navigation}
-    >
+    <Wrapper title="Sounds" navigation={navigation}>
       <ListComponent>
         {soundFileList.map((fileName) => (
           <SoundsPickerRow

@@ -2,7 +2,12 @@ import React from 'react';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
-import { onNumberUp, onNumberDown, onValueChange, onNumberChange } from './utils';
+import {
+  onNumberUp,
+  onNumberDown,
+  onValueChange,
+  onNumberChange,
+} from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
 import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
 import ButtonGroupComponent from '../../Components/ButtonGroupComponent';
@@ -81,9 +86,10 @@ const ReactionWorkout: React.FC<CounterProps> = ({
   );
 
   const onActionsChange = React.useCallback(
-    (newValue) => onNumberChange(newValue, setActions, minCountTo, maxCountTo),
-    [actions]
-  )
+    (newValue) =>
+      onNumberChange(newValue, setActions, minCountTo, maxCountTo),
+    [actions],
+  );
 
   // CountTo
   const onCountToDown = React.useCallback(
@@ -97,9 +103,10 @@ const ReactionWorkout: React.FC<CounterProps> = ({
   );
 
   const onCountToChange = React.useCallback(
-    (newValue) => onNumberChange(newValue, setCountTo, minCountTo, maxCountTo),
-    [countTo]
-  )
+    (newValue) =>
+      onNumberChange(newValue, setCountTo, minCountTo, maxCountTo),
+    [countTo],
+  );
 
   // Rounds
   const onRoundsDown = React.useCallback(
@@ -113,9 +120,10 @@ const ReactionWorkout: React.FC<CounterProps> = ({
   );
 
   const onRoundsChange = React.useCallback(
-    (newValue) => onNumberChange(newValue, setRounds, minRounds, maxRounds),
-    [rounds]
-  )
+    (newValue) =>
+      onNumberChange(newValue, setRounds, minRounds, maxRounds),
+    [rounds],
+  );
 
   // Action Duration
   const onActionDurtionChange = React.useCallback(
@@ -162,7 +170,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({
   return (
     <Wrapper
       title="Reaction"
-      backNav={() => navigation.navigate('Home')}
+      hideLoadSaveBtns={false}
       navigation={navigation}
     >
       <ButtonGroupComponent
