@@ -17,4 +17,4 @@ export const COLOR_SCHEME: { [key: string]: string } = {
 
 export const SOUNDS_PATH = '/storage/emulated/0/TrainMe/Sounds/App/';
 export const WORKOUTS_PATH =
-  '/storage/emulated/0/TrainMe/Saved_Workouts/';
+  '/storage/emulated/0/TrainMe/Saved_Workouts';

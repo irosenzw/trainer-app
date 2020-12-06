@@ -1,6 +1,6 @@
 import RNFS from 'react-native-fs';
 import { askForPremissions } from './askForPremissions';
-import { SOUNDS_PATH } from './Constants';
+import { SOUNDS_PATH, WORKOUTS_PATH } from './Constants';
 import { createDir, isPathExists } from './fsUtils';
 
 export const copyAllAudioFiles = async () => {
@@ -22,7 +22,14 @@ export const copyAllAudioFiles = async () => {
   );
 };
 
+const createWorkoutsDir = async () => {
+  if (!(await isPathExists(WORKOUTS_PATH))) {
+    await createDir(WORKOUTS_PATH);
+  }
+};
+
 export const setup = async () => {
   await askForPremissions();
   await copyAllAudioFiles();
+  await createWorkoutsDir();
 };

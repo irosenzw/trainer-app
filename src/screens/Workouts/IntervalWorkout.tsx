@@ -2,12 +2,20 @@ import React from 'react';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
-import { onNumberUp, onNumberDown, onNumberChange } from './utils';
+import {
+  onNumberUp,
+  onNumberDown,
+  onNumberChange,
+  saveWorkout,
+} from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
-import { WorkoutType } from '../../utils/types';
+import { IntervalSettings, WorkoutType } from '../../utils/types';
 import { useSelector, shallowEqual } from 'react-redux';
 import { getValue } from '../../utils/utils';
-import WorkoutNameInput from '../../Components/workoutNameInput';
+import WorkoutNameInput from '../../Components/WorkoutNameInput';
+import OverrideFileModal from '../../Components/Modals/OverrideFileModal';
+import { isPathExists } from '../../utils/fsUtils';
+import { WORKOUTS_PATH } from '../../utils/Constants';
 
 const intervalMinSec = 1;
 const intervalMinRounds = 1;
@@ -52,6 +60,13 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
     setIsNameInputVisiable,
   ] = React.useState(false);
 
+  const [
+    isOverrideModalVisiable,
+    setIsOverrideModalVisiable,
+  ] = React.useState(false);
+
+  const [workoutName, setWorkoutName] = React.useState('');
+
   const onRoundsChange = React.useCallback(
     (newValue) =>
       onNumberChange(
@@ -63,6 +78,35 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
     [rounds],
   );
 
+  const getWorkoutSettings = (): IntervalSettings => ({
+    type: WorkoutType.Interval,
+    workout: intervalSecs,
+    rest: restSecs,
+    rounds: rounds,
+  });
+
+  const saveWorkoutSettings = (workoutName: string) => {
+    const ws = getWorkoutSettings();
+    saveWorkout(ws, workoutName)
+      .then(() => console.log('saved!'))
+      .catch((e) => console.log(e));
+  };
+
+  const isWorkoutExists = (workoutName: string) => {
+    if (!workoutName) {
+      return;
+    }
+
+    setWorkoutName(workoutName);
+    isPathExists(`${WORKOUTS_PATH}/${workoutName}.json`)
+      .then((result) =>
+        result
+          ? setIsOverrideModalVisiable(true)
+          : saveWorkoutSettings(workoutName),
+      )
+      .catch((e) => console.log(e));
+  };
+
   return (
     <Wrapper
       title="Interval"
@@ -70,8 +114,16 @@ const IntervalWorkout: React.FC<IntervalWorkoutProps> = ({
       hideLoadSaveBtns={false}
       navigation={navigation}
     >
+      <OverrideFileModal
+        isVisible={isOverrideModalVisiable}
+        onClose={() => setIsOverrideModalVisiable(false)}
+        onSave={() => {
+          saveWorkoutSettings(workoutName);
+          setIsOverrideModalVisiable(false);
+        }}
+      />
       {isNameInputVisiable && (
-        <WorkoutNameInput onSubmit={(x: string) => console.log(x)} />
+        <WorkoutNameInput onSubmit={isWorkoutExists} />
       )}
       <ClockComponent
         title="Interval Time"

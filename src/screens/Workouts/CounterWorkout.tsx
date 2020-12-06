@@ -2,12 +2,21 @@ import React from 'react';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
-import { onNumberUp, onNumberDown, onNumberChange } from './utils';
+import {
+  onNumberUp,
+  onNumberDown,
+  onNumberChange,
+  saveWorkout,
+} from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
 import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
-import { WorkoutType } from '../../utils/types';
+import { CounterSettings, WorkoutType } from '../../utils/types';
 import { useSelector, shallowEqual } from 'react-redux';
 import { getValue } from '../../utils/utils';
+import OverrideFileModal from '../../Components/Modals/OverrideFileModal';
+import WorkoutNameInput from '../../Components/WorkoutNameInput';
+import { isPathExists } from '../../utils/fsUtils';
+import { WORKOUTS_PATH } from '../../utils/Constants';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -81,12 +90,65 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
     speed,
   ]);
 
+  const [
+    isNameInputVisiable,
+    setIsNameInputVisiable,
+  ] = React.useState(false);
+
+  const [
+    isOverrideModalVisiable,
+    setIsOverrideModalVisiable,
+  ] = React.useState(false);
+
+  const [workoutName, setWorkoutName] = React.useState('');
+
+  const getWorkoutSettings = (): CounterSettings => ({
+    type: WorkoutType.Counter,
+    workout: countTo,
+    rest: restSecs,
+    rounds: rounds,
+    speed,
+  });
+
+  const saveWorkoutSettings = (workoutName: string) => {
+    const ws = getWorkoutSettings();
+    saveWorkout(ws, workoutName)
+      .then(() => console.log('saved!'))
+      .catch((e) => console.log(e));
+  };
+
+  const isWorkoutExists = (workoutName: string) => {
+    if (!workoutName) {
+      return;
+    }
+
+    isPathExists(`${WORKOUTS_PATH}/${workoutName}.json`)
+      .then((result) =>
+        result
+          ? setIsOverrideModalVisiable(true)
+          : saveWorkoutSettings(workoutName),
+      )
+      .catch((e) => console.log(e));
+  };
+
   return (
     <Wrapper
       title="Counter"
+      saveAction={() => setIsNameInputVisiable(true)}
       hideLoadSaveBtns={false}
       navigation={navigation}
     >
+      <OverrideFileModal
+        isVisible={isOverrideModalVisiable}
+        onClose={() => setIsOverrideModalVisiable(false)}
+        onSave={() => {
+          saveWorkoutSettings(workoutName);
+          setIsOverrideModalVisiable(false);
+        }}
+      />
+      {isNameInputVisiable && (
+        <WorkoutNameInput onSubmit={isWorkoutExists} />
+      )}
       <NumberComponent
         title="Count To"
         number={countTo}
