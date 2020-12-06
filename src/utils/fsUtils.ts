@@ -1,5 +1,4 @@
 import RNFS from 'react-native-fs';
-import { WORKOUTS_PATH } from './Constants';
 
 // list file names in dirPath - dirPath is absolute path
 export const listFileNames = async (
@@ -18,5 +17,5 @@ export const isPathExists = async (
   return RNFS.exists(dirPath);
 };
 
-export const createFile = async (fileName: string, content: string) =>
-  await RNFS.writeFile(`${WORKOUTS_PATH}/${fileName}.json`, content);
+export const createFile = async (path: string, content: string) =>
+  await RNFS.writeFile(path, content);

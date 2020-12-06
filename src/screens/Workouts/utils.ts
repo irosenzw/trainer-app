@@ -1,3 +1,7 @@
+import { WORKOUTS_PATH } from '../../utils/Constants';
+import { createFile, isPathExists } from '../../utils/fsUtils';
+import { workoutSettings } from '../../utils/types';
+
 export const onMinutesDown = (
   setter: (n: number) => void,
   stateValue: number,
@@ -79,10 +83,10 @@ export const onNumberChange = (
   minValue: number = 0,
   maxValue: number = 100,
 ) => {
-  if (newValue <= maxValue && newValue >= minValue ) {
-    setter(newValue)
+  if (newValue <= maxValue && newValue >= minValue) {
+    setter(newValue);
   }
-}
+};
 
 export const onValueChange = (
   setter: (n: number) => void,
@@ -102,3 +106,14 @@ export const onValueChange = (
 
   setter(newValue);
 };
+
+export const saveWorkout = async (
+  ws: workoutSettings,
+  name: string,
+) => {
+  const settingsString = JSON.stringify(ws);
+  await createFile(`${WORKOUTS_PATH}/${name}.json`, settingsString);
+};
+
+export const isWorkoutExists = async (name: string) =>
+  await isPathExists(`${WORKOUTS_PATH}/${name}.json`);
