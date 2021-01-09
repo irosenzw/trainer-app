@@ -112,10 +112,9 @@ const SettingsPage: React.FC<SettingPageProps> = ({
   );
 
   const storeModefiledSettings = () => {
-    const x = Object.assign({}, localSettings);
-    setLocalSettings(x);
-    dispatch({ type: 'SET_SETTINGS', payload: localSettings });
-    storeObject('Settings', localSettings);
+    setLocalSettings(Object.assign({}, localSettings));
+    dispatch({ type: 'SET_SETTINGS', payload: localSettings }); // update local state
+    storeObject('Settings', localSettings); // update persistant settings object
   };
 
   const modifySettings = (

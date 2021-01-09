@@ -9,86 +9,65 @@ import {
   saveWorkout,
 } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
-import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
-import { CounterSettings, WorkoutType } from '../../utils/types';
-import { useSelector, shallowEqual } from 'react-redux';
+import { IntervalSettings, WorkoutType } from '../../utils/types';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { getValue } from '../../utils/utils';
-import OverrideFileModal from '../../Components/Modals/OverrideFileModal';
 import WorkoutNameInput from '../../Components/WorkoutNameInput';
+import OverrideFileModal from '../../Components/Modals/OverrideFileModal';
 import { isPathExists } from '../../utils/fsUtils';
 import { WORKOUTS_PATH } from '../../utils/Constants';
+import IntervalWorkout from '../../workouts/IntervalWorkout';
 
-const minRounds = 1;
-const maxRounds = 1000;
-const minCountTo = 1;
-const maxCountTo = 100;
-const fastestSpeed = 200;
-const slowestSpeed = 10000;
+const intervalMinSec = 1;
+const intervalMinRounds = 1;
+const intervalMaxRounds = 1000;
 
-const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
-  const counterSettings = useSelector(
-    (state: any) => state.trainerState.Settings.counter,
+const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
+  route,
+  navigation,
+}) => {
+  const loadWorkout: IntervalWorkout = route.params?.loadWorkout;
+
+  const intervalSettings = useSelector(
+    (state: any) => state.trainerState.Settings.interval,
     shallowEqual,
   );
 
-  const {
-    counterNum,
-    counterRestTime,
-    counterRounds,
-    counterSpeed,
-  } = counterSettings;
+  const dispatch = useDispatch();
 
-  const [countTo, setCountTo] = React.useState(
-    parseInt(getValue(counterNum)),
+  const {
+    intervalTime,
+    intervalRestTime,
+    intervalRounds,
+  } = intervalSettings;
+
+  const [intervalSecs, setIntervalSecs] = React.useState(
+    parseInt(getValue(intervalTime)),
   );
-  const [speed, setSpeed] = React.useState(
-    parseInt(getValue(counterSpeed)) * 1000,
-  ); // convert to milliseconds
   const [restSecs, setRestSecs] = React.useState(
-    parseInt(getValue(counterRestTime)),
+    parseInt(getValue(intervalRestTime)),
   );
   const [rounds, setRounds] = React.useState(
-    parseInt(getValue(counterRounds)),
+    parseInt(getValue(intervalRounds)),
   );
 
-  // CountTo
-  const onCountToDown = React.useCallback(
-    () => onNumberDown(setCountTo, countTo, minCountTo),
-    [countTo],
-  );
+  React.useEffect(() => {
+    if (loadWorkout) {
+      setIntervalSecs(loadWorkout.workoutTime as number);
+      setRestSecs(loadWorkout.restTime as number);
+      setRounds(loadWorkout.rounds as number);
+    }
+  }, [loadWorkout]);
 
-  const onCountToUp = React.useCallback(
-    () => onNumberUp(setCountTo, countTo, maxCountTo),
-    [countTo],
-  );
-
-  const onCountToChange = React.useCallback(
-    (newValue) =>
-      onNumberChange(newValue, setCountTo, minCountTo, maxCountTo),
-    [countTo],
-  );
-
-  // Rounds
   const onRoundsDown = React.useCallback(
-    () => onNumberDown(setRounds, rounds, minRounds),
+    () => onNumberDown(setRounds, rounds, intervalMinRounds),
     [rounds],
   );
 
   const onRoundsUp = React.useCallback(
-    () => onNumberUp(setRounds, rounds, maxRounds),
+    () => onNumberUp(setRounds, rounds, intervalMaxRounds),
     [rounds],
   );
-
-  const onRoundsChange = React.useCallback(
-    (newValue) =>
-      onNumberChange(newValue, setRounds, minRounds, maxRounds),
-    [rounds],
-  );
-
-  // Speed
-  const onUpdateSpeed = React.useCallback((spd) => setSpeed(spd), [
-    speed,
-  ]);
 
   const [
     isNameInputVisiable,
@@ -102,18 +81,30 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
 
   const [workoutName, setWorkoutName] = React.useState('');
 
-  const getWorkoutSettings = (): CounterSettings => ({
-    type: WorkoutType.Counter,
-    workout: countTo,
-    rest: restSecs,
-    rounds: rounds,
-    speed,
-  });
+  const onRoundsChange = React.useCallback(
+    (newValue) =>
+      onNumberChange(
+        newValue,
+        setRounds,
+        intervalMinRounds,
+        intervalMaxRounds,
+      ),
+    [rounds],
+  );
 
   const saveWorkoutSettings = (workoutName: string) => {
-    const ws = getWorkoutSettings();
-    saveWorkout(ws, workoutName)
-      .then(() => console.log('saved!'))
+    const ws = new InvervalWorkout(
+      workoutName,
+      intervalSecs,
+      restSecs,
+      rounds,
+    );
+
+    saveWorkout(JSON.stringify(ws), ws.name as string)
+      .then(() => {
+        dispatch({ type: 'ADD_TO_SAVED_WORKOUTS', payload: ws });
+        console.log('saved:', ws.name);
+      })
       .catch((e) => console.log(e));
   };
 
@@ -122,6 +113,7 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
       return;
     }
 
+    setWorkoutName(workoutName);
     isPathExists(`${WORKOUTS_PATH}/${workoutName}.json`)
       .then((result) =>
         result
@@ -133,8 +125,14 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
 
   return (
     <Wrapper
-      title="Counter"
+      title="Interval"
       saveAction={() => setIsNameInputVisiable(true)}
+      loadAction={() =>
+        navigation.navigate('WorkoutPicker', {
+          workoutType: WorkoutType.Interval,
+          loadToScreen: 'Interval',
+        })
+      }
       hideLoadSaveBtns={false}
       navigation={navigation}
     >
@@ -149,20 +147,16 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
       {isNameInputVisiable && (
         <WorkoutNameInput onSubmit={isWorkoutExists} />
       )}
-      <NumberComponent
-        title="Count To"
-        number={countTo}
-        onUp={onCountToUp}
-        onDown={onCountToDown}
-        onChange={onCountToChange}
+      <ClockComponent
+        title="Interval Time"
+        seconds={intervalSecs}
+        onSecondsChange={setIntervalSecs}
       />
-
       <ClockComponent
         title="Rest Time"
         seconds={restSecs}
         onSecondsChange={setRestSecs}
       />
-
       <NumberComponent
         title="Rounds"
         number={rounds}
@@ -170,23 +164,12 @@ const CounterWorkout: React.FC<CounterProps> = ({ navigation }) => {
         onDown={onRoundsDown}
         onChange={onRoundsChange}
       />
-
-      <RangeSpeedComponent
-        title="Speed (miliseconds)"
-        minValue={fastestSpeed}
-        maxValue={slowestSpeed}
-        currFastSpeed={speed}
-        onFastSpeedChange={onUpdateSpeed}
-        rangeEnabled={false}
-      />
-
       <StartButton
         onClick={() => {
           navigation.navigate('Action', {
             restTime: restSecs,
-            workoutTime: countTo,
-            workoutType: WorkoutType.Counter,
-            speed,
+            workoutTime: intervalSecs,
+            workoutType: WorkoutType.Interval,
             rounds,
           });
         }}
@@ -199,12 +182,12 @@ type NavigationParams = {
   restTime: number;
   workoutTime: number;
   workoutType: string;
-  speed: number;
   rounds: number;
 };
 
-type CounterProps = {
+type IntervalWorkoutProps = {
+  route: any;
   navigation: any; // NavigationScreenProp<NavigationState, NavigationParams>;
 };
 
-export default CounterWorkout;
+export default IntervalWorkoutScreen;

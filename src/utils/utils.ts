@@ -1,6 +1,51 @@
+import CounterWorkout from '../workouts/CounterWorkout';
+import IntervalWorkout from '../workouts/IntervalWorkout';
+import ReactionWorkout from '../workouts/ReactionWorkout';
+import Workout from '../workouts/Workout';
+import {
+  WorkoutSettings,
+  ReactionSettings,
+  WorkoutType,
+} from './types';
+
 export const isEmpty = (val: Object) =>
   !val || Object.keys(val).length === 0;
 
-export const getValue = (obj: Object): any => obj?.value;
+export const getValue = (obj: any): any => obj?.value;
 
 export const toMilliseconds = (num: number) => (num ? num * 1000 : 0);
+
+export const createWorkout = (workoutObj: any): Workout => {
+  const { type } = workoutObj;
+  console.log('type:', type);
+  switch (type) {
+    case WorkoutType.Interval:
+      return new IntervalWorkout(
+        workoutObj.name,
+        workoutObj.workoutTime,
+        workoutObj.restTime,
+        workoutObj.rounds,
+      );
+    case WorkoutType.Counter:
+      return new CounterWorkout(
+        workoutObj.name,
+        workoutObj.workoutTime,
+        workoutObj.restTime,
+        workoutObj.rounds,
+        workoutObj.speed,
+      );
+    case WorkoutType.Reaction:
+      return new ReactionWorkout(
+        workoutObj.name,
+        workoutObj.workoutTime,
+        workoutObj.restTime,
+        workoutObj.rounds,
+        workoutObj.mode,
+        workoutObj.slowSpeed,
+        workoutObj.fastSpeed,
+        workoutObj.actionDuration,
+      );
+    default:
+      return new Workout();
+  }
+};

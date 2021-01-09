@@ -1,3 +1,3 @@
 export * from './HomeScreen';
-export * from './Workouts/IntervalWorkout';
-export * from './Workouts/CounterWorkout';
+export * from './Workouts/IntervalWorkoutScreen';
+export * from './Workouts/CounterWorkoutScreen';

@@ -18,12 +18,13 @@ import {
   ReactionSettings,
   WorkoutType,
 } from '../../utils/types';
-import { useSelector, shallowEqual } from 'react-redux';
+import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { getValue, toMilliseconds } from '../../utils/utils';
 import OverrideFileModal from '../../Components/Modals/OverrideFileModal';
 import WorkoutNameInput from '../../Components/WorkoutNameInput';
 import { isPathExists } from '../../utils/fsUtils';
 import { WORKOUTS_PATH } from '../../utils/Constants';
+import ReactionWorkout from '../../workouts/ReactionWorkout';
 
 const minRounds = 1;
 const maxRounds = 1000;
@@ -32,14 +33,19 @@ const maxCountTo = 100;
 const fastestValue = 200; // miliseconds - 0.2 seconds
 const slowestValue = 10000; // miliseconds - 10 seconds
 
-const ReactionWorkout: React.FC<CounterProps> = ({
+const ReactionWorkoutScreen: React.FC<CounterProps> = ({
   navigation,
   route,
 }) => {
+  const loadWorkout: ReactionWorkout = route.params?.loadWorkout;
+  console.log('loadworkout:', loadWorkout);
+
   const reactionSettings = useSelector(
     (state: any) => state.trainerState.Settings.reaction,
     shallowEqual,
   );
+
+  const dispatch = useDispatch();
 
   const {
     reactionActionsNum,
@@ -188,21 +194,23 @@ const ReactionWorkout: React.FC<CounterProps> = ({
 
   const [workoutName, setWorkoutName] = React.useState('');
 
-  const getWorkoutSettings = (): ReactionSettings => ({
-    type: WorkoutType.Reaction,
-    workout: countTo,
-    rest: restSecs,
-    rounds: rounds,
-    mode,
-    slowSpeed: currSlowSpeed,
-    fastSpeed: currFastSpeed,
-    actionDuration: currActionDur,
-  });
-
   const saveWorkoutSettings = (workoutName: string) => {
-    const ws = getWorkoutSettings();
-    saveWorkout(ws, workoutName)
-      .then(() => console.log('saved!'))
+    const ws = new ReactionWorkout(
+      workoutName,
+      countTo,
+      restSecs,
+      rounds,
+      mode,
+      currSlowSpeed,
+      currFastSpeed,
+      currActionDur,
+    );
+
+    saveWorkout(JSON.stringify(ws), ws.name as string)
+      .then(() => {
+        dispatch({ type: 'ADD_TO_SAVED_WORKOUTS', payload: ws });
+        console.log('saved:', ws.name);
+      })
       .catch((e) => console.log(e));
   };
 
@@ -211,6 +219,7 @@ const ReactionWorkout: React.FC<CounterProps> = ({
       return;
     }
 
+    setWorkoutName(workoutName);
     isPathExists(`${WORKOUTS_PATH}/${workoutName}.json`)
       .then((result) =>
         result
@@ -220,10 +229,36 @@ const ReactionWorkout: React.FC<CounterProps> = ({
       .catch((e) => console.log(e));
   };
 
+  React.useEffect(() => {
+    if (loadWorkout) {
+      switch (loadWorkout.mode) {
+        case ReactionModes.Actions:
+          setActions(loadWorkout.workoutTime as number);
+        case ReactionModes.Counter:
+          setCountTo(loadWorkout.workoutTime as number);
+        case ReactionModes.Timer:
+          setTimerSecs(loadWorkout.workoutTime as number);
+      }
+
+      setRestSecs(loadWorkout.restTime as number);
+      setRounds(loadWorkout.rounds as number);
+      setMode(loadWorkout.mode as ReactionModes);
+      setCurrFastSpeed(loadWorkout.fastSpeed as number);
+      setCurrSlowSpeed(loadWorkout.slowSpeed as number);
+      setCurrActionDur(loadWorkout.actionDuration as number);
+    }
+  }, [loadWorkout]);
+
   return (
     <Wrapper
       title="Reaction"
       saveAction={() => setIsNameInputVisiable(true)}
+      loadAction={() =>
+        navigation.navigate('WorkoutPicker', {
+          workoutType: WorkoutType.Reaction,
+          loadToScreen: 'Reaction',
+        })
+      }
       hideLoadSaveBtns={false}
       navigation={navigation}
     >
@@ -350,4 +385,4 @@ type CounterProps = {
   route: any;
 };
 
-export default ReactionWorkout;
+export default ReactionWorkoutScreen;

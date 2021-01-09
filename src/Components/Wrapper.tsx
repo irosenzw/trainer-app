@@ -16,9 +16,11 @@ type WrapperProps = {
   hideLoadSaveBtns?: boolean;
   hideSettingsBtn?: boolean;
   hideHeader?: boolean;
+  customBtnAction?: () => void;
+  customBtnText?: string;
+  customBtnStyle?: any;
+  hideCustomBtn?: boolean;
 };
-
-const { width } = Dimensions.get('screen');
 
 export const ScrollContext = createContext<any>(null);
 
@@ -31,6 +33,10 @@ const pageLayout: React.FC<WrapperProps> = ({
   hideLoadSaveBtns,
   hideSettingsBtn,
   hideHeader = false,
+  customBtnAction,
+  customBtnText,
+  customBtnStyle,
+  hideCustomBtn,
 }) => {
   const [enableScroll, setEnableScroll] = React.useState(true);
   return (
@@ -43,6 +49,10 @@ const pageLayout: React.FC<WrapperProps> = ({
           navigation={navigation}
           hideLoadSaveBtns={hideLoadSaveBtns}
           hideSettingsBtn={hideSettingsBtn}
+          customBtnAction={customBtnAction}
+          customBtnText={customBtnText}
+          customBtnStyle={customBtnStyle}
+          hideCustomBtn={hideCustomBtn}
         />
       )}
       <ScrollView

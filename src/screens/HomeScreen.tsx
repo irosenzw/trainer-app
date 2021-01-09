@@ -1,17 +1,28 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useDispatch } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import HomeScreenBtn from '../Components/Buttons/HomeScreenBtn';
 import Wrapper from '../Components/Wrapper';
 import { getKey, storeObject } from '../storage/storage';
-import { isEmpty } from '../utils/utils';
+import { createWorkout, isEmpty } from '../utils/utils';
 import { settings } from '../utils/default-settings';
 import { setup } from '../utils/setup';
+import { getAllSavedWorkouts } from '../storage/workouts';
+import Workout from '../workouts/Workout';
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
-  const [trainerSettings, setTrainerSettings] = React.useState({});
   const dispatch = useDispatch();
   const { navigate } = navigation;
+
+  const trainerSettings = useSelector(
+    (state: any) => state.trainerState.Settings,
+    shallowEqual,
+  );
+
+  const savedWorkouts = useSelector(
+    (state: any) => state.trainerState.savedWorkouts,
+    shallowEqual,
+  );
 
   setup();
 
@@ -21,16 +32,34 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         .then((value) => {
           if (isEmpty(value)) {
             storeObject('Settings', settings); // Save default settings
-            setTrainerSettings(settings); // Load default settings to state
             dispatch({ type: 'SET_SETTINGS', payload: settings });
           } else {
-            setTrainerSettings(value); // Load saved settings to state
             dispatch({ type: 'SET_SETTINGS', payload: value });
           }
         })
         .catch((e) => console.log(e));
     }
   }, [trainerSettings]);
+
+  useEffect(() => {
+    if (savedWorkouts.length === 0) {
+      getAllSavedWorkouts()
+        .then((workouts) => {
+          const validWorkouts: Workout[] = [];
+          workouts.forEach((w) => {
+            const workout = createWorkout(JSON.parse(w));
+            if (workout.isValid()) {
+              validWorkouts.push(workout);
+            }
+          });
+          dispatch({
+            type: 'SET_SAVED_WORKOUTS',
+            payload: validWorkouts,
+          });
+        })
+        .catch(() => null);
+    }
+  }, [savedWorkouts]);
 
   return (
     <Wrapper title="Train Me" navigation={navigation}>
