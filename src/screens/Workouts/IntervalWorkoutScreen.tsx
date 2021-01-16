@@ -93,7 +93,7 @@ const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
   );
 
   const saveWorkoutSettings = (workoutName: string) => {
-    const ws = new InvervalWorkout(
+    const ws = new IntervalWorkout(
       workoutName,
       intervalSecs,
       restSecs,
