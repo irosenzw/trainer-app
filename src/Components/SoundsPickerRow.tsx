@@ -36,10 +36,6 @@ const SoundsPickerRow: React.FC<SoundsPickerRowProps> = ({
 };
 
 const styles = StyleSheet.create({
-  text: {
-    color: COLOR_SCHEME.white,
-    fontSize: 20,
-  },
   chkboxText: {
     color: COLOR_SCHEME.orange,
     fontSize: 20,

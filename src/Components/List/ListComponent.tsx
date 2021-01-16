@@ -4,7 +4,7 @@ import { COLOR_SCHEME } from '../../utils/Constants';
 
 type ListComponentProps = {};
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 export const ListComponent: React.FC<ListComponentProps> = ({
   children,
@@ -25,11 +25,21 @@ export const ListRowComponent: React.FC<ListRowComponentProps> = ({
   );
 };
 
+export const ExpRowComponent: React.FC<ListRowComponentProps> = ({
+  keyProp,
+  children,
+}) => {
+  return (
+    <View style={styles.expRowView} key={keyProp}>
+      {children}
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   listView: {
     display: 'flex',
     width: '100%',
-    height: '80%',
     marginVertical: 3,
     alignItems: 'center',
     flexDirection: 'column',
@@ -42,6 +52,16 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.2,
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  expRowView: {
+    width: width,
+    flex: 1,
+    borderColor: COLOR_SCHEME.white,
+    borderBottomWidth: 0.2,
+    borderTopWidth: 0.2,
+    flexDirection: 'column',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });

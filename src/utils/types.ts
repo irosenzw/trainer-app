@@ -15,6 +15,7 @@ export enum WorkoutType {
   Interval = 'Interval',
   Counter = 'Counter',
   Reaction = 'Reaction',
+  Any = 'Any',
 }
 
 export enum CountDirection {
@@ -30,6 +31,7 @@ export enum SettingsType {
 
 type GeneralSettings = {
   type: WorkoutType;
+  name: string;
   workout: number;
   rest: number;
   rounds: number;
@@ -48,7 +50,7 @@ export type ReactionSettings = {
   actionDuration: number;
 } & GeneralSettings;
 
-export type workoutSettings =
+export type WorkoutSettings =
   | IntervalSettings
   | CounterSettings
   | ReactionSettings;

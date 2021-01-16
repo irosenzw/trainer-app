@@ -19,3 +19,6 @@ export const isPathExists = async (
 
 export const createFile = async (path: string, content: string) =>
   await RNFS.writeFile(path, content);
+
+export const readFile = async (path: string) =>
+  await RNFS.readFile(path);

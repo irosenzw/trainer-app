@@ -20,7 +20,7 @@ export const HeaderBtn: React.FC<HeaderBtnProps> = ({
     <View style={styles.view}>
       {!hideButton && (
         <TouchableOpacity
-          style={styles.btn || btnStyle}
+          style={btnStyle || styles.btn}
           onPress={action}
         >
           {!!text && <Text style={styles.text}>{text}</Text>}
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 20,
     marginHorizontal: 10,
-    width: 25,
+    // width: 40,
   },
   btn: {
     textAlign: 'center',
@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontWeight: 'bold',
-    fontSize: 20,
+    fontSize: 25,
+    marginBottom: 5,
   },
 });
 
@@ -63,4 +64,5 @@ type HeaderBtnProps = {
   text?: string;
   iconName?: string;
   hideButton?: boolean;
+  isDisabled?: boolean;
 };

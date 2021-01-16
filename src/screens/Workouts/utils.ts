@@ -1,6 +1,6 @@
 import { WORKOUTS_PATH } from '../../utils/Constants';
 import { createFile, isPathExists } from '../../utils/fsUtils';
-import { workoutSettings } from '../../utils/types';
+import { WorkoutSettings } from '../../utils/types';
 
 export const onMinutesDown = (
   setter: (n: number) => void,
@@ -108,11 +108,13 @@ export const onValueChange = (
 };
 
 export const saveWorkout = async (
-  ws: workoutSettings,
-  name: string,
+  settingsString: string,
+  fileName: string,
 ) => {
-  const settingsString = JSON.stringify(ws);
-  await createFile(`${WORKOUTS_PATH}/${name}.json`, settingsString);
+  await createFile(
+    `${WORKOUTS_PATH}/${fileName}.json`,
+    settingsString,
+  );
 };
 
 export const isWorkoutExists = async (name: string) =>
