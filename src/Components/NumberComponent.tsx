@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLOR_SCHEME } from '../utils/Constants';
 import Card from '../Components/Layout/Card';
@@ -15,23 +10,22 @@ const NumberComponent: React.FC<NumberComponentProps> = ({
   number,
   onDown,
   onUp,
-  onChange
+  onChange,
 }) => {
-
   const [val, setVal] = React.useState(number);
 
   React.useEffect(() => {
     if (val !== number) {
       setVal(number);
     }
-  }, [number])
+  }, [number]);
 
   const submitChange = () => {
     onChange(val);
     if (val !== number) {
       setVal(number);
     }
-  }
+  };
 
   return (
     <Card title={title}>
@@ -44,8 +38,8 @@ const NumberComponent: React.FC<NumberComponentProps> = ({
         <View style={styles.subjectView}>
           <TextInput
             style={styles.NumberText}
-            keyboardType='numeric'
-            onChangeText={(v) => setVal(parseInt(v))}
+            keyboardType="numeric"
+            onChangeText={(v) => setVal(v)}
             onBlur={submitChange}
             value={val ? `${val}` : ''}
           />
@@ -87,10 +81,10 @@ const styles = StyleSheet.create({
 
 type NumberComponentProps = {
   title: string;
-  number: number;
+  number: number | string;
   onDown: () => void;
   onUp: () => void;
-  onChange: (val: number) => void;
+  onChange: (val: number | string) => void;
 };
 
 export default NumberComponent;

@@ -59,22 +59,26 @@ export const onNumberUp = (
   setter: (n: number) => void,
   stateValue: number,
   maxValue: number = 100,
+  delta: number = 1,
 ) => {
-  if (stateValue === maxValue) {
+  if (stateValue + delta > maxValue) {
+    setter(maxValue);
     return;
   }
-  setter(stateValue + 1);
+  setter(stateValue + delta);
 };
 
 export const onNumberDown = (
   setter: (n: number) => void,
   stateValue: number,
   minValue: number = 0,
+  delta: number = 1,
 ) => {
-  if (stateValue === minValue) {
+  if (stateValue - delta < minValue) {
+    setter(minValue);
     return;
   }
-  setter(stateValue - 1);
+  setter(stateValue - delta);
 };
 
 export const onNumberChange = (
@@ -85,6 +89,58 @@ export const onNumberChange = (
 ) => {
   if (newValue <= maxValue && newValue >= minValue) {
     setter(newValue);
+  }
+};
+
+export const onNumberUpString = (
+  setter: (n: string) => void,
+  stateValue: string,
+  maxValue: number = 100,
+  delta: number = 1,
+) => {
+  const num = parseFloat(stateValue);
+  if (num + delta > maxValue) {
+    setter(`${maxValue}`);
+    return;
+  }
+  console.log('s', num + delta);
+
+  setter(`${(num + delta).toFixed(2)}`);
+};
+
+export const onNumberDownString = (
+  setter: (n: string) => void,
+  stateValue: string,
+  minValue: number = 0,
+  delta: number = 1,
+) => {
+  const num = parseFloat(stateValue);
+  if (num - delta < minValue) {
+    setter(`${minValue}`);
+    return;
+  }
+  setter(`${(num - delta).toFixed(2)}`);
+};
+
+export const onNumberChangeString = (
+  newValue: string,
+  setter: (n: string) => void,
+  minValue: number = 0,
+  maxValue: number = 100,
+) => {
+  const num = parseFloat(newValue);
+  if (num > maxValue) {
+    setter(`${maxValue}`);
+    return;
+  }
+
+  if (num < minValue) {
+    setter(`${minValue}`);
+    return;
+  }
+
+  if (num <= maxValue && num >= minValue) {
+    setter(`${parseFloat(newValue).toFixed(2)}`);
   }
 };
 

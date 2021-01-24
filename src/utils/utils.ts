@@ -15,9 +15,10 @@ export const getValue = (obj: any): any => obj?.value;
 
 export const toMilliseconds = (num: number) => (num ? num * 1000 : 0);
 
-export const createWorkout = (workoutObj: any): Workout => {
+export const createWorkout = (
+  workoutObj: any,
+): Workout | undefined => {
   const { type } = workoutObj;
-  console.log('type:', type);
   switch (type) {
     case WorkoutType.Interval:
       return new IntervalWorkout(
@@ -45,7 +46,5 @@ export const createWorkout = (workoutObj: any): Workout => {
         workoutObj.fastSpeed,
         workoutObj.actionDuration,
       );
-    default:
-      return new Workout();
   }
 };

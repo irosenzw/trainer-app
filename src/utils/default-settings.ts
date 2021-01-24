@@ -17,6 +17,11 @@ export const settings: { [key: string]: any } = {
       preview: 'End round sound',
       value: 'kyai.mp3',
     },
+    speedDelta: {
+      type: SettingsType.SECONDS,
+      preview: 'Speed delta',
+      value: 0.25,
+    },
   },
   interval: {
     // interval
