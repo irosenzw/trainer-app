@@ -7,10 +7,12 @@ import {
   onNumberDown,
   onNumberChange,
   saveWorkout,
+  onNumberDownString,
+  onNumberUpString,
+  onNumberChangeString,
 } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
-import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
-import { CounterSettings, WorkoutType } from '../../utils/types';
+import { WorkoutType } from '../../utils/types';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { getValue } from '../../utils/utils';
 import OverrideFileModal from '../../Components/Modals/OverrideFileModal';
@@ -23,8 +25,8 @@ const minRounds = 1;
 const maxRounds = 1000;
 const minCountTo = 1;
 const maxCountTo = 100;
-const fastestSpeed = 200;
-const slowestSpeed = 10000;
+const fastestSpeed = 0.25;
+const slowestSpeed = 60; // 1 Minute
 
 const CounterWorkoutScreen: React.FC<CounterProps> = ({
   navigation,
@@ -36,6 +38,14 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
     (state: any) => state.trainerState.Settings.counter,
     shallowEqual,
   );
+
+  const generalSetting = useSelector(
+    (state: any) => state.trainerState.Settings.general,
+    shallowEqual,
+  );
+
+  const { speedDelta } = generalSetting;
+  const speedDel = parseFloat(getValue(speedDelta));
 
   const dispatch = useDispatch();
 
@@ -49,63 +59,15 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
   const [countTo, setCountTo] = React.useState(
     parseInt(getValue(counterNum)),
   );
-  const [speed, setSpeed] = React.useState(
-    parseInt(getValue(counterSpeed)) * 1000,
-  ); // convert to milliseconds
   const [restSecs, setRestSecs] = React.useState(
     parseInt(getValue(counterRestTime)),
   );
   const [rounds, setRounds] = React.useState(
     parseInt(getValue(counterRounds)),
   );
-
-  React.useEffect(() => {
-    if (loadWorkout) {
-      setCountTo(loadWorkout.workoutTime as number);
-      setRestSecs(loadWorkout.restTime as number);
-      setRounds(loadWorkout.rounds as number);
-      setSpeed(loadWorkout.speed as number);
-    }
-  }, [loadWorkout]);
-
-  // CountTo
-  const onCountToDown = React.useCallback(
-    () => onNumberDown(setCountTo, countTo, minCountTo),
-    [countTo],
+  const [speed, setSpeed] = React.useState(
+    `${getValue(counterSpeed)}`,
   );
-
-  const onCountToUp = React.useCallback(
-    () => onNumberUp(setCountTo, countTo, maxCountTo),
-    [countTo],
-  );
-
-  const onCountToChange = React.useCallback(
-    (newValue) =>
-      onNumberChange(newValue, setCountTo, minCountTo, maxCountTo),
-    [countTo],
-  );
-
-  // Rounds
-  const onRoundsDown = React.useCallback(
-    () => onNumberDown(setRounds, rounds, minRounds),
-    [rounds],
-  );
-
-  const onRoundsUp = React.useCallback(
-    () => onNumberUp(setRounds, rounds, maxRounds),
-    [rounds],
-  );
-
-  const onRoundsChange = React.useCallback(
-    (newValue) =>
-      onNumberChange(newValue, setRounds, minRounds, maxRounds),
-    [rounds],
-  );
-
-  // Speed
-  const onUpdateSpeed = React.useCallback((spd) => setSpeed(spd), [
-    speed,
-  ]);
 
   const [
     isNameInputVisiable,
@@ -118,6 +80,19 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
   ] = React.useState(false);
 
   const [workoutName, setWorkoutName] = React.useState('');
+
+  React.useEffect(() => {
+    if (loadWorkout) {
+      setCountTo(loadWorkout.workoutTime as number);
+      setRestSecs(loadWorkout.restTime as number);
+      setRounds(loadWorkout.rounds as number);
+      setSpeed(
+        !loadWorkout.speed
+          ? '1.00'
+          : `${parseFloat(loadWorkout.speed).toFixed(2)}`,
+      );
+    }
+  }, [loadWorkout]);
 
   const saveWorkoutSettings = (workoutName: string) => {
     const ws = new CounterWorkout(
@@ -151,6 +126,8 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
       .catch((e) => console.log(e));
   };
 
+  console.log('speed:', speed);
+
   return (
     <Wrapper
       title="Counter"
@@ -178,9 +155,11 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
       <NumberComponent
         title="Count To"
         number={countTo}
-        onUp={onCountToUp}
-        onDown={onCountToDown}
-        onChange={onCountToChange}
+        onUp={() => onNumberUp(setCountTo, countTo, maxCountTo)}
+        onDown={() => onNumberDown(setCountTo, countTo, minCountTo)}
+        onChange={(newValue) =>
+          onNumberChange(newValue, setCountTo, minCountTo, maxCountTo)
+        }
       />
 
       <ClockComponent
@@ -192,18 +171,30 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
       <NumberComponent
         title="Rounds"
         number={rounds}
-        onUp={onRoundsUp}
-        onDown={onRoundsDown}
-        onChange={onRoundsChange}
+        onUp={() => onNumberUp(setRounds, rounds, maxRounds)}
+        onDown={() => onNumberDown(setRounds, rounds, minRounds)}
+        onChange={(newValue) =>
+          onNumberChange(newValue, setRounds, minRounds, maxRounds)
+        }
       />
 
-      <RangeSpeedComponent
-        title="Speed (miliseconds)"
-        minValue={fastestSpeed}
-        maxValue={slowestSpeed}
-        currFastSpeed={speed}
-        onFastSpeedChange={onUpdateSpeed}
-        rangeEnabled={false}
+      <NumberComponent
+        title="Speed"
+        number={speed}
+        onUp={() =>
+          onNumberUpString(setSpeed, speed, slowestSpeed, speedDel)
+        }
+        onDown={() =>
+          onNumberDownString(setSpeed, speed, fastestSpeed, speedDel)
+        }
+        onChange={(newValue) =>
+          onNumberChangeString(
+            newValue,
+            setSpeed,
+            fastestSpeed,
+            slowestSpeed,
+          )
+        }
       />
 
       <StartButton

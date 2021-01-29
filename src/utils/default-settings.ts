@@ -17,6 +17,11 @@ export const settings: { [key: string]: any } = {
       preview: 'End round sound',
       value: 'kyai.mp3',
     },
+    speedDelta: {
+      type: SettingsType.SECONDS,
+      preview: 'Speed delta',
+      value: 0.25,
+    },
   },
   interval: {
     // interval
@@ -96,20 +101,15 @@ export const settings: { [key: string]: any } = {
       preview: 'Rounds',
       value: 2,
     },
-    timeBetweenActionsMin: {
+    fastSpeed: {
       type: SettingsType.SECONDS,
-      preview: 'Fast launch time',
+      preview: 'Fastest speed',
       value: 1,
     },
-    timeBetweenActionsMax: {
+    slowSpeed: {
       type: SettingsType.SECONDS,
-      preview: 'Slow launch time',
+      preview: 'Slowest speed',
       value: 3,
-    },
-    actionDuration: {
-      type: SettingsType.SECONDS,
-      preview: 'Action Duration',
-      value: 1,
     },
     reactionDefaultSound: {
       value: 'kyai.mp3',

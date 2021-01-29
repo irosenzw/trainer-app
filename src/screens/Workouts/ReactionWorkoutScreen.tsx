@@ -5,19 +5,16 @@ import NumberComponent from '../../Components/NumberComponent';
 import {
   onNumberUp,
   onNumberDown,
-  onValueChange,
   onNumberChange,
   saveWorkout,
+  onNumberDownString,
+  onNumberUpString,
+  onNumberChangeString,
 } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
-import RangeSpeedComponent from '../../Components/RangeSpeedComponent';
 import ButtonGroupComponent from '../../Components/ButtonGroupComponent';
 import SelectSoundsComponent from '../../Components/SelectSounds';
-import {
-  ReactionModes,
-  ReactionSettings,
-  WorkoutType,
-} from '../../utils/types';
+import { ReactionModes, WorkoutType } from '../../utils/types';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { getValue, toMilliseconds } from '../../utils/utils';
 import OverrideFileModal from '../../Components/Modals/OverrideFileModal';
@@ -25,13 +22,14 @@ import WorkoutNameInput from '../../Components/WorkoutNameInput';
 import { isPathExists } from '../../utils/fsUtils';
 import { WORKOUTS_PATH } from '../../utils/Constants';
 import ReactionWorkout from '../../workouts/ReactionWorkout';
+import SpeedRange from '../../Components/SpeedRangeComponent';
 
 const minRounds = 1;
 const maxRounds = 1000;
 const minCountTo = 1;
 const maxCountTo = 100;
-const fastestValue = 200; // miliseconds - 0.2 seconds
-const slowestValue = 10000; // miliseconds - 10 seconds
+const fastestValue = 0.25; // 0.25 seconds
+const slowestValue = 60; // 1 minute
 
 const ReactionWorkoutScreen: React.FC<CounterProps> = ({
   navigation,
@@ -45,6 +43,13 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
     shallowEqual,
   );
 
+  const generalSetting = useSelector(
+    (state: any) => state.trainerState.Settings.general,
+    shallowEqual,
+  );
+
+  const speedDelta = parseFloat(getValue(generalSetting.speedDelta));
+
   const dispatch = useDispatch();
 
   const {
@@ -53,10 +58,9 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
     reactionCounterNum,
     reactionRestTime,
     reactionRounds,
-    timeBetweenActionsMin,
-    timeBetweenActionsMax,
+    fastSpeed: fSpeed,
+    slowSpeed: sSPeed,
     reactionDefaultSound,
-    actionDuration,
   } = reactionSettings;
 
   const [countTo, setCountTo] = React.useState(
@@ -74,100 +78,19 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
   const [rounds, setRounds] = React.useState(
     parseInt(getValue(reactionRounds)),
   );
-  const [currFastSpeed, setCurrFastSpeed] = React.useState(
-    toMilliseconds(parseInt(getValue(timeBetweenActionsMin))),
+
+  const [fastSpeed, setFastSpeed] = React.useState(
+    parseFloat(getValue(fSpeed)).toFixed(2),
   );
-  const [currSlowSpeed, setCurrSlowSpeed] = React.useState(
-    toMilliseconds(parseInt(getValue(timeBetweenActionsMax))),
+  const [slowSpeed, setSlowSpeed] = React.useState(
+    parseFloat(getValue(sSPeed)).toFixed(2),
   );
-  const [currActionDur, setCurrActionDur] = React.useState(
-    toMilliseconds(parseInt(getValue(actionDuration))),
-  );
+
   const [mode, setMode] = React.useState(ReactionModes.Actions);
 
   const sounds = route.params?.sounds || [
     getValue(reactionDefaultSound),
   ];
-
-  // Actions
-  const onActionDown = React.useCallback(
-    () => onNumberDown(setActions, actions, minCountTo),
-    [actions],
-  );
-
-  const onActionUp = React.useCallback(
-    () => onNumberUp(setActions, actions, maxCountTo),
-    [actions],
-  );
-
-  const onActionsChange = React.useCallback(
-    (newValue) =>
-      onNumberChange(newValue, setActions, minCountTo, maxCountTo),
-    [actions],
-  );
-
-  // CountTo
-  const onCountToDown = React.useCallback(
-    () => onNumberDown(setCountTo, countTo, minCountTo),
-    [countTo],
-  );
-
-  const onCountToUp = React.useCallback(
-    () => onNumberUp(setCountTo, countTo, maxCountTo),
-    [countTo],
-  );
-
-  const onCountToChange = React.useCallback(
-    (newValue) =>
-      onNumberChange(newValue, setCountTo, minCountTo, maxCountTo),
-    [countTo],
-  );
-
-  // Rounds
-  const onRoundsDown = React.useCallback(
-    () => onNumberDown(setRounds, rounds, minRounds),
-    [rounds],
-  );
-
-  const onRoundsUp = React.useCallback(
-    () => onNumberUp(setRounds, rounds, maxRounds),
-    [rounds],
-  );
-
-  const onRoundsChange = React.useCallback(
-    (newValue) =>
-      onNumberChange(newValue, setRounds, minRounds, maxRounds),
-    [rounds],
-  );
-
-  // Action Duration
-  const onActionDurtionChange = React.useCallback(
-    (newValue) => onValueChange(setCurrActionDur, newValue),
-    [currActionDur],
-  );
-
-  // Time Between Actions
-  const onFastSpeedChange = React.useCallback(
-    (newValue) =>
-      onValueChange(
-        setCurrFastSpeed,
-        newValue,
-        fastestValue,
-        currSlowSpeed - 50,
-      ),
-    [currFastSpeed],
-  );
-
-  const onSlowSpeedChange = React.useCallback(
-    (newValue) =>
-      onValueChange(
-        setCurrSlowSpeed,
-        newValue,
-        currFastSpeed + 50,
-        slowestValue,
-      ),
-    [currSlowSpeed],
-  );
 
   const getWorkoutTime = () => {
     switch (mode) {
@@ -201,9 +124,8 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
       restSecs,
       rounds,
       mode,
-      currSlowSpeed,
-      currFastSpeed,
-      currActionDur,
+      slowSpeed,
+      fastSpeed,
     );
 
     saveWorkout(JSON.stringify(ws), ws.name as string)
@@ -243,9 +165,8 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
       setRestSecs(loadWorkout.restTime as number);
       setRounds(loadWorkout.rounds as number);
       setMode(loadWorkout.mode as ReactionModes);
-      setCurrFastSpeed(loadWorkout.fastSpeed as number);
-      setCurrSlowSpeed(loadWorkout.slowSpeed as number);
-      setCurrActionDur(loadWorkout.actionDuration as number);
+      setFastSpeed(loadWorkout.fastSpeed as string);
+      setSlowSpeed(loadWorkout.slowSpeed as string);
     }
   }, [loadWorkout]);
 
@@ -290,9 +211,16 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
         <NumberComponent
           title="Count To"
           number={countTo}
-          onUp={onCountToUp}
-          onDown={onCountToDown}
-          onChange={onCountToChange}
+          onUp={() => onNumberUp(setCountTo, countTo, maxCountTo)}
+          onDown={() => onNumberDown(setCountTo, countTo, minCountTo)}
+          onChange={(newValue) =>
+            onNumberChange(
+              newValue,
+              setCountTo,
+              minCountTo,
+              maxCountTo,
+            )
+          }
         />
       )}
 
@@ -300,9 +228,16 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
         <NumberComponent
           title="Actions"
           number={actions}
-          onUp={onActionUp}
-          onDown={onActionDown}
-          onChange={onActionsChange}
+          onUp={() => onNumberUp(setActions, actions, maxCountTo)}
+          onDown={() => onNumberDown(setActions, actions, minCountTo)}
+          onChange={(newValue) =>
+            onNumberChange(
+              newValue,
+              setActions,
+              minCountTo,
+              maxCountTo,
+            )
+          }
         />
       )}
       {mode === ReactionModes.Timer && (
@@ -322,28 +257,67 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
       <NumberComponent
         title="Rounds"
         number={rounds}
-        onUp={onRoundsUp}
-        onDown={onRoundsDown}
-        onChange={onRoundsChange}
+        onUp={() => onNumberUp(setRounds, rounds, maxRounds)}
+        onDown={() => onNumberDown(setRounds, rounds, minRounds)}
+        onChange={(newValue) =>
+          onNumberChange(newValue, setRounds, minRounds, maxRounds)
+        }
       />
 
-      <RangeSpeedComponent
-        title="Action Duration"
-        minValue={0}
-        maxValue={slowestValue}
-        currFastSpeed={currActionDur}
-        onFastSpeedChange={onActionDurtionChange}
-        rangeEnabled={false}
-      />
-
-      <RangeSpeedComponent
-        title="Time Between Actions"
-        minValue={fastestValue}
-        maxValue={slowestValue}
-        currFastSpeed={currFastSpeed}
-        currSlowSpeed={currSlowSpeed}
-        onFastSpeedChange={onFastSpeedChange}
-        onSlowSpeedChange={onSlowSpeedChange}
+      <SpeedRange
+        title="Speed Range"
+        slowSpeed={`${slowSpeed}`}
+        fastSpeed={`${fastSpeed}`}
+        onSlowDown={() =>
+          onNumberDownString(
+            setSlowSpeed,
+            slowSpeed,
+            parseFloat(fastSpeed),
+            speedDelta,
+          )
+        }
+        onSlowUp={() =>
+          onNumberUpString(
+            setSlowSpeed,
+            slowSpeed,
+            slowestValue,
+            speedDelta,
+          )
+        }
+        onSlowChange={(newValue) =>
+          onNumberChangeString(
+            newValue as string,
+            setSlowSpeed,
+            parseFloat(fastSpeed),
+            slowestValue,
+            true,
+          )
+        }
+        onFastDown={() =>
+          onNumberDownString(
+            setFastSpeed,
+            fastSpeed,
+            fastestValue,
+            speedDelta,
+          )
+        }
+        onFastUp={() =>
+          onNumberUpString(
+            setFastSpeed,
+            fastSpeed,
+            parseFloat(slowSpeed),
+            speedDelta,
+          )
+        }
+        onFastChange={(newValue) =>
+          onNumberChangeString(
+            newValue as string,
+            setFastSpeed,
+            fastestValue,
+            parseFloat(slowSpeed),
+            true,
+          )
+        }
       />
 
       {mode !== 'Counter' && (
@@ -360,8 +334,8 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
             restTime: restSecs,
             workoutTime: getWorkoutTime(), // actions,
             workoutType: WorkoutType.Reaction,
-            slowSpeed: currActionDur + currSlowSpeed,
-            fastSpeed: currActionDur + currFastSpeed,
+            slowSpeed: slowSpeed,
+            fastSpeed: fastSpeed,
             rounds,
             mode,
             sounds,

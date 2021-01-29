@@ -9,7 +9,7 @@ import {
   saveWorkout,
 } from './utils';
 import StartButton from '../../Components/Buttons/StartButton';
-import { IntervalSettings, WorkoutType } from '../../utils/types';
+import { WorkoutType } from '../../utils/types';
 import { useSelector, shallowEqual, useDispatch } from 'react-redux';
 import { getValue } from '../../utils/utils';
 import WorkoutNameInput from '../../Components/WorkoutNameInput';
@@ -59,16 +59,6 @@ const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
     }
   }, [loadWorkout]);
 
-  const onRoundsDown = React.useCallback(
-    () => onNumberDown(setRounds, rounds, intervalMinRounds),
-    [rounds],
-  );
-
-  const onRoundsUp = React.useCallback(
-    () => onNumberUp(setRounds, rounds, intervalMaxRounds),
-    [rounds],
-  );
-
   const [
     isNameInputVisiable,
     setIsNameInputVisiable,
@@ -80,17 +70,6 @@ const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
   ] = React.useState(false);
 
   const [workoutName, setWorkoutName] = React.useState('');
-
-  const onRoundsChange = React.useCallback(
-    (newValue) =>
-      onNumberChange(
-        newValue,
-        setRounds,
-        intervalMinRounds,
-        intervalMaxRounds,
-      ),
-    [rounds],
-  );
 
   const saveWorkoutSettings = (workoutName: string) => {
     const ws = new IntervalWorkout(
@@ -160,9 +139,18 @@ const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
       <NumberComponent
         title="Rounds"
         number={rounds}
-        onUp={onRoundsUp}
-        onDown={onRoundsDown}
-        onChange={onRoundsChange}
+        onUp={() => onNumberUp(setRounds, rounds, intervalMaxRounds)}
+        onDown={() =>
+          onNumberDown(setRounds, rounds, intervalMinRounds)
+        }
+        onChange={(newValue) =>
+          onNumberChange(
+            newValue,
+            setRounds,
+            intervalMinRounds,
+            intervalMaxRounds,
+          )
+        }
       />
       <StartButton
         onClick={() => {

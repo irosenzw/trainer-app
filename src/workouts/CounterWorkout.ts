@@ -5,14 +5,14 @@ class CounterWorkout extends Workout implements IWorkout {
   workoutTime: number | undefined;
   restTime: number | undefined;
   rounds: number | undefined;
-  speed: number | undefined;
+  speed: string | undefined;
 
   constructor(
     name?: string,
     workoutTime?: number,
     restTime?: number,
     rounds?: number,
-    speed?: number,
+    speed?: string,
   ) {
     super(name, WorkoutType.Counter);
     this.workoutTime = workoutTime;
