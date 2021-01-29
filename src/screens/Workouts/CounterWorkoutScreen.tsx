@@ -89,7 +89,7 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
       setSpeed(
         !loadWorkout.speed
           ? '1.00'
-          : `${parseFloat(loadWorkout.speed).toFixed(2)}`,
+          : `${parseFloat(`${loadWorkout.speed}`).toFixed(2)}`,
       );
     }
   }, [loadWorkout]);
