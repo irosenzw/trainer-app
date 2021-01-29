@@ -62,8 +62,8 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   );
   const speed: number = route?.params?.speed || 1000;
   const sounds: string[] = route?.params?.sounds;
-  const fastSpeed: number = route?.params?.fastSpeed || 1000;
-  const slowSpeed: number = route?.params?.slowSpeed || 1000;
+  const fastSpeed: number = route?.params?.fastSpeed * 1000 || 1000;
+  const slowSpeed: number = route?.params?.slowSpeed * 1000 || 1000;
 
   const [workoutState, setWorkoutState] = React.useState<string>(
     prepTime > 0 ? WorkoutPhase.Preparation : WorkoutPhase.Workout,
@@ -143,8 +143,24 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     console.log('*************************');
   };
 
-  const calcReactionSpeeds = (): number =>
-    Math.round(fastSpeed + (slowSpeed - fastSpeed) * Math.random());
+  const calcReactionSpeeds = (): number => {
+    const diff = (slowSpeed - fastSpeed) / 1000;
+    if (diff === 0) {
+      return slowSpeed;
+    }
+
+    const optionsCount = diff <= 0.5 ? 2 : Math.round(diff) + 1; // 3 <> 6 will be 3,4,5,6 while 6 - 3 is 3
+    const randInterval = 1 / optionsCount;
+    const rand = Math.random();
+    const res = Math.floor(rand / randInterval);
+
+    if (res + 1 === optionsCount) {
+      return slowSpeed;
+    }
+
+    const calcSpeed = fastSpeed + res * 1000;
+    return calcSpeed > slowSpeed ? slowSpeed : calcSpeed;
+  };
 
   const calcInnerCircleValue = () => {
     let value;

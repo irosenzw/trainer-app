@@ -6,9 +6,8 @@ class ReactionWorkout extends Workout implements IWorkout {
   restTime: number | undefined;
   rounds: number | undefined;
   mode: ReactionModes | undefined;
-  slowSpeed: number | undefined;
-  fastSpeed: number | undefined;
-  actionDuration: number | undefined;
+  slowSpeed: string | undefined;
+  fastSpeed: string | undefined;
 
   constructor(
     name?: string,
@@ -16,9 +15,8 @@ class ReactionWorkout extends Workout implements IWorkout {
     restTime?: number,
     rounds?: number,
     mode?: ReactionModes,
-    slowSpeed?: number,
-    fastSpeed?: number,
-    actionDuration?: number,
+    slowSpeed?: string,
+    fastSpeed?: string,
   ) {
     super(name, WorkoutType.Reaction);
     this.workoutTime = workoutTime;
@@ -27,7 +25,6 @@ class ReactionWorkout extends Workout implements IWorkout {
     this.mode = mode;
     this.slowSpeed = slowSpeed;
     this.fastSpeed = fastSpeed;
-    this.actionDuration = actionDuration;
   }
 
   fillFromJSON = (json: string) => {
@@ -46,7 +43,6 @@ class ReactionWorkout extends Workout implements IWorkout {
     this.mode = workoutObj.mode;
     this.slowSpeed = workoutObj.slowSpeed;
     this.fastSpeed = workoutObj.fastSpeed;
-    this.actionDuration = workoutObj.actionDuration;
   };
 
   isValid = () =>
@@ -57,8 +53,7 @@ class ReactionWorkout extends Workout implements IWorkout {
     !!this.rounds &&
     !!this.mode &&
     !!this.slowSpeed &&
-    !!this.fastSpeed &&
-    !!this.actionDuration;
+    !!this.fastSpeed;
 
   toStringedObj = (): { [key: string]: string } => {
     return {
@@ -70,7 +65,6 @@ class ReactionWorkout extends Workout implements IWorkout {
       mode: `${this.mode}`,
       slowSpeed: `${this.slowSpeed}`,
       fastSpeed: `${this.fastSpeed}`,
-      actionDuration: `${this.actionDuration}`,
     };
   };
 }

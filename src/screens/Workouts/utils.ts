@@ -127,15 +127,24 @@ export const onNumberChangeString = (
   setter: (n: string) => void,
   minValue: number = 0,
   maxValue: number = 100,
+  isParseFloat?: boolean,
 ) => {
   const num = parseFloat(newValue);
   if (num > maxValue) {
-    setter(`${maxValue}`);
+    setter(
+      isParseFloat
+        ? parseFloat(`${minValue}`).toFixed(2)
+        : `${maxValue}`,
+    );
     return;
   }
 
   if (num < minValue) {
-    setter(`${minValue}`);
+    setter(
+      isParseFloat
+        ? parseFloat(`${minValue}`).toFixed(2)
+        : `${minValue}`,
+    );
     return;
   }
 

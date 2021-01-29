@@ -1,55 +1,65 @@
 import React from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLOR_SCHEME } from '../utils/Constants';
-import Card from './Layout/Card';
-import { TextInput } from 'react-native';
 
-const NewNumberComponent: React.FC<NumberComponentProps> = ({
-  value,
+type SimpleNumComponentProps = {
+  number: number | string;
+  onDown: () => void;
+  onUp: () => void;
+  onChange: (val: number | string) => void;
+  btnSize?: number;
+  fontSize?: number;
+};
+
+const SimpleNumComponent: React.FC<SimpleNumComponentProps> = ({
+  number,
   onDown,
   onUp,
   onChange,
+  btnSize = 40,
+  fontSize = 50,
 }) => {
-  const [val, setVal] = React.useState(value);
+  const [val, setVal] = React.useState(number);
 
-  /*React.useEffect(() => {
+  React.useEffect(() => {
     if (val !== number) {
       setVal(number);
     }
-  }, [number]);*/
+  }, [number]);
 
   const submitChange = () => {
     onChange(val);
-    if (val !== value) {
-      setVal(value);
+    if (val !== number) {
+      setVal(number);
     }
   };
 
   return (
     <View style={styles.componentView}>
       <View style={styles.buttonView}>
-        <TouchableOpacity onPress={onDown}>
-          <Icon name="minus-circle" size={40} color="#AAA" />
+        <TouchableOpacity onPress={onDown} style={styles.btnStyle}>
+          <Icon name="minus-circle" size={btnSize} color="#AAA" />
         </TouchableOpacity>
       </View>
       <View style={styles.subjectView}>
         <TextInput
-          style={styles.NumberText}
+          style={{ ...styles.NumberText, fontSize }}
           keyboardType="numeric"
-          onChangeText={(v) => setVal(parseInt(v))}
+          onFocus={() => setVal('')}
+          onChangeText={(v) => setVal(v)}
           onBlur={submitChange}
           value={val ? `${val}` : ''}
         />
       </View>
       <View style={styles.buttonView}>
-        <TouchableOpacity onPress={onUp}>
-          <Icon name="plus-circle" size={40} color="#AAA" />
+        <TouchableOpacity onPress={onUp} style={styles.btnStyle}>
+          <Icon name="plus-circle" size={btnSize} color="#AAA" />
         </TouchableOpacity>
       </View>
     </View>
@@ -71,21 +81,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   subjectView: {
-    flex: 4,
-    flexGrow: 3,
+    flex: 1,
+    flexGrow: 2,
     alignItems: 'center',
   },
   NumberText: {
     fontSize: 50,
     color: COLOR_SCHEME.white,
   },
+  btnStyle: {
+    padding: 10,
+  },
 });
 
-type NumberComponentProps = {
-  value: string;
-  onDown: () => void;
-  onUp: () => void;
-  onChange: (val: string) => void;
-};
-
-export default NewNumberComponent;
+export default SimpleNumComponent;
