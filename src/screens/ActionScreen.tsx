@@ -143,15 +143,29 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
     console.log('*************************');
   };
 
-  const calcReactionSpeeds = (): number => {
+  const calcReactionSpeeds = (mode = 'simple'): number => {
     const diff = (slowSpeed - fastSpeed) / 1000;
     if (diff === 0) {
       return slowSpeed;
     }
 
+    const rand = Math.random();
+
+    // Simple mode: 3 speeds: fast, slow, middle
+    if (mode === 'simple') {
+      if (rand <= 0.33) {
+        return fastSpeed;
+      }
+      if (rand > 0.66) {
+        return slowSpeed;
+      }
+
+      return fastSpeed + diff * 1000;
+    }
+
+    // advanced mode: fast, slow, every second in between
     const optionsCount = diff <= 0.5 ? 2 : Math.round(diff) + 1; // 3 <> 6 will be 3,4,5,6 while 6 - 3 is 3
     const randInterval = 1 / optionsCount;
-    const rand = Math.random();
     const res = Math.floor(rand / randInterval);
 
     if (res + 1 === optionsCount) {

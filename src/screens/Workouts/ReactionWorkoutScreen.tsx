@@ -265,7 +265,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
       />
 
       <SpeedRange
-        title="Speed Range"
+        title="Speed Range (sec)"
         slowSpeed={`${slowSpeed}`}
         fastSpeed={`${fastSpeed}`}
         onSlowDown={() =>
@@ -274,6 +274,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
             slowSpeed,
             parseFloat(fastSpeed),
             speedDelta,
+            true,
           )
         }
         onSlowUp={() =>
@@ -282,6 +283,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
             slowSpeed,
             slowestValue,
             speedDelta,
+            true,
           )
         }
         onSlowChange={(newValue) =>
@@ -299,6 +301,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
             fastSpeed,
             fastestValue,
             speedDelta,
+            true,
           )
         }
         onFastUp={() =>
@@ -307,6 +310,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
             fastSpeed,
             parseFloat(slowSpeed),
             speedDelta,
+            true,
           )
         }
         onFastChange={(newValue) =>

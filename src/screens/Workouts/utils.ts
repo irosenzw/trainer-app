@@ -97,13 +97,17 @@ export const onNumberUpString = (
   stateValue: string,
   maxValue: number = 100,
   delta: number = 1,
+  isParseFloat?: boolean,
 ) => {
   const num = parseFloat(stateValue);
   if (num + delta > maxValue) {
-    setter(`${maxValue}`);
+    setter(
+      isParseFloat
+        ? parseFloat(`${maxValue}`).toFixed(2)
+        : `${maxValue}`,
+    );
     return;
   }
-  console.log('s', num + delta);
 
   setter(`${(num + delta).toFixed(2)}`);
 };
@@ -113,10 +117,15 @@ export const onNumberDownString = (
   stateValue: string,
   minValue: number = 0,
   delta: number = 1,
+  isParseFloat?: boolean,
 ) => {
   const num = parseFloat(stateValue);
   if (num - delta < minValue) {
-    setter(`${minValue}`);
+    setter(
+      isParseFloat
+        ? parseFloat(`${minValue}`).toFixed(2)
+        : `${minValue}`,
+    );
     return;
   }
   setter(`${(num - delta).toFixed(2)}`);
@@ -133,7 +142,7 @@ export const onNumberChangeString = (
   if (num > maxValue) {
     setter(
       isParseFloat
-        ? parseFloat(`${minValue}`).toFixed(2)
+        ? parseFloat(`${maxValue}`).toFixed(2)
         : `${maxValue}`,
     );
     return;
