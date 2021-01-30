@@ -33,7 +33,7 @@ const WorkoutDetails: React.FC<WorkoutDetailsProps> = ({
       {Object.keys(stringedWorkout).map((setting) => {
         if (setting !== 'name') {
           return (
-            <View>
+            <View key={`${stringedWorkout.name}-${setting}`}>
               <Text
                 style={{ color: 'white', fontSize: 20 }}
               >{`${setting}: `}</Text>

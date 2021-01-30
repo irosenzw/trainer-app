@@ -54,7 +54,8 @@ const SettingsFieldInput: React.FC<settingsFieldInputProps> = ({
   const { topic, key } = settingsPath;
 
   const validateInput = (newText: any) => {
-    if (isNumber && isNaN(newText)) {
+    if (isNumber && newText === '') {
+      setVal(initialValue);
       return;
     }
 
@@ -67,9 +68,10 @@ const SettingsFieldInput: React.FC<settingsFieldInputProps> = ({
       {isNumber && (
         <TextInput
           style={styles.text}
-          keyboardType="numeric"
+          keyboardType="phone-pad"
           value={`${val}`}
           onFocus={() => setVal('')}
+          onBlur={() => validateInput(val)}
           onChangeText={(v: string) => validateInput(v)}
         />
       )}

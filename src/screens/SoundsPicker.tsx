@@ -3,8 +3,9 @@ import Wrapper from '../Components/Wrapper';
 import SoundsPickerRow from '../Components/SoundsPickerRow';
 import { SoundMaker } from '../Audio/SoundMaker';
 import Sound from 'react-native-sound';
-import WorkoutButton from '../Components/Buttons/WorkoutButton';
 import { ListComponent } from '../Components/List/ListComponent';
+import { COLOR_SCHEME } from '../utils/Constants';
+import { StyleSheet } from 'react-native';
 
 const SoundPicker: React.FC<SoundPickerProps> = ({
   route,
@@ -79,7 +80,21 @@ const SoundPicker: React.FC<SoundPickerProps> = ({
   );
 
   return (
-    <Wrapper title="Sounds" navigation={navigation}>
+    <Wrapper
+      title="Sounds"
+      navigation={navigation}
+      customBtnText="Save"
+      customBtnStyle={styles.saveBtn}
+      customBtnAction={() =>
+        navigation.navigate(backTo, {
+          sounds: soundFileList.filter(
+            (fileName) => pickedSounds[fileName],
+          ),
+          settingsPath,
+        })
+      }
+      hideCustomBtn={isSaveDisabled}
+    >
       <ListComponent>
         {soundFileList.map((fileName) => (
           <SoundsPickerRow
@@ -90,23 +105,23 @@ const SoundPicker: React.FC<SoundPickerProps> = ({
             onPlay={() => loadedSounds[fileName].play()}
           />
         ))}
-        <WorkoutButton
-          style={{}}
-          text="Save"
-          disabled={isSaveDisabled}
-          onClick={() =>
-            navigation.navigate(backTo, {
-              sounds: soundFileList.filter(
-                (fileName) => pickedSounds[fileName],
-              ),
-              settingsPath,
-            })
-          }
-        />
       </ListComponent>
     </Wrapper>
   );
 };
+
+const styles = StyleSheet.create({
+  saveBtn: {
+    borderColor: COLOR_SCHEME.orange,
+    borderWidth: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 80,
+    height: 40,
+    borderRadius: 10,
+    marginTop: 10,
+  },
+});
 
 type SoundPickerProps = {
   route: any;

@@ -50,7 +50,7 @@ const SimpleNumComponent: React.FC<SimpleNumComponentProps> = ({
       <View style={styles.subjectView}>
         <TextInput
           style={{ ...styles.NumberText, fontSize }}
-          keyboardType="numeric"
+          keyboardType="phone-pad"
           onFocus={() => setVal('')}
           onChangeText={(v) => setVal(v)}
           onBlur={submitChange}

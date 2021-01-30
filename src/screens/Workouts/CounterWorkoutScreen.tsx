@@ -66,7 +66,7 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
     parseInt(getValue(counterRounds)),
   );
   const [speed, setSpeed] = React.useState(
-    `${getValue(counterSpeed)}`,
+    parseFloat(`${getValue(counterSpeed)}`).toFixed(2),
   );
 
   const [
@@ -179,7 +179,7 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
       />
 
       <NumberComponent
-        title="Speed"
+        title="Speed (sec)"
         number={speed}
         onUp={() =>
           onNumberUpString(setSpeed, speed, slowestSpeed, speedDel)
