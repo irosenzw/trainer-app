@@ -23,20 +23,13 @@ import { isPathExists } from '../../utils/fsUtils';
 import { WORKOUTS_PATH } from '../../utils/Constants';
 import ReactionWorkout from '../../workouts/ReactionWorkout';
 import SpeedRange from '../../Components/SpeedRangeComponent';
-
-const minRounds = 1;
-const maxRounds = 1000;
-const minCountTo = 1;
-const maxCountTo = 100;
-const fastestValue = 0.25; // 0.25 seconds
-const slowestValue = 60; // 1 minute
+import { SettingsRules } from '../HomeScreen';
 
 const ReactionWorkoutScreen: React.FC<CounterProps> = ({
   navigation,
   route,
 }) => {
   const loadWorkout: ReactionWorkout = route.params?.loadWorkout;
-  console.log('loadworkout:', loadWorkout);
 
   const reactionSettings = useSelector(
     (state: any) => state.trainerState.Settings.reaction,
@@ -47,6 +40,15 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
     (state: any) => state.trainerState.Settings.general,
     shallowEqual,
   );
+
+  const {
+    roundsMax,
+    roundsMin,
+    workoutCountToMax,
+    workoutCountToMin,
+    fastestSpeed,
+    slowestSpeed,
+  } = React.useContext(SettingsRules);
 
   const speedDelta = parseFloat(getValue(generalSetting.speedDelta));
 
@@ -211,14 +213,18 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
         <NumberComponent
           title="Count To"
           number={countTo}
-          onUp={() => onNumberUp(setCountTo, countTo, maxCountTo)}
-          onDown={() => onNumberDown(setCountTo, countTo, minCountTo)}
+          onUp={() =>
+            onNumberUp(setCountTo, countTo, workoutCountToMax)
+          }
+          onDown={() =>
+            onNumberDown(setCountTo, countTo, workoutCountToMin)
+          }
           onChange={(newValue) =>
             onNumberChange(
               newValue,
               setCountTo,
-              minCountTo,
-              maxCountTo,
+              workoutCountToMin,
+              workoutCountToMax,
             )
           }
         />
@@ -228,14 +234,18 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
         <NumberComponent
           title="Actions"
           number={actions}
-          onUp={() => onNumberUp(setActions, actions, maxCountTo)}
-          onDown={() => onNumberDown(setActions, actions, minCountTo)}
+          onUp={() =>
+            onNumberUp(setActions, actions, workoutCountToMax)
+          }
+          onDown={() =>
+            onNumberDown(setActions, actions, workoutCountToMin)
+          }
           onChange={(newValue) =>
             onNumberChange(
               newValue,
               setActions,
-              minCountTo,
-              maxCountTo,
+              workoutCountToMin,
+              workoutCountToMax,
             )
           }
         />
@@ -257,10 +267,10 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
       <NumberComponent
         title="Rounds"
         number={rounds}
-        onUp={() => onNumberUp(setRounds, rounds, maxRounds)}
-        onDown={() => onNumberDown(setRounds, rounds, minRounds)}
+        onUp={() => onNumberUp(setRounds, rounds, roundsMax)}
+        onDown={() => onNumberDown(setRounds, rounds, roundsMin)}
         onChange={(newValue) =>
-          onNumberChange(newValue, setRounds, minRounds, maxRounds)
+          onNumberChange(newValue, setRounds, roundsMin, roundsMax)
         }
       />
 
@@ -281,7 +291,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
           onNumberUpString(
             setSlowSpeed,
             slowSpeed,
-            slowestValue,
+            slowestSpeed,
             speedDelta,
             true,
           )
@@ -291,7 +301,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
             newValue as string,
             setSlowSpeed,
             parseFloat(fastSpeed),
-            slowestValue,
+            slowestSpeed,
             true,
           )
         }
@@ -299,7 +309,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
           onNumberDownString(
             setFastSpeed,
             fastSpeed,
-            fastestValue,
+            fastestSpeed,
             speedDelta,
             true,
           )
@@ -317,7 +327,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
           onNumberChangeString(
             newValue as string,
             setFastSpeed,
-            fastestValue,
+            fastestSpeed,
             parseFloat(slowSpeed),
             true,
           )

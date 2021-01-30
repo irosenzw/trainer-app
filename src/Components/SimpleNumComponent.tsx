@@ -88,6 +88,7 @@ const styles = StyleSheet.create({
   NumberText: {
     fontSize: 50,
     color: COLOR_SCHEME.white,
+    paddingVertical: 0,
   },
   btnStyle: {
     padding: 10,

@@ -118,3 +118,13 @@ export const settings: { [key: string]: any } = {
     },
   },
 };
+
+export const settingsConstraints = {
+  workoutTimeMin: 1, // one second
+  workoutCountToMin: 1,
+  workoutCountToMax: 100,
+  roundsMin: 1,
+  roundsMax: 100, // for set
+  fastestSpeed: 0.25, // seconds
+  slowestSpeed: 60, // seconds
+};

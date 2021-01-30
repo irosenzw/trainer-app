@@ -1,19 +1,21 @@
 // there are ints and floats
 export const numberValidator = (
-  numValue: string,
+  numValue: number | string,
   isFloat: boolean = false,
   max: number,
   min: number,
-): string => {
-  const num = isFloat ? parseFloat(numValue) : parseInt(numValue);
+) => {
+  const num = isFloat
+    ? parseFloat(numValue as string)
+    : parseInt(numValue as string);
   if (num < min) {
-    return `${min}`;
+    return min;
   }
   if (num > max) {
-    return `${max}`;
+    return max;
   }
 
-  return `${num}`;
+  return num;
 };
 
 export const stringValidator = (
