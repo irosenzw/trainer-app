@@ -20,13 +20,7 @@ import WorkoutNameInput from '../../Components/WorkoutNameInput';
 import { isPathExists } from '../../utils/fsUtils';
 import { WORKOUTS_PATH } from '../../utils/Constants';
 import CounterWorkout from '../../workouts/CounterWorkout';
-
-const minRounds = 1;
-const maxRounds = 1000;
-const minCountTo = 1;
-const maxCountTo = 100;
-const fastestSpeed = 0.25;
-const slowestSpeed = 60; // 1 Minute
+import { SettingsRules } from '../HomeScreen';
 
 const CounterWorkoutScreen: React.FC<CounterProps> = ({
   navigation,
@@ -43,6 +37,15 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
     (state: any) => state.trainerState.Settings.general,
     shallowEqual,
   );
+
+  const {
+    roundsMax,
+    roundsMin,
+    workoutCountToMax,
+    workoutCountToMin,
+    fastestSpeed,
+    slowestSpeed,
+  } = React.useContext(SettingsRules);
 
   const { speedDelta } = generalSetting;
   const speedDel = parseFloat(getValue(speedDelta));
@@ -83,6 +86,10 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
 
   React.useEffect(() => {
     if (loadWorkout) {
+      const loadWT = loadWorkout.workoutTime as number;
+      const loadRT = loadWorkout.workoutTime as number;
+      const loadR = loadWorkout.rounds as number;
+      // const loadS = loadWorkout.speed as number;
       setCountTo(loadWorkout.workoutTime as number);
       setRestSecs(loadWorkout.restTime as number);
       setRounds(loadWorkout.rounds as number);
@@ -126,8 +133,6 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
       .catch((e) => console.log(e));
   };
 
-  console.log('speed:', speed);
-
   return (
     <Wrapper
       title="Counter"
@@ -155,10 +160,19 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
       <NumberComponent
         title="Count To"
         number={countTo}
-        onUp={() => onNumberUp(setCountTo, countTo, maxCountTo)}
-        onDown={() => onNumberDown(setCountTo, countTo, minCountTo)}
+        onUp={() =>
+          onNumberUp(setCountTo, countTo, workoutCountToMax)
+        }
+        onDown={() =>
+          onNumberDown(setCountTo, countTo, workoutCountToMin)
+        }
         onChange={(newValue) =>
-          onNumberChange(newValue, setCountTo, minCountTo, maxCountTo)
+          onNumberChange(
+            newValue,
+            setCountTo,
+            workoutCountToMin,
+            workoutCountToMax,
+          )
         }
       />
 
@@ -171,10 +185,10 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
       <NumberComponent
         title="Rounds"
         number={rounds}
-        onUp={() => onNumberUp(setRounds, rounds, maxRounds)}
-        onDown={() => onNumberDown(setRounds, rounds, minRounds)}
+        onUp={() => onNumberUp(setRounds, rounds, roundsMax)}
+        onDown={() => onNumberDown(setRounds, rounds, roundsMin)}
         onChange={(newValue) =>
-          onNumberChange(newValue, setRounds, minRounds, maxRounds)
+          onNumberChange(newValue, setRounds, roundsMin, roundsMax)
         }
       />
 

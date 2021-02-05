@@ -13,6 +13,7 @@ import SoundsPicker from './src/screens/SoundsPicker';
 import LoadWorkoutScreen from './src/screens/WorkoutPicker';
 import SettingPage from './src/screens/settings';
 import reducers from './src/redux/reducers';
+import { settingsConstraints } from './src/utils/default-settings';
 
 const Stack = createStackNavigator();
 export default class App extends React.PureComponent {

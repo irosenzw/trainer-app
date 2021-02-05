@@ -17,10 +17,7 @@ import OverrideFileModal from '../../Components/Modals/OverrideFileModal';
 import { isPathExists } from '../../utils/fsUtils';
 import { WORKOUTS_PATH } from '../../utils/Constants';
 import IntervalWorkout from '../../workouts/IntervalWorkout';
-
-const intervalMinSec = 1;
-const intervalMinRounds = 1;
-const intervalMaxRounds = 1000;
+import { SettingsRules } from '../HomeScreen';
 
 const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
   route,
@@ -32,6 +29,8 @@ const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
     (state: any) => state.trainerState.Settings.interval,
     shallowEqual,
   );
+
+  const { roundsMax, roundsMin } = React.useContext(SettingsRules);
 
   const dispatch = useDispatch();
 
@@ -139,17 +138,10 @@ const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
       <NumberComponent
         title="Rounds"
         number={rounds}
-        onUp={() => onNumberUp(setRounds, rounds, intervalMaxRounds)}
-        onDown={() =>
-          onNumberDown(setRounds, rounds, intervalMinRounds)
-        }
+        onUp={() => onNumberUp(setRounds, rounds, roundsMax)}
+        onDown={() => onNumberDown(setRounds, rounds, roundsMin)}
         onChange={(newValue) =>
-          onNumberChange(
-            newValue,
-            setRounds,
-            intervalMinRounds,
-            intervalMaxRounds,
-          )
+          onNumberChange(newValue, setRounds, roundsMin, roundsMax)
         }
       />
       <StartButton
