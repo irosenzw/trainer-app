@@ -8,12 +8,11 @@ import IntervalWorkoutScreen from './src/screens/Workouts/IntervalWorkoutScreen'
 import CounterWorkoutScreen from './src/screens/Workouts/CounterWorkoutScreen';
 import ReactionWorkoutScreen from './src/screens/Workouts/ReactionWorkoutScreen';
 import ActionScreen from './src/screens/ActionScreen';
-import CustomWorkout from './src/screens/Workouts/CustomWorkoutScreen';
 import SoundsPicker from './src/screens/SoundsPicker';
 import LoadWorkoutScreen from './src/screens/WorkoutPicker';
 import SettingPage from './src/screens/settings';
 import reducers from './src/redux/reducers';
-import { settingsConstraints } from './src/utils/default-settings';
+import FlashMessage from 'react-native-flash-message';
 
 const Stack = createStackNavigator();
 export default class App extends React.PureComponent {
@@ -40,7 +39,6 @@ export default class App extends React.PureComponent {
               component={ReactionWorkoutScreen}
             />
             <Stack.Screen name="Action" component={ActionScreen} />
-            <Stack.Screen name="Custom" component={CustomWorkout} />
             <Stack.Screen name="Settings" component={SettingPage} />
             <Stack.Screen
               name="SoundsPicker"
@@ -51,6 +49,15 @@ export default class App extends React.PureComponent {
               component={LoadWorkoutScreen}
             />
           </Stack.Navigator>
+          <FlashMessage
+            position="bottom"
+            ref="flashMessageComp"
+            floating
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          />
         </NavigationContainer>
       </Provider>
     );
