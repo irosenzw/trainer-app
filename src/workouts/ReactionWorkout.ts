@@ -8,6 +8,7 @@ class ReactionWorkout extends Workout implements IWorkout {
   mode: ReactionModes | undefined;
   slowSpeed: string | undefined;
   fastSpeed: string | undefined;
+  sounds: string[] | undefined;
 
   constructor(
     name?: string,
@@ -17,6 +18,7 @@ class ReactionWorkout extends Workout implements IWorkout {
     mode?: ReactionModes,
     slowSpeed?: string,
     fastSpeed?: string,
+    sounds?: string[],
   ) {
     super(name, WorkoutType.Reaction);
     this.workoutTime = workoutTime;
@@ -25,6 +27,7 @@ class ReactionWorkout extends Workout implements IWorkout {
     this.mode = mode;
     this.slowSpeed = slowSpeed;
     this.fastSpeed = fastSpeed;
+    this.sounds = sounds;
   }
 
   fillFromJSON = (json: string) => {
@@ -43,6 +46,7 @@ class ReactionWorkout extends Workout implements IWorkout {
     this.mode = workoutObj.mode;
     this.slowSpeed = workoutObj.slowSpeed;
     this.fastSpeed = workoutObj.fastSpeed;
+    this.sounds = workoutObj.sounds;
   };
 
   isValid = () =>
@@ -53,7 +57,8 @@ class ReactionWorkout extends Workout implements IWorkout {
     !!this.rounds &&
     !!this.mode &&
     !!this.slowSpeed &&
-    !!this.fastSpeed;
+    !!this.fastSpeed &&
+    !!this.sounds;
 
   toStringedObj = (): { [key: string]: string } => {
     return {
@@ -65,6 +70,7 @@ class ReactionWorkout extends Workout implements IWorkout {
       mode: `${this.mode}`,
       slowSpeed: `${this.slowSpeed}`,
       fastSpeed: `${this.fastSpeed}`,
+      sounds: `[${this.sounds?.join(',')}]`,
     };
   };
 }

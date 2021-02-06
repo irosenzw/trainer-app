@@ -8,22 +8,17 @@ const ButtonGroupComponent: React.FC<ButtonGroupComponentProps> = ({
   title,
   onChange,
   labelArr,
+  value,
 }) => {
   if (labelArr.length < 1) {
     return <></>;
   }
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-
-  const onPress = (idx: number) => {
-    setSelectedIndex(idx);
-    onChange(labelArr[idx]);
-  };
 
   return (
     <Card title={title}>
       <ButtonGroup
-        onPress={(idx) => onPress(idx)}
-        selectedIndex={selectedIndex}
+        onPress={(idx) => onChange(labelArr[idx])}
+        selectedIndex={labelArr.indexOf(value)}
         buttons={labelArr}
         containerStyle={styles.componentView}
         buttonStyle={styles.ButtonStyle}
@@ -63,6 +58,7 @@ type ButtonGroupComponentProps = {
   title: string;
   onChange: (value: any) => void;
   labelArr: string[];
+  value: any;
 };
 
 export default ButtonGroupComponent;
