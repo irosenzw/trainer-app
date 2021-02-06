@@ -1,4 +1,5 @@
 import React from 'react';
+import { showMessage } from 'react-native-flash-message';
 import Wrapper from '../../Components/Wrapper';
 import ClockComponent from '../../Components/ClockComponent';
 import NumberComponent from '../../Components/NumberComponent';
@@ -113,7 +114,9 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
     saveWorkout(JSON.stringify(ws), ws.name as string)
       .then(() => {
         dispatch({ type: 'ADD_TO_SAVED_WORKOUTS', payload: ws });
-        console.log('saved:', ws.name);
+        showMessage({
+          message: `${ws.name} saved`,
+        });
       })
       .catch((e) => console.log(e));
   };
