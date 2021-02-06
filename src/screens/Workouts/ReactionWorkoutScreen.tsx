@@ -90,9 +90,16 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
 
   const [mode, setMode] = React.useState(ReactionModes.Actions);
 
-  const sounds = route.params?.sounds || [
+  const [sounds, setSounds] = React.useState<string[]>([
     getValue(reactionDefaultSound),
-  ];
+  ]);
+
+  React.useEffect(() => {
+    const newPickedSounds = route.params?.sounds;
+    if (newPickedSounds) {
+      setSounds(newPickedSounds);
+    }
+  }, [route.params?.sounds]);
 
   const getWorkoutTime = () => {
     switch (mode) {
@@ -128,6 +135,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
       mode,
       slowSpeed,
       fastSpeed,
+      sounds,
     );
 
     saveWorkout(JSON.stringify(ws), ws.name as string)
@@ -169,6 +177,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
       setMode(loadWorkout.mode as ReactionModes);
       setFastSpeed(loadWorkout.fastSpeed as string);
       setSlowSpeed(loadWorkout.slowSpeed as string);
+      setSounds(loadWorkout.sounds as string[]);
     }
   }, [loadWorkout]);
 
@@ -207,6 +216,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
           ReactionModes.Counter,
           ReactionModes.Timer,
         ]}
+        value={mode}
       />
 
       {mode === ReactionModes.Counter && (
