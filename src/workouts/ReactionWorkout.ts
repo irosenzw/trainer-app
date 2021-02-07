@@ -70,7 +70,7 @@ class ReactionWorkout extends Workout implements IWorkout {
       mode: `${this.mode}`,
       slowSpeed: `${this.slowSpeed}`,
       fastSpeed: `${this.fastSpeed}`,
-      sounds: `[${this.sounds?.join(',')}]`,
+      sounds: `${this.sounds}`,
     };
   };
 }

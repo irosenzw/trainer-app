@@ -15,12 +15,14 @@ type ListRowWithCheckBoxProps = {
   title: string;
   isChosen: boolean;
   onChecked: () => void;
+  onDelete: () => void;
 };
 
 const ListRowWithCheckBox: React.FC<ListRowWithCheckBoxProps> = ({
   title,
   isChosen,
   onChecked,
+  onDelete,
   children,
 }) => {
   const [isCollapsed, setIsCollapsed] = React.useState(true);
@@ -40,16 +42,23 @@ const ListRowWithCheckBox: React.FC<ListRowWithCheckBoxProps> = ({
             onPress={onChecked}
           />
         </View>
-        <View style={styles.playView}>
-          <TouchableOpacity
-            onPress={() => setIsCollapsed(!isCollapsed)}
-          >
-            <Icon
-              name={isCollapsed ? 'plus-square' : 'minus-square'}
-              size={30}
-              color="white"
-            />
-          </TouchableOpacity>
+        <View style={styles.iconsContainer}>
+          <View style={styles.iconView}>
+            <TouchableOpacity onPress={onDelete}>
+              <Icon name="trash" size={30} color="white" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.iconView}>
+            <TouchableOpacity
+              onPress={() => setIsCollapsed(!isCollapsed)}
+            >
+              <Icon
+                name={isCollapsed ? 'plus-square' : 'minus-square'}
+                size={30}
+                color="white"
+              />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       <View>
@@ -62,8 +71,16 @@ const ListRowWithCheckBox: React.FC<ListRowWithCheckBoxProps> = ({
 const styles = StyleSheet.create({
   rowView: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
     height: 80,
+    alignSelf: 'stretch',
+  },
+  iconsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginRight: 25,
+    flex: 1,
   },
   chkboxText: {
     color: COLOR_SCHEME.orange,
@@ -75,11 +92,11 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   chkboxView: {
-    width: '88%',
     flexDirection: 'row',
     justifyContent: 'flex-start',
+    flex: 4,
   },
-  playView: {
+  iconView: {
     flexDirection: 'row',
     alignItems: 'center',
   },
