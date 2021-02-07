@@ -44,6 +44,7 @@ export const createWorkout = (
         workoutObj.mode,
         workoutObj.slowSpeed,
         workoutObj.fastSpeed,
+        workoutObj.sounds,
       );
   }
 };

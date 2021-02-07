@@ -6,14 +6,15 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
-import { shallowEqual, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Collapsible from 'react-native-collapsible';
 import { WorkoutSettings, WorkoutType } from '../utils/types';
 import Wrapper from '../Components/Wrapper';
 import { ListComponent } from '../Components/List/ListComponent';
 import ListRowWithCheckBox from '../Components/WorkoutPickerRow';
 import Workout, { IWorkout } from '../workouts/Workout';
-import { COLOR_SCHEME } from '../utils/Constants';
+import { COLOR_SCHEME, WORKOUTS_PATH } from '../utils/Constants';
+import { deleteFile } from '../utils/fsUtils';
 
 type LoadWorkoutScreenProps = {
   route: any;
@@ -58,15 +59,25 @@ const LoadWorkoutScreen: React.FC<LoadWorkoutScreenProps> = ({
   const [chosenWorkout, setChosenWorkout] = React.useState<
     Workout | undefined
   >(undefined);
+
+  const dispatch = useDispatch();
+
   const savedWorkouts: Workout[] = useSelector(
     (state: any) => state.trainerState.savedWorkouts,
     shallowEqual,
   );
 
-  let workouts = [...savedWorkouts];
-  if (isTyped) {
-    workouts = savedWorkouts.filter((ws) => ws.type === workoutType);
-  }
+  const [workouts, setWorkouts] = React.useState(
+    isTyped
+      ? savedWorkouts.filter((ws) => ws.type === workoutType)
+      : savedWorkouts,
+  );
+
+  const deleteWorkout = async (workoutName: string) => {
+    await deleteFile(`${WORKOUTS_PATH}/${workoutName}.json`);
+    dispatch({ type: 'DELETE_WORKOUT', payload: workoutName });
+    setWorkouts(workouts.filter((w) => w.name !== workoutName));
+  };
 
   return (
     <Wrapper
@@ -88,6 +99,7 @@ const LoadWorkoutScreen: React.FC<LoadWorkoutScreenProps> = ({
             title={workout.name as string}
             isChosen={chosenWorkout?.name === workout.name}
             onChecked={() => setChosenWorkout(workout)}
+            onDelete={() => deleteWorkout(workout.name as string)}
           >
             <WorkoutDetails workoutSettings={workout} />
           </ListRowWithCheckBox>

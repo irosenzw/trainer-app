@@ -22,3 +22,6 @@ export const createFile = async (path: string, content: string) =>
 
 export const readFile = async (path: string) =>
   await RNFS.readFile(path);
+
+export const deleteFile = async (path: string) =>
+  await RNFS.unlink(path);

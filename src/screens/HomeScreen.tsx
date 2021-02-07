@@ -12,6 +12,7 @@ import {
 import { setup } from '../utils/setup';
 import { getAllSavedWorkouts } from '../storage/workouts';
 import Workout from '../workouts/Workout';
+import { WorkoutType } from '../utils/types';
 
 export const SettingsRules = React.createContext(settingsConstraints);
 
@@ -53,6 +54,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           const validWorkouts: Workout[] = [];
           workouts.forEach((w) => {
             const workout = createWorkout(JSON.parse(w));
+            if (workout?.type === WorkoutType.Reaction) {
+              console.log('workout', workout);
+              console.log('workout', workout.isValid());
+            }
+
             if (workout && workout.isValid()) {
               validWorkouts.push(workout);
             }
