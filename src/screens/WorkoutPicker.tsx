@@ -67,11 +67,17 @@ const LoadWorkoutScreen: React.FC<LoadWorkoutScreenProps> = ({
     shallowEqual,
   );
 
+  console.log(
+    's',
+    savedWorkouts.map((w) => w.name),
+  );
+
   const [workouts, setWorkouts] = React.useState(
     isTyped
       ? savedWorkouts.filter((ws) => ws.type === workoutType)
       : savedWorkouts,
   );
+  console.log('workouts', workouts);
 
   const deleteWorkout = async (workoutName: string) => {
     await deleteFile(`${WORKOUTS_PATH}/${workoutName}.json`);

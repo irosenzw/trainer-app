@@ -54,11 +54,6 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           const validWorkouts: Workout[] = [];
           workouts.forEach((w) => {
             const workout = createWorkout(JSON.parse(w));
-            if (workout?.type === WorkoutType.Reaction) {
-              console.log('workout', workout);
-              console.log('workout', workout.isValid());
-            }
-
             if (workout && workout.isValid()) {
               validWorkouts.push(workout);
             }
