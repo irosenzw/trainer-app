@@ -10,6 +10,13 @@ const trainerState = (state = initalState, action: any) => {
     case 'SET_SAVED_WORKOUTS':
       return { ...state, savedWorkouts: action.payload };
     case 'ADD_TO_SAVED_WORKOUTS':
+      if (
+        state.savedWorkouts.find(
+          (w: Workout) => w.name === action.payload.name,
+        )
+      ) {
+        return state;
+      }
       return {
         ...state,
         savedWorkouts: [...state.savedWorkouts, action.payload],
