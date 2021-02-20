@@ -220,7 +220,7 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
             restTime: restSecs,
             workoutTime: countTo,
             workoutType: WorkoutType.Counter,
-            speed,
+            speed: parseFloat(speed) * 1000,
             rounds,
           });
         }}
