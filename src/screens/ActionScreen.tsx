@@ -8,13 +8,11 @@ import { COLOR_SCHEME } from '../utils/Constants';
 import { useInterval } from '../Hooks/UseInterval';
 import WorkoutButtonFooter from '../Components/WorkoutButtonFooter';
 import ActionInnerView from '../Components/ActionInnerView';
-import { playSound, playText } from '../Audio/SoundMaker';
 import {
-  playBell,
+  playSound,
   playCount,
   playSuccess,
-  playWarning,
-  playLongBeep,
+  playText,
 } from '../Audio/SoundMaker';
 import {
   WorkoutPhase,
@@ -245,6 +243,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
         setRTLastSoundTime(workoutTime);
       }
       setTimerDelay(calcReactionSpeeds());
+      playSound(enterWorkoutSound);
     }
 
     // Interval:
