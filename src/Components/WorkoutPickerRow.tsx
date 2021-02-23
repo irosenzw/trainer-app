@@ -4,12 +4,15 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { CheckBox } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { COLOR_SCHEME } from '../utils/Constants';
 import { ExpRowComponent } from './List/ListComponent';
+
+const { width } = Dimensions.get('window');
 
 type ListRowWithCheckBoxProps = {
   title: string;
@@ -62,7 +65,12 @@ const ListRowWithCheckBox: React.FC<ListRowWithCheckBoxProps> = ({
         </View>
       </View>
       <View>
-        <Collapsible collapsed={isCollapsed}>{children}</Collapsible>
+        <Collapsible
+          collapsed={isCollapsed}
+          style={{ width: (width * 9) / 10 }}
+        >
+          {children}
+        </Collapsible>
       </View>
     </ExpRowComponent>
   );

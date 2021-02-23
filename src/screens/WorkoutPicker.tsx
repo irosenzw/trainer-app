@@ -1,20 +1,14 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+import { Text, StyleSheet, View } from 'react-native';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import Collapsible from 'react-native-collapsible';
-import { WorkoutSettings, WorkoutType } from '../utils/types';
+import { WorkoutType } from '../utils/types';
 import Wrapper from '../Components/Wrapper';
 import { ListComponent } from '../Components/List/ListComponent';
 import ListRowWithCheckBox from '../Components/WorkoutPickerRow';
 import Workout, { IWorkout } from '../workouts/Workout';
 import { COLOR_SCHEME, WORKOUTS_PATH } from '../utils/Constants';
 import { deleteFile } from '../utils/fsUtils';
+import { toClockView } from '../utils/utils';
 
 type LoadWorkoutScreenProps = {
   route: any;
@@ -25,22 +19,73 @@ type WorkoutDetailsProps = {
   workoutSettings: IWorkout;
 };
 
+const settingsLabel = (setting: string): string => {
+  switch (setting) {
+    case 'workoutTime':
+      return 'Workout';
+    case 'restTime':
+      return 'Rest';
+    case 'rounds':
+      return 'Rounds';
+    case 'mode':
+      return 'Mode';
+    case 'speed':
+      return 'Speed';
+    case 'slowSpeed':
+      return 'Slow Speed';
+    case 'fastSpeed':
+      return 'Fast Speed';
+    default:
+      return setting;
+  }
+};
+
+const valueLabel = (
+  setting: string,
+  value: string | number,
+): string => {
+  if (setting === 'workoutTime' || setting === 'restTime') {
+    return toClockView(value as number);
+  }
+
+  if (
+    setting === 'speed' ||
+    setting === 'slowSpeed' ||
+    setting === 'fastSpeed'
+  ) {
+    return `${value}s`;
+  }
+
+  return `${value}`;
+};
+
 const WorkoutDetails: React.FC<WorkoutDetailsProps> = ({
   workoutSettings,
 }) => {
   const stringedWorkout = workoutSettings.toStringedObj();
   return (
-    <View>
+    <View style={styles.detailsView}>
       {Object.keys(stringedWorkout).map((setting) => {
-        if (setting !== 'name') {
+        if (
+          setting !== 'name' &&
+          setting !== 'type' &&
+          setting !== 'sounds'
+        ) {
           return (
-            <View key={`${stringedWorkout.name}-${setting}`}>
-              <Text
-                style={{ color: 'white', fontSize: 20 }}
-              >{`${setting}: `}</Text>
-              <Text
-                style={{ color: 'white', fontSize: 15 }}
-              >{`${stringedWorkout[setting]}`}</Text>
+            <View
+              key={`${stringedWorkout.name}-${setting}`}
+              style={styles.rowDetail}
+            >
+              <View style={styles.setting}>
+                <Text style={{ color: 'white', fontSize: 20 }}>
+                  {`${settingsLabel(setting)}: `}
+                </Text>
+              </View>
+              <View style={styles.value}>
+                <Text style={{ color: 'white', fontSize: 20 }}>
+                  {valueLabel(setting, stringedWorkout[setting])}
+                </Text>
+              </View>
             </View>
           );
         }
@@ -67,17 +112,11 @@ const LoadWorkoutScreen: React.FC<LoadWorkoutScreenProps> = ({
     shallowEqual,
   );
 
-  console.log(
-    's',
-    savedWorkouts.map((w) => w.name),
-  );
-
   const [workouts, setWorkouts] = React.useState(
     isTyped
       ? savedWorkouts.filter((ws) => ws.type === workoutType)
       : savedWorkouts,
   );
-  console.log('workouts', workouts);
 
   const deleteWorkout = async (workoutName: string) => {
     await deleteFile(`${WORKOUTS_PATH}/${workoutName}.json`);
@@ -125,6 +164,24 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 10,
     marginTop: 10,
+  },
+  detailsView: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingBottom: 20,
+  },
+  rowDetail: {
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingBottom: 5,
+  },
+  setting: {
+    flex: 1,
+  },
+  value: {
+    flex: 1,
   },
 });
 
