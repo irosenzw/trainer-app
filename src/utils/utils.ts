@@ -48,3 +48,13 @@ export const createWorkout = (
       );
   }
 };
+
+const getText = (num: number): string =>
+  num < 10 ? `0${num}` : `${num}`;
+
+export const toClockView = (seconds: number): string => {
+  const minutes = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+
+  return `${getText(minutes)}:${getText(secs)}`;
+};

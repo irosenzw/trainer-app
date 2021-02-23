@@ -1,18 +1,14 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet } from 'react-native';
 import { COLOR_SCHEME } from '../../utils/Constants';
+import { toClockView } from '../../utils/utils';
 
-const getText = (num: number): string =>
-  num < 10 ? `0${num}` : `${num}`;
+type ClockViewerProps = {
+  seconds: number;
+};
 
 const ClockViewer: React.FC<ClockViewerProps> = ({ seconds }) => {
-  const minutes = Math.floor(seconds / 60);
-  const secs = seconds % 60;
-  return (
-    <Text style={styles.clockText}>
-      {`${getText(minutes)}:${getText(secs)}`}
-    </Text>
-  );
+  return <Text style={styles.clockText}>{toClockView(seconds)}</Text>;
 };
 
 const styles = StyleSheet.create({
@@ -22,7 +18,4 @@ const styles = StyleSheet.create({
   },
 });
 
-type ClockViewerProps = {
-  seconds: number;
-};
 export default ClockViewer;
