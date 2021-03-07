@@ -11,6 +11,7 @@ import { SettingsType } from '../utils/types';
 import WorkoutButton from '../Components/Buttons/WorkoutButton';
 import { storeObject } from '../storage/storage';
 import { settings } from '../utils/default-settings';
+import { setSettings } from '../redux/settingsSlice';
 
 type settingsFieldInputProps = {
   navigation: any;
@@ -105,7 +106,7 @@ const SettingsPage: React.FC<SettingPageProps> = ({
 }) => {
   const dispatch = useDispatch();
   let getSettings = useSelector(
-    (state: any) => state.trainerState.Settings,
+    (state: any) => state.settings,
     shallowEqual,
   );
 
@@ -115,7 +116,7 @@ const SettingsPage: React.FC<SettingPageProps> = ({
 
   const storeModefiledSettings = () => {
     setLocalSettings(Object.assign({}, localSettings));
-    dispatch({ type: 'SET_SETTINGS', payload: localSettings }); // update local state
+    dispatch(setSettings(localSettings)); // update local state
     storeObject('Settings', localSettings); // update persistant settings object
   };
 

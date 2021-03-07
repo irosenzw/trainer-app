@@ -11,8 +11,9 @@ import {
 } from '../utils/default-settings';
 import { setup } from '../utils/setup';
 import { getAllSavedWorkouts } from '../storage/workouts';
-import Workout from '../workouts/Workout';
-import { WorkoutType } from '../utils/types';
+import { WorkoutSimpleObject, WorkoutType } from '../utils/types';
+import { setSettings } from '../redux/settingsSlice';
+import { setSavedWorkouts } from '../redux/workoutsSlice';
 
 export const SettingsRules = React.createContext(settingsConstraints);
 
@@ -21,12 +22,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   const { navigate } = navigation;
 
   const trainerSettings = useSelector(
-    (state: any) => state.trainerState.Settings,
+    (state: { [key: string]: any }) => state.settings,
     shallowEqual,
   );
 
   const savedWorkouts = useSelector(
-    (state: any) => state.trainerState.savedWorkouts,
+    (state: any) => state.workouts,
     shallowEqual,
   );
 
@@ -38,9 +39,9 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         .then((value) => {
           if (isEmpty(value)) {
             storeObject('Settings', settings); // Save default settings
-            dispatch({ type: 'SET_SETTINGS', payload: settings });
+            dispatch(setSettings(settings));
           } else {
-            dispatch({ type: 'SET_SETTINGS', payload: value });
+            dispatch(setSettings(value));
           }
         })
         .catch((e) => console.log(e));
@@ -51,17 +52,14 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     if (savedWorkouts.length === 0) {
       getAllSavedWorkouts()
         .then((workouts) => {
-          const validWorkouts: Workout[] = [];
+          const validWorkouts: WorkoutSimpleObject[] = [];
           workouts.forEach((w) => {
             const workout = createWorkout(JSON.parse(w));
             if (workout && workout.isValid()) {
-              validWorkouts.push(workout);
+              validWorkouts.push(JSON.parse(JSON.stringify(workout)));
             }
           });
-          dispatch({
-            type: 'SET_SAVED_WORKOUTS',
-            payload: validWorkouts,
-          });
+          dispatch(setSavedWorkouts(validWorkouts));
         })
         .catch(() => null);
     }

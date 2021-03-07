@@ -1,8 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+
+import store from './src/app/store';
 import HomeScreen from './src/screens/HomeScreen';
 import IntervalWorkoutScreen from './src/screens/Workouts/IntervalWorkoutScreen';
 import CounterWorkoutScreen from './src/screens/Workouts/CounterWorkoutScreen';
@@ -11,14 +12,13 @@ import ActionScreen from './src/screens/ActionScreen';
 import SoundsPicker from './src/screens/SoundsPicker';
 import LoadWorkoutScreen from './src/screens/WorkoutPicker';
 import SettingPage from './src/screens/settings';
-import reducers from './src/redux/reducers';
 import FlashMessage from 'react-native-flash-message';
 
 const Stack = createStackNavigator();
 export default class App extends React.PureComponent {
   render() {
     return (
-      <Provider store={createStore(reducers)}>
+      <Provider store={store}>
         <NavigationContainer>
           <Stack.Navigator
             initialRouteName="Home"

@@ -37,6 +37,8 @@ type GeneralSettings = {
   rounds: number;
 };
 
+export type WorkoutSimpleObject = { [key: string]: string };
+
 export type IntervalSettings = GeneralSettings;
 
 export type CounterSettings = {

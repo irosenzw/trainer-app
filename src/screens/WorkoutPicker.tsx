@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, View } from 'react-native';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { WorkoutType } from '../utils/types';
+import { WorkoutSimpleObject, WorkoutType } from '../utils/types';
 import Wrapper from '../Components/Wrapper';
 import { ListComponent } from '../Components/List/ListComponent';
 import ListRowWithCheckBox from '../Components/WorkoutPickerRow';
@@ -9,6 +9,7 @@ import Workout, { IWorkout } from '../workouts/Workout';
 import { COLOR_SCHEME, WORKOUTS_PATH } from '../utils/Constants';
 import { deleteFile } from '../utils/fsUtils';
 import { toClockView } from '../utils/utils';
+import { deleteWorkout as deleteWorkoutAction } from '../redux/workoutsSlice';
 
 type LoadWorkoutScreenProps = {
   route: any;
@@ -16,7 +17,7 @@ type LoadWorkoutScreenProps = {
 };
 
 type WorkoutDetailsProps = {
-  workoutSettings: IWorkout;
+  workoutSettings: WorkoutSimpleObject;
 };
 
 const settingsLabel = (setting: string): string => {
@@ -62,10 +63,10 @@ const valueLabel = (
 const WorkoutDetails: React.FC<WorkoutDetailsProps> = ({
   workoutSettings,
 }) => {
-  const stringedWorkout = workoutSettings.toStringedObj();
+  const stringedWorkout = JSON.parse(JSON.stringify(workoutSettings));
   return (
     <View style={styles.detailsView}>
-      {Object.keys(stringedWorkout).map((setting) => {
+      {Object.keys(workoutSettings).map((setting) => {
         if (
           setting !== 'name' &&
           setting !== 'type' &&
@@ -73,7 +74,7 @@ const WorkoutDetails: React.FC<WorkoutDetailsProps> = ({
         ) {
           return (
             <View
-              key={`${stringedWorkout.name}-${setting}`}
+              key={`${workoutSettings.name}-${setting}`}
               style={styles.rowDetail}
             >
               <View style={styles.setting}>
@@ -83,7 +84,7 @@ const WorkoutDetails: React.FC<WorkoutDetailsProps> = ({
               </View>
               <View style={styles.value}>
                 <Text style={{ color: 'white', fontSize: 20 }}>
-                  {valueLabel(setting, stringedWorkout[setting])}
+                  {valueLabel(setting, workoutSettings[setting])}
                 </Text>
               </View>
             </View>
@@ -102,13 +103,13 @@ const LoadWorkoutScreen: React.FC<LoadWorkoutScreenProps> = ({
   const loadToScreen = route.params?.loadToScreen;
   const isTyped = workoutType && workoutType !== WorkoutType.Any;
   const [chosenWorkout, setChosenWorkout] = React.useState<
-    Workout | undefined
+    WorkoutSimpleObject | undefined
   >(undefined);
 
   const dispatch = useDispatch();
 
-  const savedWorkouts: Workout[] = useSelector(
-    (state: any) => state.trainerState.savedWorkouts,
+  const savedWorkouts: WorkoutSimpleObject[] = useSelector(
+    (state: any) => state.workouts,
     shallowEqual,
   );
 
@@ -120,7 +121,7 @@ const LoadWorkoutScreen: React.FC<LoadWorkoutScreenProps> = ({
 
   const deleteWorkout = async (workoutName: string) => {
     await deleteFile(`${WORKOUTS_PATH}/${workoutName}.json`);
-    dispatch({ type: 'DELETE_WORKOUT', payload: workoutName });
+    dispatch(deleteWorkoutAction(workoutName));
     setWorkouts(workouts.filter((w) => w.name !== workoutName));
   };
 
@@ -132,7 +133,7 @@ const LoadWorkoutScreen: React.FC<LoadWorkoutScreenProps> = ({
       customBtnStyle={styles.loadBtn}
       customBtnAction={() =>
         navigation.navigate(loadToScreen || 'Interval', {
-          loadWorkout: chosenWorkout as Workout,
+          loadWorkout: chosenWorkout as WorkoutSimpleObject,
         })
       }
       hideCustomBtn={!chosenWorkout}

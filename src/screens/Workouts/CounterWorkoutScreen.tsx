@@ -22,6 +22,7 @@ import { isPathExists } from '../../utils/fsUtils';
 import { WORKOUTS_PATH } from '../../utils/Constants';
 import CounterWorkout from '../../workouts/CounterWorkout';
 import { SettingsRules } from '../HomeScreen';
+import { addToSavedWorkouts } from '../../redux/workoutsSlice';
 
 const CounterWorkoutScreen: React.FC<CounterProps> = ({
   navigation,
@@ -29,15 +30,13 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
 }) => {
   const loadWorkout: CounterWorkout = route.params?.loadWorkout;
 
-  const counterSettings = useSelector(
-    (state: any) => state.trainerState.Settings.counter,
+  const settings = useSelector(
+    (state: any) => state.settings,
     shallowEqual,
   );
 
-  const generalSetting = useSelector(
-    (state: any) => state.trainerState.Settings.general,
-    shallowEqual,
-  );
+  const counterSettings = settings.counter;
+  const generalSetting = settings.general;
 
   const {
     roundsMax,
@@ -113,7 +112,7 @@ const CounterWorkoutScreen: React.FC<CounterProps> = ({
 
     saveWorkout(JSON.stringify(ws), ws.name as string)
       .then(() => {
-        dispatch({ type: 'ADD_TO_SAVED_WORKOUTS', payload: ws });
+        dispatch(addToSavedWorkouts(JSON.parse(JSON.stringify(ws))));
         showMessage({
           message: `${ws.name} saved`,
         });

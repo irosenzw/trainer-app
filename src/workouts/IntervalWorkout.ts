@@ -39,16 +39,6 @@ class IntervalWorkout extends Workout implements IWorkout {
     !!this.workoutTime &&
     !!this.restTime &&
     !!this.rounds;
-
-  toStringedObj = (): { [key: string]: string } => {
-    return {
-      name: `${this.name}`,
-      type: `${this.type}`,
-      workoutTime: `${this.workoutTime}`,
-      restTime: `${this.restTime}`,
-      rounds: `${this.rounds}`,
-    };
-  };
 }
 
 export default IntervalWorkout;

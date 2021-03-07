@@ -59,20 +59,6 @@ class ReactionWorkout extends Workout implements IWorkout {
     !!this.slowSpeed &&
     !!this.fastSpeed &&
     !!this.sounds;
-
-  toStringedObj = (): { [key: string]: string } => {
-    return {
-      name: `${this.name}`,
-      type: `${this.type}`,
-      workoutTime: `${this.workoutTime}`,
-      restTime: `${this.restTime}`,
-      rounds: `${this.rounds}`,
-      mode: `${this.mode}`,
-      slowSpeed: `${this.slowSpeed}`,
-      fastSpeed: `${this.fastSpeed}`,
-      sounds: `${this.sounds}`,
-    };
-  };
 }
 
 export default ReactionWorkout;

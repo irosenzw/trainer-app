@@ -44,17 +44,6 @@ class CounterWorkout extends Workout implements IWorkout {
     !!this.restTime &&
     !!this.rounds &&
     !!this.speed;
-
-  toStringedObj = (): { [key: string]: string } => {
-    return {
-      name: `${this.name}`,
-      type: `${this.type}`,
-      workoutTime: `${this.workoutTime}`,
-      restTime: `${this.restTime}`,
-      rounds: `${this.rounds}`,
-      speed: `${this.speed}`,
-    };
-  };
 }
 
 export default CounterWorkout;

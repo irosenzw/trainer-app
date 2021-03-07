@@ -3,7 +3,6 @@ import { WorkoutType } from '../utils/types';
 export interface IWorkout {
   isValid: () => boolean;
   fillFromJSON: (json: string) => void;
-  toStringedObj: () => { [key: string]: string };
 }
 
 abstract class Workout implements IWorkout {
@@ -17,9 +16,6 @@ abstract class Workout implements IWorkout {
 
   isValid = () => false;
   fillFromJSON = (json: string) => {};
-  toStringedObj = () => {
-    return {};
-  };
 }
 
 export default Workout;
