@@ -20,6 +20,7 @@ import { isPathExists } from '../../utils/fsUtils';
 import { WORKOUTS_PATH } from '../../utils/Constants';
 import IntervalWorkout from '../../workouts/IntervalWorkout';
 import { SettingsRules } from '../HomeScreen';
+import { addToSavedWorkouts } from '../../redux/workoutsSlice';
 
 const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
   route,
@@ -27,10 +28,12 @@ const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
 }) => {
   const loadWorkout: IntervalWorkout = route.params?.loadWorkout;
 
-  const intervalSettings = useSelector(
-    (state: any) => state.trainerState.Settings.interval,
+  const settings = useSelector(
+    (state: any) => state.settings,
     shallowEqual,
   );
+
+  const intervalSettings = settings.interval;
 
   const { roundsMax, roundsMin } = React.useContext(SettingsRules);
 
@@ -82,7 +85,7 @@ const IntervalWorkoutScreen: React.FC<IntervalWorkoutProps> = ({
 
     saveWorkout(JSON.stringify(ws), ws.name as string)
       .then(() => {
-        dispatch({ type: 'ADD_TO_SAVED_WORKOUTS', payload: ws });
+        dispatch(addToSavedWorkouts(JSON.parse(JSON.stringify(ws))));
         showMessage({
           message: `${ws.name} saved`,
         });

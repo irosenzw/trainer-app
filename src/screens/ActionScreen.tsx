@@ -44,7 +44,7 @@ const ActionScreen: React.FC<ActionScreenProps> = ({
   } = route.params;
 
   const allSettings = useSelector(
-    (state: any) => state.trainerState.Settings,
+    (state: any) => state.settings,
     shallowEqual,
   );
 

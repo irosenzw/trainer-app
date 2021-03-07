@@ -25,6 +25,7 @@ import { WORKOUTS_PATH } from '../../utils/Constants';
 import ReactionWorkout from '../../workouts/ReactionWorkout';
 import SpeedRange from '../../Components/SpeedRangeComponent';
 import { SettingsRules } from '../HomeScreen';
+import { addToSavedWorkouts } from '../../redux/workoutsSlice';
 
 const ReactionWorkoutScreen: React.FC<CounterProps> = ({
   navigation,
@@ -32,15 +33,13 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
 }) => {
   const loadWorkout: ReactionWorkout = route.params?.loadWorkout;
 
-  const reactionSettings = useSelector(
-    (state: any) => state.trainerState.Settings.reaction,
+  const settings = useSelector(
+    (state: any) => state.settings,
     shallowEqual,
   );
 
-  const generalSetting = useSelector(
-    (state: any) => state.trainerState.Settings.general,
-    shallowEqual,
-  );
+  const reactionSettings = settings.reaction;
+  const generalSetting = settings.general;
 
   const {
     roundsMax,
@@ -141,7 +140,7 @@ const ReactionWorkoutScreen: React.FC<CounterProps> = ({
 
     saveWorkout(JSON.stringify(ws), ws.name as string)
       .then(() => {
-        dispatch({ type: 'ADD_TO_SAVED_WORKOUTS', payload: ws });
+        dispatch(addToSavedWorkouts(JSON.parse(JSON.stringify(ws))));
         showMessage({
           message: `${ws.name} saved`,
         });
